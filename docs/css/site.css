@@ -1,0 +1,161 @@
+body {
+  overflow-y: scroll;
+  font: 400 16px/1.4 "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-feature-settings: "kern" 1;
+  font-kerning: normal;
+}
+pre, code {
+  font-size: 14px;
+}
+.wrapper {
+  max-width: 960px;
+}
+.site-header {
+  background-color: lightgray;
+  padding-top: 6px;
+  border-top: 0;
+  border-bottom: 0;
+}
+.site-link {
+  color: #212121;
+}
+.site-link:hover {
+  text-decoration: none;
+}
+.site-link:visited {
+  color: #212121;
+}
+.logo-icon {
+  float: left;
+}
+.logo {
+  float: left;
+  color: #212121;
+  position: relative;
+  top: -2px;
+  left: -6px;
+  font-size: 32px; 
+  font-weight: 600;
+  font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';  
+}
+.site-nav {
+  float: left;
+  display: flex;
+  align-items: center;
+  margin-left: 100px;
+  margin-top: -3px;
+}
+.site-nav a {
+  color: #78909c;
+  margin-right: 20px;
+  font-weight: bold;
+}
+.site-nav a:visited {
+  color: #78909c;
+}
+.site-nav a:hover {
+  text-decoration: none;
+  color: #455a64;
+}
+.page-content {
+  padding: 30px;
+  padding-top: 20px;
+  font-family: Verdana, Geneva, sans-serif;
+}
+.active-group {
+  color: #455a64 !important;
+}
+.highlighter-rouge {
+  background-color: #cfd8dc;
+  border-radius: 5px;
+}
+.highlighter-rouge .highlight {
+  background-color: #eceff1;
+  background: #eceff1;
+  border: 1px solid lightgray;
+}
+.home {
+  color: #e9e9e9;
+  background-color: #455a64;
+  padding-bottom: 10px;
+  font-family: Verdana, Geneva, sans-serif;
+}
+.home .highlighter-rouge {
+  color: #0d47a1;
+  border: none;
+}
+.home a {
+  color: #f48fb1;
+}
+.home a:visited {
+  color: #f48fb1;
+}
+.home-col {
+  font-size: 17px;
+  float: left;
+  width: 280px;
+  padding-left: 15px;
+}
+.home-col h3 {
+  margin-bottom: 10px;
+}
+.site-btn {
+  padding: 2px 6px;
+  font-size: 18px;
+  font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';
+  font-weight: 600;
+  display: inline-block;
+  background-color: #009999;
+  border-radius: 5px;
+  color: #eeeeee;
+}
+.site-btn:hover {
+  text-decoration: none;
+}
+.site-btn:visited {
+  color: #eeeeee;
+}
+.github {
+  float: right;
+  padding-top: 9px;
+}
+.outer {
+  width: 100%;
+}
+.left-nav {
+  font-size: 15px;
+  float: left;
+  width: 100px;
+  padding-top: 25px;
+}
+.left-nav ul {
+  list-style: none;
+  margin: 0;
+}
+.left-nav ul li {
+  height: 25px;
+}
+.left-nav a {
+  color: #546e7a;
+}
+.left-nav a:visited {
+  color: #546e7a;
+}
+.left-nav a:hover {
+  text-decoration: none;
+  color: #263238;
+}
+.active-nav {
+  font-weight: bold;
+}
+.page-right {
+  float: right;
+  width: calc(100% - 200px);
+  min-width: 500px;
+  min-height: 800px;  
+}
+.topic {
+	margin: 0 25px;
+}
+.site-footer {
+}

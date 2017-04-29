@@ -1,0 +1,22 @@
+<header class="site-header" role="banner">
+
+  <div class="wrapper">
+    <a href="{{site.baseurl}}/" class="site-link">
+      <img src="{{site.baseurl}}/images/icon_48px.png" alt="limberest" class="logo-icon">
+      <div class="logo">
+        limbe<span style="color:#009999;">rest</span>
+      </div>
+    </a>
+
+    <nav class="site-nav">
+      <a href="{{site.baseurl}}/topics/services" {% if navgroup == 'topics' %}class="active-group"{% endif %}>Topics</a>
+      <a href="{{site.baseurl}}/cookbook/" {% if navgroup == 'cookbook' %}class="active-group"{% endif %}>Cookbook</a>
+      <a href="{{site.baseurl}}/demo/" {% if navgroup == 'demo' %}class="active-group"{% endif %}>Demo</a>
+      <a href="{{site.baseurl}}/javadoc/">Javadocs</a>
+    </nav>
+    
+    <div class="github">
+      <a href="https://github.com/oakesville/limberest" class="site-btn">GitHub</a>
+    </div>
+  </div>
+</header>

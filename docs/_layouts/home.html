@@ -1,0 +1,51 @@
+---
+layout: default
+---
+<main class="page-content home" aria-label="Content">
+  <div class="wrapper">
+    {{ content }}
+  </div>
+</main>
+
+<div class="wrapper" style="margin-top:22px;">
+  <div class="home-col">
+    <h3>Lightweight</h3>
+    <p>
+    Everything in Limberest exists to help you build a service API.
+    Bring your own model, persistence, UI and container.  Limberest is not trying to be a platform.
+    <a href="topics/dependencies">Dependencies</a> are scant and unlikely to conflict.
+    </p>
+    <p>
+    Yet Limberest has everything you need to get up and running quickly.
+    Follow the <a href="cookbook/">cookbook</a> to walk through the steps, or jump straight to the
+    fully-baked implementation in <a href="demo/">limberest-demo</a>.
+    </p>   
+  </div>
+  <div class="home-col">
+    <h3>Flexible</h3>
+    <p>
+    Limberest can be deployed in a variety of ways; from a straight-up jar dependency, to
+    a self-contained, prebuilt War distribution.  There are even fully-hosted ecosystems available (todo: ref).
+    </p>
+    <p>
+    While Limberest is naturally geared to channel you toward a hypermedia constrained approach, your services
+    can adopt whatever pattern makes sense to you.  You exercise low-level control by implementing the HTTP method
+    verbs directly.
+    </p>
+  </div>
+  <div class="home-col">
+    <h3>Elegant</h3>
+    <p>
+    REST is meant to be simple and cohesive.  Why introduce a framework that makes it complicated?
+    You'll be amazed at how little implementation it takes to <a href="topics/services">expose a service</a> with Limberest.
+    </p>
+    <p>
+    Simplicity is especially apparent in Limberest's approach to JSON <a href="topics/binding">object binding</a>.
+    To override the defaults you don't need to inject any convoluted mapping mechanism; rather you'll employ an
+    intuitive object inheritance pattern.
+    </p>
+  </div>
+  <hr style="clear:both;">
+  <div style="min-height:50px;">
+  </div>
+</div>

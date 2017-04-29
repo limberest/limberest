@@ -1,0 +1,55 @@
+plugins {
+	id 'java'
+}
+
+jar {
+	baseName = 'limberest'
+	version =  '1.0.01'
+}
+
+repositories {
+	mavenCentral()
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+sourceSets {
+	main {
+		java {
+			srcDir 'src'
+		}
+		output.classesDir = 'build/classes'
+	}
+}
+
+dependencies {
+	compile 'javax.servlet:javax.servlet-api:3.0.1'
+	compile 'javax.ws.rs:javax.ws.rs-api:2.0'
+	compile 'org.json:json:20160810'
+	compile 'org.slf4j:slf4j-api:1.7.22'
+	compile 'com.google.guava:guava:21.0'
+    compile 'commons-codec:commons-codec:1.10'
+	compile 'org.reflections:reflections:0.9.10'
+	compile 'io.swagger:swagger-annotations:1.5.12'
+	compile 'io.swagger:swagger-core:1.5.12'
+	compile 'io.swagger:swagger-models:1.5.12'
+	compile 'io.swagger:swagger-servlet:1.5.12'
+	compile 'com.fasterxml.jackson.core:jackson-core:2.8.6'
+	compile 'com.fasterxml.jackson.core:jackson-databind:2.8.6'
+}
+
+task cleanJavadocs(type: Delete) {
+    delete "docs/javadoc"
+}
+
+task javadocs(type: Javadoc) {
+    dependsOn "cleanJavadocs"
+    source = sourceSets.main.allJava
+    title = "Limberest API"
+    maxMemory = "256m"
+    options.links "http://docs.oracle.com/javase/8/docs/api/"
+    options.bottom "<i>Copyright &#169; 2017</i>"
+    destinationDir = file('docs/javadoc')
+}
+

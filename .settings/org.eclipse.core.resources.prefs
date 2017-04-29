@@ -1,0 +1,16 @@
+eclipse.preferences.version=1
+encoding//src/io/limberest/api=UTF-8
+encoding//src/io/limberest/api/DefaultSwaggerDefinition.java=UTF-8
+encoding//src/io/limberest/api/ServiceApi.java=UTF-8
+encoding//src/io/limberest/api/ServiceApiException.java=UTF-8
+encoding//src/io/limberest/api/ServiceApiServlet.java=UTF-8
+encoding//src/io/limberest/api/SwaggerReader.java=UTF-8
+encoding//src/io/limberest/api/SwaggerReaderExtension.java=UTF-8
+encoding//src/io/limberest/api/SwaggerScanner.java=UTF-8
+encoding//src/io/limberest/api/validate/ArrayValidator.java=UTF-8
+encoding//src/io/limberest/api/validate/NumberValidator.java=UTF-8
+encoding//src/io/limberest/api/validate/PrimitiveValidator.java=UTF-8
+encoding//src/io/limberest/api/validate/StringValidator.java=UTF-8
+encoding//src/io/limberest/api/validate/SwaggerRequest.java=UTF-8
+encoding//src/io/limberest/api/validate/SwaggerValidator.java=UTF-8
+encoding/<project>=UTF-8
