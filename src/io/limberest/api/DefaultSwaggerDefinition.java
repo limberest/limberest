@@ -6,7 +6,7 @@ import io.swagger.annotations.SwaggerDefinition;
 @SwaggerDefinition(
     info=@Info(title="Limberest REST API", description="REST Services", version=""),
     schemes={SwaggerDefinition.Scheme.DEFAULT},
-    basePath="/service")
+    basePath="/")
 public class DefaultSwaggerDefinition {
 
 }
