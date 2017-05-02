@@ -219,7 +219,7 @@ public class RestServlet extends HttpServlet {
                 return settings.get(method.toString().toLowerCase(), fallbackMap);
             }
         }
-        return null;
+        return "application/json";
     }
     
     /**
