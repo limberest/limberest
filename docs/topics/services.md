@@ -33,4 +33,18 @@ When {id} is present, MoviesService.get() responds with the movie whose 'id' pro
 Optionally, HTTP query parameters can be included on the request endpoint URL.  These are made accessible in the
 [Request]() argument via request.getQuery().  Usage is described in the [queries](queries.md) document.
 
-TODO: how to customize error response for a given ServiceException
+
+To override the base path for Limberest services in your webapp, declare a different servlet mapping in your web.xml:
+```xml
+  <servlet>
+    <servlet-name>io.limberest.service.http.RestServlet</servlet-name>
+    <servlet-class>io.limberest.service.http.RestServlet</servlet-class>
+  </servlet>  
+
+  <servlet-mapping>
+    <servlet-name>io.limberest.service.http.RestServlet</servlet-name>
+    <url-pattern>/services/*</url-pattern>
+  </servlet-mapping>
+```
+*Note:* The servlet-name must be exactly as above to override Limberest's base.  A different servlet-name will add separate
+mapping(s) instead of overriding.
