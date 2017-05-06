@@ -61,7 +61,10 @@ public class Query {
         }
     }
 
-    private boolean count; // count only -- no retrieval
+    /**
+     * Count only (no retrieval)
+     */
+    private boolean count;
     public boolean isCount() { return count; }
     public void setCount(boolean count) { this.count = true; }
 
@@ -103,6 +106,10 @@ public class Query {
     
     public boolean hasFilters() {
         return !filters.isEmpty();
+    }
+    
+    public boolean hasFilter(String key) {
+        return filters.containsKey(key);
     }
 
     /**

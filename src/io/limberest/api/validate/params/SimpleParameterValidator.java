@@ -65,9 +65,22 @@ public class SimpleParameterValidator {
                         result.also(arrayValidator.validate(objs, param.getName()));
                     }
                     else {
-                        Object obj = parse(keyClass, p, value, -1, result);
-                        if (obj != null)
-                            validator.doValidate(validator.convert(obj), param.getName());
+                        if (Number.class.isAssignableFrom(keyClass) && value != null && (value.indexOf('>') >= 0 || value.indexOf('<') >= 0)) {
+                            // allow comparison operators (>1931, <=1945, >=1930<1940)
+                            String[] vals = value.split("[<>]=?");
+                            for (int i = 0; i < vals.length; i++) {
+                                if (i > 0 || !vals[i].isEmpty()) {
+                                    Object obj = parse(keyClass, p, vals[i], -1, result);
+                                    if (obj != null)
+                                        result.also(validator.doValidate(validator.convert(obj), param.getName()));
+                                }
+                            }
+                        }
+                        else {
+                            Object obj = parse(keyClass, p, value, -1, result);
+                            if (obj != null)
+                                result.also(validator.doValidate(validator.convert(obj), param.getName()));
+                        }
                     }
                 }
             }
@@ -75,7 +88,7 @@ public class SimpleParameterValidator {
         return result;
     }
     
-    private Object parse(Class<?> keyClass, SerializableParameter param, String value, int index, Result result) 
+    protected Object parse(Class<?> keyClass, SerializableParameter param, String value, int index, Result result) 
             throws ValidationException {
         try {
             // parse by instantiating
