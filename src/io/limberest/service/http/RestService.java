@@ -37,6 +37,10 @@ public abstract class RestService<T> implements Service<T> {
         request.setUserRolePredicate(roleChecker);
     }
     
+    /**
+     * Return true if authentication is required.
+     * Note: Containers may indicate authenticated if authentication not set up.
+     */
     @Override
     public boolean isAuthenticationRequired(Request<T> request) throws ServiceException {
         return false;

@@ -31,8 +31,8 @@ This means in limberest-demo user credentials are not required to retrieve movie
 update or delete.  Furthermore, even authenticated users require membership in the "Deleters" role to be able
 to delete a movie. 
 
-So the user named *regular* in the following tomcat-users.xml sample would be able to create and update movies, but
-would be prohibited from deleting movies.  With this setup only user *deleter* is allowed to delete.
+So the user named *regular* in the following tomcat-users.xml sample is able to create and update movies,
+but is prohibited from deleting movies.  With this setup only user *deleter* is allowed to delete.
 tomcat-users.xml:
 ```xml
 <tomcat-users version="1.0" xmlns="http://tomcat.apache.org/xml"
