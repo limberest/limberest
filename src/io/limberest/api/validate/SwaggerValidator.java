@@ -22,6 +22,7 @@ import io.limberest.service.Query;
 import io.limberest.service.ResourcePath;
 import io.limberest.service.http.Request;
 import io.limberest.service.http.Status;
+import io.limberest.util.ExecutionTimer;
 import io.limberest.validate.Result;
 import io.limberest.validate.ValidationException;
 import io.limberest.validate.Validator;
@@ -65,6 +66,7 @@ public class SwaggerValidator implements Validator<JSONObject> {
     }
     
     public Result validate(Request<JSONObject> request, boolean strict) throws ValidationException {
+        ExecutionTimer timer = new ExecutionTimer(true);
         try {
             Result result = new Result();
 
@@ -78,6 +80,9 @@ public class SwaggerValidator implements Validator<JSONObject> {
         }
         catch (ServiceApiException ex) {
             throw new ValidationException(NOT_FOUND.getCode(), ex.getMessage(), ex);
+        }
+        finally {
+            timer.log("SwaggerValidator: validate:");
         }
     }
     

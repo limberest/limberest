@@ -6,6 +6,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -104,17 +105,25 @@ public class Jsonator {
         return json;
     }
     
+    private static Map<Method,Boolean> hiddenMethods;
     /**
      * For swagger "hidden" annotation, lowest declaring subclass governs.
+     * This method is especially expensive, so preliminary caching begins here.
      */
     protected boolean isHidden(Method method) {
+        if (hiddenMethods == null)
+            hiddenMethods = new HashMap<>();
+        Boolean hidden = hiddenMethods.get(method);
+        if (hidden != null)
+            return hidden;
         
+        hidden = false;
         if ("getClass".equals(method.getName()) && method.getParameterTypes().length == 0)
-            return true;
+            hidden = true;
         if ("getJson".equals(method.getName()) && method.getParameterTypes().length == 0)
-            return true;
+            hidden = true;
         if ("getJsonName".equals(method.getName()) && method.getParameterTypes().length == 0)
-            return true;
+            hidden = true;
         
         Class<?> c = method.getDeclaringClass();
         while (c != null) {
@@ -122,14 +131,15 @@ public class Jsonator {
                 Method m = c.getMethod(method.getName(), method.getParameterTypes());
                 ApiModelProperty apiModelProp = m.getAnnotation(ApiModelProperty.class);
                 if (apiModelProp != null)
-                    return apiModelProp.hidden();
+                    hidden = apiModelProp.hidden();
             }
             catch (NoSuchMethodException ex) {
             }
             c = c.getSuperclass();
         }
         
-        return false;
+        hiddenMethods.put(method, hidden);
+        return hidden;
     }
     
     protected Object getJsonObject(Object o) {

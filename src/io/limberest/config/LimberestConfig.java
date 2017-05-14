@@ -52,8 +52,8 @@ public class LimberestConfig {
         }
         catch (IOException ex) {
             logger.warn("limberest config not found, using defaults");
-            if (logger.isDebugEnabled())
-                logger.debug(ex.getMessage(), ex);
+            if (logger.isTraceEnabled())
+                logger.trace(ex.getMessage(), ex);
             settings = new Settings();
         }        
     }

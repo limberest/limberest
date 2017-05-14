@@ -170,6 +170,7 @@ public class RestServlet extends HttpServlet {
                 if (requestString.isEmpty())
                     requestString = null;
                 serviceRequest.setText(requestString);
+                timer.log("RestServlet: build ServiceRequest:");
 
                 logger.info("Request: {}'", serviceRequest);
                 logger.debug("Request Content:\n{}", serviceRequest, requestString);
@@ -177,6 +178,7 @@ public class RestServlet extends HttpServlet {
 
                 Response<?> serviceResponse = service.service(serviceRequest);
                 logger.debug("Response for '{}':\n{}", serviceRequest, serviceResponse.getText());
+                timer.log("RestServlet: invoke service():");
                 response.setContentType(registryKey.getContentType());
                 Map<String,String> responseHeaders = serviceResponse.getHeaders();
                 if (responseHeaders != null) {
@@ -206,7 +208,7 @@ public class RestServlet extends HttpServlet {
         }
         finally {
             if (timer.isEnabled())
-                timer.log("HTTP " + request.getMethod() + " completed in ");
+                timer.log("RestServlet: http " + request.getMethod() + " completed in:");
         }
     }
     
