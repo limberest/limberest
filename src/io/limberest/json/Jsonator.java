@@ -18,7 +18,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Default binding for Jsonables.
- * TODO: bean model caching
+ * TODO: more thorough bean model caching
  */
 public class Jsonator {
     
@@ -28,12 +28,14 @@ public class Jsonator {
         this.jsonable = jsonable;
     }
     
+    public JSONObject getJson() {
+        return getJson(new JsonObject());
+    };
+    
     /**
-     * TODO: test with no swagger
      * TODO: edge cases with swagger dataType attribute (eg: date)
      */
-    public JSONObject getJson() {
-        JSONObject json = new JsonObject();
+    public JSONObject getJson(JSONObject json) {
         try {
             BeanInfo beanInfo = Introspector.getBeanInfo(jsonable.getClass());
             for (PropertyDescriptor pd : beanInfo.getPropertyDescriptors()) {
