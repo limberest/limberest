@@ -2,17 +2,13 @@ plugins {
 	id 'java'
 }
 
-jar {
-	baseName = 'limberest'
-	version =  '1.0.01'
-}
+version = '1.0.01'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 repositories {
 	mavenCentral()
 }
-
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
 
 sourceSets {
 	main {
@@ -40,16 +36,25 @@ dependencies {
 }
 
 task cleanJavadocs(type: Delete) {
-    delete "docs/javadoc"
+    delete 'docs/javadoc'
 }
 
-task javadocs(type: Javadoc) {
-    dependsOn "cleanJavadocs"
+task javadocs(type: Javadoc, dependsOn: cleanJavadocs) {
     source = sourceSets.main.allJava
-    title = "Limberest API"
-    maxMemory = "256m"
-    options.links "http://docs.oracle.com/javase/8/docs/api/"
-    options.bottom "<i>Copyright &#169; 2017</i>"
+    title = 'Limberest API'
+    maxMemory = '256m'
+    options.links 'http://docs.oracle.com/javase/8/docs/api/'
+    options.bottom '<i>Copyright &#169; 2017</i>'
     destinationDir = file('docs/javadoc')
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadocs) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
 }
 
