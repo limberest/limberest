@@ -8,8 +8,14 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +40,8 @@ import com.google.common.collect.Multiset;
  *
  */
 public class Objectifier {
+    
+    private static DateFormat DF = new SimpleDateFormat("yyyy-MM-dd");
     
     private Object into;
     
@@ -60,6 +68,9 @@ public class Objectifier {
                 throw new JSONException(ex.getMessage() + ": " + name, ex);
             }
             catch (ReflectiveOperationException ex) {
+                throw new JSONException(ex.getMessage() + ": " + name, ex);
+            }
+            catch (DateTimeParseException ex) {
                 throw new JSONException(ex.getMessage() + ": " + name, ex);
             }
         }
@@ -89,10 +100,15 @@ public class Objectifier {
                 if (Jsonable.class.isAssignableFrom((Class<?>)t)) {
                     Class<? extends Jsonable> jclass = (Class<? extends Jsonable>)t;
                     try {
-                        Constructor<? extends Jsonable> jctor = jclass.getConstructor(JSONObject.class);
+                        if (this.into.getClass().equals(jclass.getEnclosingClass())) {
+                            Constructor<? extends Jsonable> jctor = jclass.getDeclaredConstructor(this.into.getClass(), JSONObject.class);
+                            return jctor.newInstance(this.into, json);
+                        }
+                        Constructor<? extends Jsonable> jctor = jclass.getDeclaredConstructor(JSONObject.class);
                         return jctor.newInstance(json);
                     }
                     catch (NoSuchMethodException ex) {
+                        // non-static inner class
                         throw new JSONException(t + " must implement a constructor that takes a JSONObject");
                     }
                 }
@@ -130,8 +146,30 @@ public class Objectifier {
             else
                 return coerceNumber((Number)o, t);
         }
-        else if (o instanceof Boolean || o instanceof String) {
+        else if (o instanceof Boolean) {
             return o;
+        }
+        else if (o instanceof String) {
+            if (t.equals(Date.class)) {
+                try {
+                    return Date.from(Instant.parse((String)o));
+                }
+                catch (DateTimeParseException ex) {
+                    // allow non-datetime java.util.Date
+                    try {
+                        return DF.parse((String)o);
+                    }
+                    catch (ParseException ex2) {
+                        throw new DateTimeParseException(ex.getMessage(), (String)o, 0, ex);
+                    }
+                }
+            }
+            else if (t.equals(Instant.class)) {
+                return Instant.parse((String)o);
+            }
+            else {
+                return o;
+            }
         }
         
         return null;
@@ -193,7 +231,7 @@ public class Objectifier {
     @SuppressWarnings("rawtypes")
     protected Map getMapInstance(Class<? extends Map> mapType) throws ReflectiveOperationException {
         if (mapType.isInterface()) {
-            if (HashMap.class.isAssignableFrom(mapType))
+            if (Map.class.isAssignableFrom(mapType))
                 return new LinkedHashMap<>();
             else if (Dictionary.class.isAssignableFrom(mapType))
                 return new Hashtable<>();

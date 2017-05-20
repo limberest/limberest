@@ -5,7 +5,9 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
+import java.time.Instant;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -159,6 +161,12 @@ public class Jsonator {
         }
         else if (o instanceof Map) {
             return getJson((Map<?,?>)o);
+        }
+        else if (o instanceof Date) {
+            return ((Date)o).toInstant().toString();
+        }
+        else if (o instanceof Instant) {
+            return ((Instant)o).toString();
         }
         else {
             return JSONObject.wrap(o);
