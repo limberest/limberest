@@ -1,7 +1,10 @@
 plugins {
 	id 'java'
+    id 'maven'
+    id 'signing'
 }
 
+group = 'io.limberest'
 version = '1.0.01'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -55,6 +58,58 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 task javadocJar(type: Jar, dependsOn: javadocs) {
     classifier = 'javadoc'
-    from javadoc.destinationDir
+    from file('docs/javadoc')
 }
 
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+  
+            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+  
+            snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+  
+            pom.project {
+                name 'Limberest'
+                description 'Lightweight REST for Java'
+                packaging 'jar'
+                url 'https://limberest.io'
+  
+                scm {
+                    connection 'scm:git:https://github.com/limberest/limberest.git'
+                    developerConnection 'scm:git:https://github.com/limberest/limberest.git'
+                    url 'https://github.com/limberest/limberest'
+
+                }
+  
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'https://opensource.org/licenses/MIT'
+                    }
+                }
+  
+                developers {
+                    developer {
+                        id 'oakesville'
+                        name 'Donald Oakes'
+                        email 'donald@oakesville.io'
+                    }
+                }
+            }
+        }
+    }
+}
