@@ -14,6 +14,7 @@ Only dependency is org.json.JSONObject.
 Cascading to contained objects and supers.
 By convention, constructor takes JSONObject.
 
+The Jsonable interface takes advantage of Java 8's `default` methods to provide 
 
 JSON property order not significant or even necessarily predictable,
 but repeatable.  This makes it possible to write automated tests that
