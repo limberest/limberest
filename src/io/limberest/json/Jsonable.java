@@ -6,12 +6,16 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * By convention Jsonables should have a constructor that takes
- * a single argument of type org.json.JSONObject.
+ * a single argument of type 
+ * <a href="https://stleary.github.io/JSON-java/org/json/JSONObject.html">org.json.JSONObject</a>.
+ * To invoke default autobinding, the constructor can call {@link #bind(org.json.JSONObject)}.
  */
 public interface Jsonable {
 
     /**
-     * Builds a JSON object representing this.
+     * Builds an 
+     * <a href="https://stleary.github.io/JSON-java/org/json/JSONObject.html">org.json.JSONObject</a> 
+     * representing this.
      * @return a JSON object
      */
     @ApiModelProperty(hidden=true)
@@ -27,6 +31,12 @@ public interface Jsonable {
         return null;
     }
     
+    /**
+     * Binds this Jsonable to an
+     * <a href="https://stleary.github.io/JSON-java/org/json/JSONObject.html">org.json.JSONObject</a>.
+     * Call this from the constructor to invoke autobinding.
+     * @param json the JSONObject to bind to
+     */
     default void bind(JSONObject json) {
         new Objectifier(this).from(json);
     }
