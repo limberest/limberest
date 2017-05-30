@@ -126,6 +126,7 @@ pre, code {
   font-size: 15px;
   float: left;
   width: 100px;
+  position: fixed;
   padding-top: 25px;
 }
 .left-nav ul {

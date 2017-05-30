@@ -18,13 +18,13 @@ import io.limberest.api.ServiceApi.Format;
 /**
  * Scans a service path for Swagger annotations and generates the service spec in JSON or YAML.
  */
-@WebServlet(urlPatterns={"/api/*"})
-public class ApiServlet extends HttpServlet {
+@WebServlet(urlPatterns={"/spec/*"})
+public class SwaggerServlet extends HttpServlet {
 
     private static final String PRETTY_INDENT_PARAM = "prettyIndent";
     private static final String SWAGGER_PATH = "/swagger";
 
-    private static final Logger logger = LoggerFactory.getLogger(ApiServlet.class);
+    private static final Logger logger = LoggerFactory.getLogger(SwaggerServlet.class);
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {

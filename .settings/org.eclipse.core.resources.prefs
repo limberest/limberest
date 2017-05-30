@@ -12,5 +12,5 @@ encoding//src/io/limberest/api/validate/PrimitiveValidator.java=UTF-8
 encoding//src/io/limberest/api/validate/StringValidator.java=UTF-8
 encoding//src/io/limberest/api/validate/SwaggerRequest.java=UTF-8
 encoding//src/io/limberest/api/validate/SwaggerValidator.java=UTF-8
-encoding//src/io/limberest/service/http/ApiServlet.java=UTF-8
+encoding//src/io/limberest/service/http/SwaggerServlet.java=UTF-8
 encoding/<project>=UTF-8

@@ -38,7 +38,7 @@ import io.limberest.util.ExecutionTimer;
  * 
  * TODO: can urlPatterns be overridden by declaring in web.xml?
  */
-@WebServlet(urlPatterns={"/*"}, loadOnStartup=0)
+@WebServlet(urlPatterns={"/api/*"}, loadOnStartup=0)
 public class RestServlet extends HttpServlet {
 
     // TODO yaml option instead of servlet init param
