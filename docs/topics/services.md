@@ -59,4 +59,4 @@ and try them out for yourself:
      (the [Queries](queries) topic has many more such examples).
 
 **Note:** The default root path for limberest services is */api/*.
-See the [Configuration](configuration) topic for details on how to override this default.  
+See the [Configuration](config) topic for details on how to override this default.  
