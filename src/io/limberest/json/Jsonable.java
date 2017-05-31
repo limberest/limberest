@@ -6,9 +6,8 @@ import io.swagger.annotations.ApiModelProperty;
 
 /**
  * By convention Jsonables should have a constructor that takes
- * a single argument of type 
- * <a href="https://stleary.github.io/JSON-java/org/json/JSONObject.html">org.json.JSONObject</a>.
- * To invoke default autobinding, the constructor can call {@link #bind(org.json.JSONObject)}.
+ * a single argument of type {@link org.json.JSONObject}.
+ * To invoke default autobinding, the constructor can and should call {@link io.limberest.json.Jsonable#bind(org.json.JSONObject) bind(JSONObject)}.
  */
 public interface Jsonable {
 
@@ -32,8 +31,7 @@ public interface Jsonable {
     }
     
     /**
-     * Binds this Jsonable to an
-     * <a href="https://stleary.github.io/JSON-java/org/json/JSONObject.html">org.json.JSONObject</a>.
+     * Binds this Jsonable to an {@link org.json.JSONObject}.
      * Call this from the constructor to invoke autobinding.
      * @param json the JSONObject to bind to
      */

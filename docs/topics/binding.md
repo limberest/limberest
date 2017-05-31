@@ -72,7 +72,7 @@ of Credit Jsonables.  The limberest-demo model object tree results in complete t
 JSON and Java.  Since Jsonable is an interface, any existing model hierarchy can be hooked up to Limberest
 and exposed as a JSON REST service API.  No need to extend any concrete base class.
 
-## JSON Property Ordering
+### JSON Property Ordering
 You're probably aware that JSON object property order is not considered significant.
 This is a central tenet of the JSON format specification.  Limberest makes use of a custom
 [JSONObject extension](../javadoc/io/limberest/json/JsonObject) that provides repeatable, 
@@ -81,3 +81,4 @@ evaluate outcomes by straight text comparison of formatted JSON (see the [Testin
 It also makes it easy for humans to perform eyeball comparisons and locate mismatches.
 This is not to be construed as an indication that JSON property ordering is significant in Limberest.
 
+Next Topic: [Queries](queries)

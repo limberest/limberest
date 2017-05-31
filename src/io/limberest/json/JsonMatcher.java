@@ -10,6 +10,10 @@ import org.json.JSONObject;
 
 import io.limberest.util.BooleanFormatException;
 
+/**
+ * A predicate to facilitate JSONObject filter matching.
+ * @see io.limberest.service.Query#match(java.util.function.Predicate)
+ */
 public class JsonMatcher implements Predicate<Entry<String,String>> {
     
     private JSONObject json;

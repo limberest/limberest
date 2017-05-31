@@ -231,7 +231,9 @@ public class Query {
     }
     
     /**
-     * Matcher should check for search
+     * Checks for matches.
+     * @param matcher should check search as well as filters
+     * @return true if match
      */
     public boolean match(Predicate<Entry<String,String>> matcher) {
         Map<String,String> filtersPlusSearch = new HashMap<String,String>(filters);

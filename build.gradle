@@ -43,10 +43,13 @@ task cleanJavadocs(type: Delete) {
 }
 
 task javadocs(type: Javadoc, dependsOn: cleanJavadocs) {
+    classpath = configurations.compile
     source = sourceSets.main.allJava
     title = 'Limberest API'
     maxMemory = '256m'
     options.links 'http://docs.oracle.com/javase/8/docs/api/'
+    options.links 'http://docs.swagger.io/swagger-core/current/apidocs/'
+    options.links 'http://stleary.github.io/JSON-java/'
     options.bottom '<i>Copyright &#169; 2017</i>'
     destinationDir = file('docs/javadoc')
 }
