@@ -1,10 +1,13 @@
 ---
 layout: topic
 ---
-## Authentication and Authorization
-
-Authentication in your service is controlled by overriding `isAuthenticationRequired()`.  Here's how the
-limberest-demo MoviesService requires authentication for all HTTP methods exception GET:
+## Access Control
+### Authentication
+Authentication in your Limberest service is enforced by overriding 
+[isAuthenticationRequired()](../javadoc/io/limberest/service/http/RestService.html#isAuthenticationRequired-io.limberest.service.http.Request-).
+Here's how the [limberest-demo](../demo) 
+[MoviesService](https://github.com/limberest/limberest-demo/blob/master/src/io/limberest/demo/service/MoviesService.java)
+requires authentication for all HTTP methods except GET:
 ```java
     @Override
     public boolean isAuthenticationRequired(Request<JSONObject> request) {
@@ -12,9 +15,11 @@ limberest-demo MoviesService requires authentication for all HTTP methods except
     }
 ```
 
-Authorization is governed by `getRolesAllowedAccess()`.  MoviesService requires the role "Deleters" in order
-to perform a DELETE operation. 
-
+### Authorization
+Authorization is governed by 
+[getRolesAllowedAccess()](../javadoc/io/limberest/service/http/RestService.html#getRolesAllowedAccess-io.limberest.service.http.Request-).
+[MovieService](https://github.com/limberest/limberest-demo/blob/master/src/io/limberest/demo/service/MovieService.java)
+requires the role "Deleters" in order to perform a DELETE operation.
 ```java
     public List<String> getRolesAllowedAccess(Request<JSONObject> request) {
         if (request.getMethod() == HttpMethod.DELETE) {
@@ -22,18 +27,17 @@ to perform a DELETE operation.
             roles.add("Deleters");
             return roles;
         }
-        
         return null; // access is not restricted for other operations
     }
 ```
 
-This means in limberest-demo user credentials are not required to retrieve movies, but they are required to create, 
-update or delete.  Furthermore, even authenticated users require membership in the "Deleters" role to be able
-to delete a movie. 
+This combination means in limberest-demo user credentials are not required to retrieve movies, 
+but they are required to create, update or delete.  Furthermore, even authenticated users require
+membership in the "Deleters" role to be able to delete a movie. 
 
-So the user named *regular* in the following tomcat-users.xml sample is able to create and update movies,
-but is prohibited from deleting movies.  With this setup only user *deleter* is allowed to delete.
-tomcat-users.xml:
+### Tomcat Setup
+The user named *regular* in the following tomcat-users.xml sample is able to create and update movies
+in limberest-demo, but is prohibited from deleting movies.
 ```xml
 <tomcat-users version="1.0" xmlns="http://tomcat.apache.org/xml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -43,3 +47,6 @@ tomcat-users.xml:
   <user username="regular" password="norolesforme" />
 </tomcat-users>
 ```
+With this setup only user *deleter* is allowed to delete.
+
+Next Topic: [Configuration](config)

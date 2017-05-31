@@ -5,7 +5,7 @@ layout: topic
 Limberest comes with the ability to auto-generate API documentation based on 
 [JAX-RS](http://docs.oracle.com/javaee/7/api/javax/ws/rs/Path.html) and 
 [Swagger](https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X)
-annotations.  Here's an example from the [limberest-demo](demo.md)
+annotations.  Here's an example from the [limberest-demo](../demo)
 [MovieService](https://github.com/limberest/limberest-demo/blob/master/src/io/limberest/demo/service/MovieService.java)
 `put()` method that shows what Swagger annotations look like:
 ```java
@@ -180,5 +180,8 @@ because they're maintained with your code.  Not only that, the same annotations 
 the API docs can also be used to automatically [validate](validation) requests.
 This *bottom-up* or *prove-first* approach is the best way to ensure that your docs stay
 in sync with your code.
+
+**Note:** The default root path for limberest Swagger output is */api-docs/*.
+See the [Configuration](config) topic for details on how to override this default.
 
 Next Topic: [Validation](validation)

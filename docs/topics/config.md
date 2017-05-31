@@ -3,12 +3,13 @@ layout: topic
 ---
 ## Configuration
 
-zero config required
+Zero configuration is required to deploy Limberest.
+However, there are a few defaults you might want to override; the
+most-likely being the service API and/or Docs root paths.
 
-
-The default root path for limberest services is */api/*.
-See the [Configuration](configuration) topic for details on how to override this default.  
-To override the default root path in your webapp, declare a different servlet mapping in your web.xml:
+### Service Path
+The default root path for limberest services is **_/api/_**.
+To override the service path in your webapp, declare a different servlet mapping in your web.xml:
 ```xml
   <servlet>
     <servlet-name>io.limberest.service.http.RestServlet</servlet-name>
@@ -20,9 +21,27 @@ To override the default root path in your webapp, declare a different servlet ma
     <url-pattern>/services/*</url-pattern>
   </servlet-mapping>
 ```
-**Note:** The servlet-name must be exactly as above to override Limberest's base.  A different servlet-name will add separate
-mapping(s) instead of overriding.
+**Note:** The servlet-name element must be exactly as above to override Limberest's base.  
+A different servlet-name will add separate mapping(s) instead of overriding.
 
+### API Docs Path
+The default path for limberest Swagger output is **_/api-docs/_**.
+To override the swagger path in your webapp, declare a different servlet mapping in your web.xml:
+```xml
+  <servlet>
+    <servlet-name>io.limberest.service.http.SwaggerServlet</servlet-name>
+    <servlet-class>io.limberest.service.http.SwaggerServlet</servlet-class>
+  </servlet>  
 
+  <servlet-mapping>
+    <servlet-name>io.limberest.service.http.SwaggerServlet</servlet-name>
+    <url-pattern>/swagger/*</url-pattern>
+  </servlet-mapping>
+```
 
-todo: document yaml content and how located
+TODO: override root paths in Spring Boot.
+
+### Optional services.yaml
+TODO: document services.yaml content and how located
+
+Next Topic: [Testing](testing)

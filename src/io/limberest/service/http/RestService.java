@@ -70,6 +70,9 @@ public abstract class RestService<T> implements Service<T> {
     /**
      * If the request user belongs to any of these roles, access is granted.
      * @return set of roles, or null if anyone's allowed
+     * 
+     * NOTE: {@link #isAuthenticationRequired(Request)} must return true for this 
+     * to work with Java container authentication.
      */
     public List<String> getRolesAllowedAccess(Request<T> request) throws ServiceException {
         return null;

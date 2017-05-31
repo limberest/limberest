@@ -17,9 +17,10 @@ public class MoviesService extends JsonRestService {
 
 This registers MoviesService to respond to requests for */movies* resources.
 When a request is received by Limberest, it's forwarded to the service with the most specific
-matching registered path (for example: a request to /movies/a2d7721c will invoke the service
-registered with path '/movies/{id}' in preference to that with just '/movies').
+matching registered path (for example: a request to */movies/a2d7721c* will invoke the service
+registered with path "/movies/{id}" in preference to that with just "/movies").
 
+### Implementation
 The job of your service is to interpret the request and build a corresponding response.
 Here's the complete `get()` method from MoviesService: 
 ```java
@@ -31,12 +32,12 @@ Here's the complete `get()` method from MoviesService:
     }
 ```
 
-Let's take a look at each step in this implementation:
+Let's take a look at each step in this code:
 0. We invoke `validate()`, passing the [Request](../javadoc/io/limberest/service/http/Request).
    Validation may throw a [ServiceException](../javadoc/io/limberest/service/ServiceException) 
    with an appropriate [Status Code](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
    if it does not like the request.
-   This mechanism is discussed in more detail in the [Validations](validations) topic.
+   This mechanism is discussed in more detail in the [Validation](validation) topic.
 0. Next we populate a List of movies by retrieving from a persistent store.
    Filtering of results is governed by HTTP query parameters that
    may be appended to the resource URL (e.g. *?sort=title*).  These are accessible via `request.getQuery()`, 
