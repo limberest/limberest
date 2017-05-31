@@ -3,6 +3,7 @@ package io.limberest.service.http;
 import java.io.IOException;
 
 import javax.servlet.ServletConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +19,7 @@ import io.limberest.api.ServiceApi.Format;
 /**
  * Scans a service path for Swagger annotations and generates the service spec in JSON or YAML.
  */
-@WebServlet(urlPatterns={"/spec/*"})
+@WebServlet(urlPatterns={"/api-docs/*"})
 public class SwaggerServlet extends HttpServlet {
 
     private static final String PRETTY_INDENT_PARAM = "prettyIndent";
@@ -27,8 +28,11 @@ public class SwaggerServlet extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(SwaggerServlet.class);
 
     @Override
-    public void init(ServletConfig servletConfig) throws ServletException {
-        super.init(servletConfig);
+    public void init(ServletConfig config) throws ServletException {
+        super.init(config);
+
+        ServletContext servletContext = config.getServletContext();
+        logger.info("swagger context path: {}: " + servletContext.getContextPath());
     }
 
     @Override

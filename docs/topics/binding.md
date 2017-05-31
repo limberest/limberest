@@ -70,7 +70,7 @@ Limberest autobinding cascades through contained and inherited Jsonables to buil
 representation of your Java object model.  Movie extends Item for its properties, and contains a list
 of Credit Jsonables.  The limberest-demo model object tree results in complete two-way binding between
 JSON and Java.  Since Jsonable is an interface, any existing model hierarchy can be hooked up to Limberest
-and exposed as a JSON REST service API.  No need to extend any concrete base class.
+and exposed as a JSON REST service API.
 
 ### JSON Property Ordering
 You're probably aware that JSON object property order is not considered significant.

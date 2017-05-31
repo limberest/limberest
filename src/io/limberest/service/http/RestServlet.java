@@ -50,11 +50,13 @@ public class RestServlet extends HttpServlet {
         super.init(config);
 
         ServletContext servletContext = config.getServletContext();
+        logger.info("limberest context path: {}: " + servletContext.getContextPath());
+
         String warDeployPath = servletContext.getRealPath("/");
-        logger.info("warDeployPath: {}", warDeployPath);
+        logger.debug("warDeployPath: {}", warDeployPath);
 
         String webappContextPath = servletContext.getContextPath();
-        logger.info("webappContextPath: {}", webappContextPath);
+        logger.debug("webappContextPath: {}", webappContextPath);
 
         String scanPackagesParam = config.getInitParameter(SCAN_PACKAGES);
         if (scanPackagesParam != null) {
