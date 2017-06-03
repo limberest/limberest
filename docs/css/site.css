@@ -10,6 +10,12 @@ pre, code {
 .wrapper {
   max-width: 960px;
 }
+.page-content {
+  padding: 30px;
+  padding-top: 20px;
+  font-family: Verdana, Geneva, sans-serif;
+  background-color: #455a64;
+}
 .site-header {
   background-color: lightgray;
   padding-top: 6px;
@@ -56,11 +62,6 @@ pre, code {
 .site-nav a:hover {
   text-decoration: none;
   color: #455a64;
-}
-.page-content {
-  padding: 30px;
-  padding-top: 20px;
-  font-family: Verdana, Geneva, sans-serif;
 }
 .active-group {
   color: #455a64 !important;
