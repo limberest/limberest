@@ -1,13 +1,18 @@
 ---
 layout: default
 ---
+<script>
+// ie does not support main element
+document.createElement('main');
+</script>
+
 <main class="page-content home" aria-label="Content">
   <div class="wrapper">
     {{ content }}
   </div>
 </main>
 
-<div class="wrapper" style="margin-top:22px;">
+<div class="wrapper">
   <div class="home-col">
     <h3>Lightweight</h3>
     <p>
