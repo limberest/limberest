@@ -41,7 +41,7 @@ public interface Validator<T> {
 }
 ```
 
-This stipulates a `validate()` method that takes a Request and returns a Limberest validation [Result](../javadoc/io/limberest/validate/Result)
+This stipulates a `validate()` method that takes a Request and returns a Limberest validation [Result](../javadoc/io/limberest/validate/Result).
 Results are cumulative, and can be appended to each other through [Result.also()](../javadoc/io/limberest/validate/Result.html#also-io.limberest.validate.Result-).
 Maximum accumulation can be controlled through [Result.setMaxErrors()](../javadoc/io/limberest/validate/Result.html#setMaxErrors-int-).
 

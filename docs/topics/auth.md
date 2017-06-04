@@ -31,7 +31,7 @@ requires the role "Deleters" in order to perform a DELETE operation.
     }
 ```
 
-This combination means in limberest-demo user credentials are not required to retrieve movies, 
+This combination means that in limberest-demo, user credentials are not required to retrieve movies, 
 but they are required to create, update or delete.  Furthermore, even authenticated users require
 membership in the "Deleters" role to be able to delete a movie. 
 
@@ -47,6 +47,6 @@ in limberest-demo, but is prohibited from deleting movies.
   <user username="regular" password="norolesforme" />
 </tomcat-users>
 ```
-With this setup only user *deleter* is allowed to delete.
+With this setup, only user *deleter* is allowed to delete.
 
 Next Topic: [Configuration](config)

@@ -22,7 +22,7 @@ class in [limberest-demo](../demo/):
     }
 ```
 
-The call to `bind()` is where the magic happens by way of Limberests autobinding mechanism.
+The call to `bind()` is where the magic happens by way of Limberest's autobinding mechanism.
 Always call `bind()` unless you want to completely bypass autobinding, or your model class extends another
 Jsonable in its inheritance chain whose constructor already calls `bind()`.  This is the case with 
 [Movie](https://github.com/limberest/limberest-demo/blob/master/src/io/limberest/demo/model/Movie.java),

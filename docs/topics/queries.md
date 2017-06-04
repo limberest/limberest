@@ -71,7 +71,8 @@ A few **meta** parameters have special meaning to Query objects:
   - **descending** (`boolean`): Sort results in descending order.
 
 These special parameters are not included in `getFilters()`, but can be accessed directly (`getSort()`).
-You can use these special fields to further process the results returned by your service as in the example above.
+You can use these special fields to further process the results returned by your service as in the 
+filtering, sorting and paginating examples above.
 
 <a name="sample-requests"></a>
 ### Sample requests 
