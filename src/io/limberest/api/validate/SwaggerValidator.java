@@ -37,14 +37,44 @@ import io.swagger.models.properties.StringProperty;
 
 public class SwaggerValidator implements Validator<JSONObject> {
     
-    public SwaggerValidator() {
+    private PropertyValidators propertyValidators = new PropertyValidators();
+    protected PropertyValidators getPropertyValidators() { return propertyValidators; }
+    private ParameterValidators parameterValidators = new ParameterValidators();
+    protected ParameterValidators getParameterValidators() { return parameterValidators; }
+    
+    private Request<JSONObject> request;
+    
+    private SwaggerRequest swaggerRequest;
+    protected SwaggerRequest getSwaggerRequest() throws ValidationException {
+        if (swaggerRequest == null) {
+            try {
+                swaggerRequest = new SwaggerRequest(request.getMethod(), request.getPath());
+            }
+            catch (ServiceApiException ex) {
+                throw new ValidationException(NOT_FOUND.getCode(), ex.getMessage(), ex);
+            }
+        }
+        return swaggerRequest;
+    }
+    
+    public SwaggerValidator(Request<JSONObject> request) {
+        this.request = request;
         addDefaultValidators();
     }
 
-    private PropertyValidators propertyValidators = new PropertyValidators();
-    private ParameterValidators parameterValidators = new ParameterValidators();
-    
-    public SwaggerValidator(ParameterValidators parameterValidators, PropertyValidators propertyValidators) {
+    public SwaggerValidator(SwaggerRequest swaggerRequest) {
+        this.swaggerRequest = swaggerRequest;
+        addDefaultValidators();
+    }
+
+    public SwaggerValidator(Request<JSONObject> request, ParameterValidators parameterValidators, PropertyValidators propertyValidators) {
+        this.request = request;
+        this.parameterValidators = parameterValidators;
+        this.propertyValidators = propertyValidators;
+    }
+
+    public SwaggerValidator(SwaggerRequest swaggerRequest, ParameterValidators parameterValidators, PropertyValidators propertyValidators) {
+        this.swaggerRequest = swaggerRequest;
         this.parameterValidators = parameterValidators;
         this.propertyValidators = propertyValidators;
     }
@@ -58,28 +88,20 @@ public class SwaggerValidator implements Validator<JSONObject> {
         addValidator(BodyParameter.class, new BodyParameterValidator(propertyValidators));
     }
 
-    private SwaggerRequest swaggerRequest;
-
-    @Override
     public Result validate(Request<JSONObject> request) throws ValidationException {
         return validate(request, false);
     }
     
     public Result validate(Request<JSONObject> request, boolean strict) throws ValidationException {
+        this.request = request;
         ExecutionTimer timer = new ExecutionTimer(true);
         try {
             Result result = new Result();
-
-            swaggerRequest = new SwaggerRequest(request.getMethod(), request.getPath());
-            
             result.also(validatePath(request.getPath(), strict));
             result.also(validateQuery(request.getQuery(), strict));
             result.also(validateHeaders(request.getHeaders(), strict));
             result.also(validateBody(request.getBody(), strict));
             return result;
-        }
-        catch (ServiceApiException ex) {
-            throw new ValidationException(NOT_FOUND.getCode(), ex.getMessage(), ex);
         }
         finally {
             timer.log("SwaggerValidator: validate:");
@@ -88,7 +110,7 @@ public class SwaggerValidator implements Validator<JSONObject> {
     
     public Result validatePath(ResourcePath path, boolean strict) throws ValidationException {
         Result result = new Result();
-        ResourcePath swaggerPath = swaggerRequest.getPath();
+        ResourcePath swaggerPath = getSwaggerRequest().getPath();
         if (strict) {
             // validate path segments
             if (swaggerPath.getSegments().length < path.getSegments().length) {
@@ -98,11 +120,11 @@ public class SwaggerValidator implements Validator<JSONObject> {
                 result.also(Status.BAD_REQUEST, "Unknown path suffix: " + unknownPath);
             }
         }
-        List<PathParameter> pathParams = swaggerRequest.getPathParameters();
+        List<PathParameter> pathParams = getSwaggerRequest().getPathParameters();
         for (int i = 0; i < pathParams.size(); i++) {
             PathParameter pathParam = pathParams.get(i);
             for (ParameterValidator<? extends Parameter> validator : parameterValidators.getValidators(pathParam)) {
-                result.also(validator.doValidate(swaggerRequest, pathParam, path.getSegment(i), strict));
+                result.also(validator.doValidate(getSwaggerRequest(), pathParam, path.getSegment(i), strict));
             }
         }
         return result;
@@ -111,9 +133,9 @@ public class SwaggerValidator implements Validator<JSONObject> {
     // TODO honor strict
     public Result validateQuery(Query query, boolean strict) throws ValidationException {
         Result result = new Result();
-        for (QueryParameter queryParam : swaggerRequest.getQueryParameters()) {
+        for (QueryParameter queryParam : getSwaggerRequest().getQueryParameters()) {
             for (ParameterValidator<? extends Parameter> validator : parameterValidators.getValidators(queryParam)) {
-                result.also(validator.doValidate(swaggerRequest, queryParam, query.getFilter(queryParam.getName()), strict));
+                result.also(validator.doValidate(getSwaggerRequest(), queryParam, query.getFilter(queryParam.getName()), strict));
             }
         }
         return result;
@@ -121,12 +143,12 @@ public class SwaggerValidator implements Validator<JSONObject> {
 
     public Result validateHeaders(Map<String,String> headers, boolean strict) throws ValidationException {
         Result result = new Result();
-        for (HeaderParameter headerParam : swaggerRequest.getHeaderParameters()) {
+        for (HeaderParameter headerParam : getSwaggerRequest().getHeaderParameters()) {
             for (ParameterValidator<? extends Parameter> validator : parameterValidators.getValidators(headerParam)) {
                 String value = headers.get(headerParam.getName());
                 if (value == null)
                     value = headers.get(headerParam.getName().toLowerCase());
-                result.also(validator.doValidate(swaggerRequest, headerParam, value, strict));
+                result.also(validator.doValidate(getSwaggerRequest(), headerParam, value, strict));
             }
         }
         return result;
@@ -134,9 +156,9 @@ public class SwaggerValidator implements Validator<JSONObject> {
 
     public Result validateBody(JSONObject body, boolean strict) throws ValidationException {
         Result result = new Result();
-        for (BodyParameter bodyParam : swaggerRequest.getBodyParameters()) {
+        for (BodyParameter bodyParam : getSwaggerRequest().getBodyParameters()) {
             for (ParameterValidator<? extends Parameter> validator : parameterValidators.getValidators(bodyParam)) {
-                result.also(validator.doValidate(swaggerRequest, bodyParam, body, strict));
+                result.also(validator.doValidate(getSwaggerRequest(), bodyParam, body, strict));
             }
         }
         return result;

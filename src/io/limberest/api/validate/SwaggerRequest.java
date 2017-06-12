@@ -35,9 +35,14 @@ public class SwaggerRequest {
     public Swagger getSwagger() { return swagger; }
     
     public SwaggerRequest(HttpMethod method, ResourcePath path) throws ServiceApiException {
+        this(method, ServiceRegistry.getInstance().getMatchedPath(path, "application/json"),
+                new ServiceApi().getSwagger(path.toString()));
+    }
+    
+    public SwaggerRequest(HttpMethod method, ResourcePath path, Swagger swagger) {
         this.method = method;
-        this.path = ServiceRegistry.getInstance().getMatchedPath(path, "application/json");
-        this.swagger = new ServiceApi().getSwagger(this.path.toString());
+        this.path = path;
+        this.swagger = swagger;
     }
 
     public Operation getOperation() {
