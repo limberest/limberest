@@ -34,7 +34,7 @@ public class SimpleParameterValidator {
         Result result = new Result();
         if (value == null || value.isEmpty()) {
             if (param.getRequired())
-                result.also(BAD_REQUEST, "Missing required param: " + param.getName());
+                result.also(BAD_REQUEST, "Missing required " + param.getIn() + " param: " + param.getName());
         }
         else if (param instanceof SerializableParameter) {
             SerializableParameter p = (SerializableParameter) param;
