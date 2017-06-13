@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
+import io.limberest.api.ServiceApi;
 import io.limberest.api.ServiceApiException;
 import io.limberest.api.validate.params.BodyParameterValidator;
 import io.limberest.api.validate.params.HeaderParameterValidator;
@@ -22,10 +23,12 @@ import io.limberest.service.Query;
 import io.limberest.service.ResourcePath;
 import io.limberest.service.http.Request;
 import io.limberest.service.http.Status;
+import io.limberest.service.registry.ServiceRegistry;
 import io.limberest.util.ExecutionTimer;
 import io.limberest.validate.Result;
 import io.limberest.validate.ValidationException;
 import io.limberest.validate.Validator;
+import io.swagger.models.Swagger;
 import io.swagger.models.parameters.BodyParameter;
 import io.swagger.models.parameters.HeaderParameter;
 import io.swagger.models.parameters.Parameter;
@@ -48,7 +51,9 @@ public class SwaggerValidator implements Validator<JSONObject> {
     protected SwaggerRequest getSwaggerRequest() throws ValidationException {
         if (swaggerRequest == null) {
             try {
-                swaggerRequest = new SwaggerRequest(request.getMethod(), request.getPath());
+                ResourcePath matchedPath = ServiceRegistry.getInstance().getMatchedPath(request.getPath(), "application/json");
+                Swagger swagger = new ServiceApi().getSwagger(matchedPath.toString());
+                swaggerRequest = new SwaggerRequest(request.getMethod(), matchedPath, swagger);
             }
             catch (ServiceApiException ex) {
                 throw new ValidationException(NOT_FOUND.getCode(), ex.getMessage(), ex);

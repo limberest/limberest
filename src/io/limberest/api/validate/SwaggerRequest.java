@@ -5,11 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import io.limberest.api.ServiceApi;
-import io.limberest.api.ServiceApiException;
 import io.limberest.service.ResourcePath;
 import io.limberest.service.http.Request.HttpMethod;
-import io.limberest.service.registry.ServiceRegistry;
 import io.swagger.models.Model;
 import io.swagger.models.Operation;
 import io.swagger.models.Path;
@@ -33,11 +30,6 @@ public class SwaggerRequest {
     
     private Swagger swagger;
     public Swagger getSwagger() { return swagger; }
-    
-    public SwaggerRequest(HttpMethod method, ResourcePath path) throws ServiceApiException {
-        this(method, ServiceRegistry.getInstance().getMatchedPath(path, "application/json"),
-                new ServiceApi().getSwagger(path.toString()));
-    }
     
     public SwaggerRequest(HttpMethod method, ResourcePath path, Swagger swagger) {
         this.method = method;
