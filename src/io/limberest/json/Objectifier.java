@@ -50,28 +50,31 @@ public class Objectifier {
     }
     
     public void from(JSONObject json) throws JSONException {
-        for (String name : JSONObject.getNames(json)) {
-            try {
-                Method writer = getWriter(name);
-                if (writer != null) {
-                    Object o = json.get(name);
-                    Type t = writer.getGenericParameterTypes()[0];
-                    o = getObject(t, o);
-                    if (o != null)
-                        writer.invoke(into, new Object[]{o});
+        String[] names = JSONObject.getNames(json);
+        if (names != null) {
+            for (String name : names) {
+                try {
+                    Method writer = getWriter(name);
+                    if (writer != null) {
+                        Object o = json.get(name);
+                        Type t = writer.getGenericParameterTypes()[0];
+                        o = getObject(t, o);
+                        if (o != null)
+                            writer.invoke(into, new Object[]{o});
+                    }
                 }
-            }
-            catch (IllegalArgumentException ex) {
-                throw new JSONException(ex.getMessage() + ": " + name, ex);
-            }
-            catch (IntrospectionException ex) {
-                throw new JSONException(ex.getMessage() + ": " + name, ex);
-            }
-            catch (ReflectiveOperationException ex) {
-                throw new JSONException(ex.getMessage() + ": " + name, ex);
-            }
-            catch (DateTimeParseException ex) {
-                throw new JSONException(ex.getMessage() + ": " + name, ex);
+                catch (IllegalArgumentException ex) {
+                    throw new JSONException(ex.getMessage() + ": " + name, ex);
+                }
+                catch (IntrospectionException ex) {
+                    throw new JSONException(ex.getMessage() + ": " + name, ex);
+                }
+                catch (ReflectiveOperationException ex) {
+                    throw new JSONException(ex.getMessage() + ": " + name, ex);
+                }
+                catch (DateTimeParseException ex) {
+                    throw new JSONException(ex.getMessage() + ": " + name, ex);
+                }
             }
         }
     }
