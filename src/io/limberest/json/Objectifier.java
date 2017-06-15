@@ -126,6 +126,9 @@ public class Objectifier {
                         }
                     }
                 }
+                else {
+                    return o;
+                }
             }
         }
         else if (o instanceof JSONArray) {
