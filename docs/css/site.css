@@ -12,6 +12,10 @@ main {
 }
 .wrapper {
   max-width: 960px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 30px;
+  padding-left: 30px;  
 }
 .page-content {
   padding: 30px;
@@ -23,6 +27,8 @@ main {
   padding-top: 6px;
   border-top: 0;
   border-bottom: 0;
+  min-height: 55.95px;
+  position: relative;  
 }
 .site-link {
   color: #212121;
@@ -35,6 +41,8 @@ main {
 }
 .logo-icon {
   float: left;
+  max-width: 100%;
+  vertical-align: middle;  
 }
 .logo {
   float: left;
@@ -52,6 +60,7 @@ main {
   align-items: center;
   margin-left: 100px;
   margin-top: -3px;
+  line-height: 54px;  
 }
 .site-nav a {
   color: #78909c;
