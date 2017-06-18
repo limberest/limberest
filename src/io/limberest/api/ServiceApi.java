@@ -32,7 +32,20 @@ public class ServiceApi {
     }
     
     public JSONObject getSwaggerJson(String path) throws ServiceApiException {
-        return new JsonObject(getSwaggerString(path, Format.json));
+        Swagger swagger = getSwagger(path);
+        try {
+            // Re-parse as JsonObject to ensure ordering of definitions and paths.
+            // TODO: make this optional (see limberest.yaml comments in limberest-demo)
+            JsonObject swaggerJson = new JsonObject(Json.mapper().writeValueAsString(swagger));
+            if (swaggerJson.has("definitions"))
+                swaggerJson.put("definitions", new JsonObject(swaggerJson.getJSONObject("definitions").toString()));
+            if (swaggerJson.has("paths"))
+                swaggerJson.put("paths", new JsonObject(swaggerJson.getJSONObject("paths").toString()));
+            return swaggerJson;
+        }
+        catch (JsonProcessingException ex) {
+            throw new ServiceApiException(ex.getMessage(), ex);
+        }
     }
     
     public String getSwaggerString(String path, Format format) throws ServiceApiException {
@@ -47,7 +60,16 @@ public class ServiceApi {
     public String getSwaggerString(String path, Format format, int prettyIndent) 
     throws ServiceApiException {
         try {
-            return getWriter(format, prettyIndent).writeValueAsString(getSwagger(path));
+            Swagger swagger = getSwagger(path);
+            // TODO orderedKeys in limberest.yaml
+            boolean orderedKeys = true;
+            if (format == Format.json && orderedKeys) {
+                JSONObject swaggerJson = getSwaggerJson(path);
+                return swaggerJson.toString(prettyIndent);
+            }
+            else {
+                return getWriter(format, prettyIndent).writeValueAsString(swagger);
+            }
         } 
         catch (JsonProcessingException ex) {
             throw new ServiceApiException(ex.getMessage(), ex);

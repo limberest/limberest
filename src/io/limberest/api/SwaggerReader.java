@@ -24,6 +24,7 @@ import io.swagger.models.Scheme;
 import io.swagger.models.Swagger;
 import io.swagger.models.Tag;
 import io.swagger.models.parameters.Parameter;
+import io.swagger.models.parameters.PathParameter;
 import io.swagger.servlet.ReaderContext;
 import io.swagger.servlet.extensions.ReaderExtension;
 import io.swagger.util.BaseReaderUtils;
@@ -33,7 +34,7 @@ import io.swagger.util.PathUtils;
  * Duplicated from io.swagger.servlet.Reader except where noted below.
  * This is to avoid auto-inclusion of Swagger's ServletResourceReaderExtension.
  * 
- * TODO: yaml config option to include alternative reader extensions
+ * TODO: config option to include alternative reader extensions
  */
 public class SwaggerReader {
 
@@ -65,9 +66,9 @@ public class SwaggerReader {
         }
         for (Method method : context.getCls().getMethods()) {
             // TODO: how to smartly limit extension processing
-//            if (ReflectionUtils.isOverriddenMethod(method, context.getCls())) {
-//                continue;
-//            }
+            // if (ReflectionUtils.isOverriddenMethod(method, context.getCls())) {
+            //     continue;
+            // }
             final Operation operation = new Operation();
             String operationPath = null;
             String httpMethod = null;
@@ -123,6 +124,29 @@ public class SwaggerReader {
                 final Map<String, String> regexMap = new HashMap<String, String>();
                 final String parsedPath = PathUtils.parsePath(operationPath, regexMap);
 
+                if (parsedPath != null) {
+                    // Check for curly path params -- these are added for free if not annotated.
+                    for (String seg : parsedPath.split("/")) {
+                        if (seg.startsWith("{") && seg.endsWith("}")) {
+                            String segName = seg.substring(1, seg.length() - 1);
+                            boolean declared = false;
+                            for (Parameter opParam : operation.getParameters()) {
+                                if ("path".equals(opParam.getIn()) && segName.equals(opParam.getName())) {
+                                    declared = true;
+                                    break;
+                                }
+                            }
+                            if (!declared) {
+                                PathParameter pathParam = new PathParameter();
+                                pathParam.setName(segName);
+                                pathParam.setRequired(false);
+                                pathParam.setDefaultValue("");
+                                operation.parameter(pathParam);
+                            }
+                        }
+                    }
+                }
+                                    
                 Path path = swagger.getPath(parsedPath);
                 if (path == null) {
                     path = new Path();
