@@ -25,7 +25,7 @@ public class ArrayValidator<T> {
     public Result validate(Object[] items, String path) throws ValidationException {
         Result result = new Result();
         if (getMaxItems() != null && items.length > getMaxItems()) {
-            String msg = path + ": array size '" + items.length + "' exceces maximum (" + getMaxItems() + ")";
+            String msg = path + ": array size '" + items.length + "' exceeds maximum (" + getMaxItems() + ")";
             result.also(BAD_REQUEST, msg);
         }
         if (getMinItems() != null && items.length < getMinItems()) {

@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'io.limberest'
-version = '1.0.03'
+version = '1.0.04'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 

@@ -81,6 +81,7 @@ public class RestServlet extends HttpServlet {
             throws ServletException, IOException {
 
         ExecutionTimer timer = new ExecutionTimer(true);
+        String responseContentType = null;
         try {
             HttpMethod method;
             try {
@@ -107,6 +108,7 @@ public class RestServlet extends HttpServlet {
             RegistryKey registryKey = null;
             String accept = request.getHeader("Accept");
             if (accept != null) {
+                responseContentType = accept;
                 for (String type : accept.split(",")) {
                     registryKey = new RegistryKey(resourcePath, type);
                     service = registry.get(registryKey);
@@ -118,6 +120,7 @@ public class RestServlet extends HttpServlet {
                 // try the same as received
                 String contentType = request.getContentType();
                 if (contentType != null) {
+                    responseContentType = contentType;
                     registryKey = new RegistryKey(resourcePath, contentType);
                     service = registry.get(registryKey);
                 }
@@ -125,6 +128,7 @@ public class RestServlet extends HttpServlet {
             if (service == null) {
                 String fallback = getFallbackContentType(method);
                 if (fallback != null) {
+                    responseContentType = fallback;
                     registryKey = new RegistryKey(resourcePath, fallback);
                     service = registry.get(registryKey);
                 }
@@ -154,7 +158,7 @@ public class RestServlet extends HttpServlet {
             Request serviceRequest = new Request(method, resourcePath, query, headers);
             if (service.isAuthenticationRequired(serviceRequest) || request.getHeader("Authorization") != null) {
                 // TODO authenticate() populates response status message with tomcat default
-                AuthenticationResponseWrapper authWrapper = new AuthenticationResponseWrapper(response);
+                AuthenticationResponseWrapper authWrapper = new AuthenticationResponseWrapper(response, responseContentType);
                 if (!request.authenticate(authWrapper)) {
                     throw new ServiceException(new Status(authWrapper.code, authWrapper.message));
                 }
@@ -181,13 +185,16 @@ public class RestServlet extends HttpServlet {
                 Response<?> serviceResponse = service.service(serviceRequest);
                 logger.debug("Response for '{}':\n{}", serviceRequest, serviceResponse.getText());
                 timer.log("RestServlet: invoke service():");
-                response.setContentType(registryKey.getContentType());
+                if (response.getContentType() == null)
+                    response.setContentType(responseContentType);
                 Map<String,String> responseHeaders = serviceResponse.getHeaders();
                 if (responseHeaders != null) {
                     for (String responseHeaderName : responseHeaders.keySet())
                         response.setHeader(responseHeaderName, responseHeaders.get(responseHeaderName));
                 }
 
+                if (serviceResponse.getStatus() != null && serviceResponse.getStatus().getCode() > 0)
+                    response.setStatus(serviceResponse.getStatus().getCode());
                 response.getOutputStream().print(serviceResponse.getText());
             }
             else {
@@ -195,14 +202,16 @@ public class RestServlet extends HttpServlet {
             }
         }
         catch (ServiceException ex) {
-            // TODO: yaml option: logging level based on response code
-            logger.error("Service exception: " + ex.getCode(), ex);
             // TODO: customize error response
+            response.setContentType(responseContentType);
+            // TODO: logging level based on response code
+            logger.error("Service exception: " + ex.getCode(), ex);
             response.setStatus(ex.getCode());
             response.getWriter().println(new StatusResponse(ex.getCode(), ex.getMessage()).toString());
         }
         catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
+            response.setContentType(responseContentType);
             // TODO: customize error response
             Status status = Status.INTERNAL_ERROR;
             response.setStatus(status.getCode());
@@ -233,19 +242,25 @@ public class RestServlet extends HttpServlet {
 
         int code = Status.UNAUTHORIZED.getCode();
         String message = "Authentication failure";
+        String contentType;
         
-        public AuthenticationResponseWrapper(HttpServletResponse response) {
+        public AuthenticationResponseWrapper(HttpServletResponse response, String contentType) {
             super(response);
+            this.contentType = contentType;
         }
 
         @Override
         public void sendError(int sc, String msg) throws IOException {
+            if (contentType != null)
+                setContentType(contentType);
             this.code = sc;
             this.message = msg;
         }
 
         @Override
         public void sendError(int sc) throws IOException {
+            if (contentType != null)
+                setContentType(contentType);
             this.code = sc;
         }
     }
