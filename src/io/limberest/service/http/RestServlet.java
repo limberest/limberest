@@ -35,8 +35,6 @@ import io.limberest.util.ExecutionTimer;
 
 /**
  * Initialization registers jax-rs @Path annotations in the ServiceRegistry.
- * 
- * TODO: can urlPatterns be overridden by declaring in web.xml?
  */
 @WebServlet(urlPatterns={"/api/*"}, loadOnStartup=0)
 public class RestServlet extends HttpServlet {

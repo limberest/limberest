@@ -2,8 +2,6 @@ package io.limberest.config;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,42 +61,5 @@ public class LimberestConfig {
         if (instance == null)
             instance = new LimberestConfig();
         return instance;
-    }
-    
-    /**
-     * @return responsePrettyPrint
-     */
-    public int getResponsePrettyIndentx() {
-        int responsePrettyIndent = 0;
-        String indent = settings.get("responsePrettyIndent");
-        if (indent != null)
-            responsePrettyIndent = Integer.parseInt(indent);
-        return responsePrettyIndent;
-    }
-
-    
-    /**
-     * @return apiDefinitionClasses
-     */
-    public List<String> getApiDefinitionClassesx() {
-        List<String> apiDefinitionClasses = null;
-        List<?> list = settings.getList("apiDefinitionClasses");
-        if (list != null) {
-            apiDefinitionClasses = new ArrayList<>();
-            for (Object o : list)
-                apiDefinitionClasses.add(o.toString());
-        }
-        return apiDefinitionClasses;
-    }
-    
-    /**
-     * @return apiPrettyPrint
-     */
-    public int getApiPrettyIndentx() {
-        int apiPrettyIndent = 0;
-        String indent = settings.get("apiPrettyIndent");
-        if (indent != null)
-            apiPrettyIndent = Integer.parseInt(indent);
-        return apiPrettyIndent;
     }
 }
