@@ -44,7 +44,18 @@ public class Tests extends JsonRestService {
                     // lightweight items is array of strings
                     JSONArray items = new JSONArray();
                     for (int i = 0; i < itemArr.length(); i++) {
-                        items.put(itemArr.getJSONObject(i).get("name"));
+                        JSONObject itemObj = itemArr.getJSONObject(i);
+                        JSONObject item = new JsonObject();
+                        item.put("name", itemObj.get("name"));
+                        String method = null;
+                        if (itemObj.has("request")) {
+                            JSONObject requestObj = itemObj.getJSONObject("request");
+                            if (requestObj.has("method"))
+                                method = requestObj.getString("method");
+                        }
+                        if (method != null)
+                            item.put("method", method);
+                        items.put(item);
                     }
                     json.put(path, items);
                 }
@@ -55,7 +66,6 @@ public class Tests extends JsonRestService {
         catch (IOException ex) {
             throw new ServiceException(Status.INTERNAL_ERROR, ex);
         }
-        
     }
     
     /**
