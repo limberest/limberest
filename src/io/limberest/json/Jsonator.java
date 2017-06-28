@@ -168,6 +168,9 @@ public class Jsonator {
         else if (o instanceof Instant) {
             return ((Instant)o).toString();
         }
+        else if (o.getClass().isEnum()) {
+            return o.toString();
+        }
         else {
             return JSONObject.wrap(o);
         }

@@ -173,6 +173,12 @@ public class Objectifier {
             else if (t.equals(Instant.class)) {
                 return Instant.parse((String)o);
             }
+            else if (t instanceof Class && ((Class)t).isEnum()) {
+                for (Object enumConst : ((Class)t).getEnumConstants()) {
+                    if (enumConst.toString().equals(o))
+                        return enumConst;
+                }
+            }
             else {
                 return o;
             }
