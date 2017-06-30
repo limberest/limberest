@@ -8,5 +8,6 @@ io.limberest.json
 io.limberest.service
 io.limberest.service.http
 io.limberest.service.registry
+io.limberest.service.test
 io.limberest.util
 io.limberest.validate
