@@ -11,9 +11,9 @@ main {
     display:block;
 }
 .wrapper {
-  max-width: 960px;
-  margin-right: auto;
-  margin-left: auto;
+  max-width: 100%;
+  margin-left: 15px;
+  margin-right: 15px;
   padding-right: 30px;
   padding-left: 30px;  
 }
