@@ -121,12 +121,9 @@ main {
   font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';
   font-weight: 600;
   display: inline-block;
-  background-color: #009999;
+  background-color: #616161;
   border-radius: 5px;
   color: #eeeeee;
-}
-.site-btn:hover {
-  text-decoration: none;
 }
 .site-btn:visited {
   color: #eeeeee;
