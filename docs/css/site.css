@@ -14,8 +14,6 @@ main {
   max-width: 100%;
   margin-left: 15px;
   margin-right: 15px;
-  padding-right: 30px;
-  padding-left: 30px;  
 }
 .page-content {
   padding: 30px;
@@ -139,6 +137,7 @@ main {
   font-size: 15px;
   float: left;
   width: 105px;
+  margin-left: 10px;
   position: fixed;
   padding-top: 25px;
   white-space: nowrap;
