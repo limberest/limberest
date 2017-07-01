@@ -10,10 +10,17 @@ pre, code {
 main {
     display:block;
 }
-.wrapper {
+.header {
   max-width: 100%;
-  margin-left: 15px;
-  margin-right: 15px;
+  margin-left: 35px;
+  margin-right: 35px;  
+}
+.wrapper {
+  max-width: 960px;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 30px;
+  padding-left: 30px;  
 }
 .page-content {
   padding: 30px;
