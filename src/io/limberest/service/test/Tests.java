@@ -22,15 +22,13 @@ import io.limberest.service.ServiceException;
 import io.limberest.service.http.Request;
 import io.limberest.service.http.Response;
 import io.limberest.service.http.Status;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
+/**
+ * For tests from the server.
+ */
 @Path("/limberest/tests")
-@Api("Limberest test cases")
 public class Tests extends JsonRestService {
 
-    @ApiOperation(value="Retrieve a flat list of tests",
-            notes="Test assets are in postman collection", responseContainer="List")
     public Response<JSONObject> get(Request<JSONObject> request) throws ServiceException {
         Map<String,File> testFiles = getTestFiles();
         JSONObject json = new JsonObject();
@@ -74,7 +72,7 @@ public class Tests extends JsonRestService {
     private Map<String,File> testFiles = new HashMap<>();
     private File testsDir;
     
-    private Map<String,File> getTestFiles() throws ServiceException {
+    protected Map<String,File> getTestFiles() throws ServiceException {
         String testsLoc = null;
         Settings settings = LimberestConfig.getSettings();
         Map<?,?> test = settings.getMap("tests");

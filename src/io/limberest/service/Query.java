@@ -279,7 +279,9 @@ public class Query {
                 if (val != null) {
                     if (sb.length() > 0)
                         sb.append("&");
-                    sb.append(key).append("=").append(val);
+                    sb.append(key);
+                    if (val != null && val.length() > 0)
+                        sb.append("=").append(val);
                 }
             }
         }
