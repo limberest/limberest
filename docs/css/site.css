@@ -136,6 +136,7 @@ main {
 .github {
   float: right;
   padding-top: 9px;
+  padding-right: 9px;
 }
 .outer {
   width: 100%;
