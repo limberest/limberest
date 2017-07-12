@@ -125,6 +125,7 @@ public class Objectifier {
                             map.put(name, mo);
                         }
                     }
+                    return map;
                 }
                 else {
                     return o;
