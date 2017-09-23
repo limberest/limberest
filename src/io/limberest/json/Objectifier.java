@@ -195,8 +195,11 @@ public class Objectifier {
      * @param t type
      * @return object of expected type
      */
+    @SuppressWarnings("unchecked")
     protected Object coerceNumber(Number n, Type t) throws ReflectiveOperationException {
         Class<? extends Number> c = primitiveNumToWrapper.get(t.getTypeName());
+        if (c == null)
+            c = (Class<? extends Number>)Class.forName(t.getTypeName());
         if (n.getClass().equals(c))
             return n; // runtime coercion will work
         Constructor<? extends Number> ctor = c.getConstructor(String.class);
