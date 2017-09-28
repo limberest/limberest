@@ -90,27 +90,32 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
         path += path == null || path.isEmpty() ? name : "." + name;
         
         if (json.has(name)) {
-            Result typeMatch = matchType(json.get(name), prop, path);
-            if (typeMatch.getStatus().getCode() == OK.getCode()) {
-                if (prop instanceof RefProperty) {
-                    JSONObject obj = json.getJSONObject(name);
-                    String ref = ((RefProperty)prop).getSimpleRef();
-                    Model model = swaggerRequest.getDefinitions().get(ref);
-                    result.also(validate(obj, model, path, strict));
-                }
-                else if (prop instanceof ArrayProperty) {
-                    Property itemsProp = ((ArrayProperty)prop).getItems();
-                    if (itemsProp != null)
-                        result.also(validate(json.getJSONArray(name), itemsProp, path, strict));
-                }
-                else {
-                    for (PropertyValidator<? extends Property> validator : propertyValidators.getValidators(prop)) {
-                        result.also(validator.doValidate(json, prop, path, strict));
-                    }
-                }
+            if (prop.getReadOnly() != null && prop.getReadOnly()) {
+                result.also(BAD_REQUEST, path + " is read-only");
             }
             else {
-                result.also(typeMatch); 
+                Result typeMatch = matchType(json.get(name), prop, path);
+                if (typeMatch.getStatus().getCode() == OK.getCode()) {
+                    if (prop instanceof RefProperty) {
+                        JSONObject obj = json.getJSONObject(name);
+                        String ref = ((RefProperty)prop).getSimpleRef();
+                        Model model = swaggerRequest.getDefinitions().get(ref);
+                        result.also(validate(obj, model, path, strict));
+                    }
+                    else if (prop instanceof ArrayProperty) {
+                        Property itemsProp = ((ArrayProperty)prop).getItems();
+                        if (itemsProp != null)
+                            result.also(validate(json.getJSONArray(name), itemsProp, path, strict));
+                    }
+                    else {
+                        for (PropertyValidator<? extends Property> validator : propertyValidators.getValidators(prop)) {
+                            result.also(validator.doValidate(json, prop, path, strict));
+                        }
+                    }
+                }
+                else {
+                    result.also(typeMatch); 
+                }
             }
         }
         else if (prop.getRequired()) {
@@ -177,7 +182,7 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
             else {
                 Type refType = ReflectionUtils.typeFromString(prop.getType());
                 if (refType != null)
-                expectedType = refType.getTypeName();
+                    expectedType = refType.getTypeName();
             }
         }
             
@@ -191,6 +196,10 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
             }
             else if (Double.class.getName().equals(expectedType)) {
                 if (foundType.equals(Integer.class.getName()))
+                    match = true;
+            }
+            else if (Integer.class.getName().equals(expectedType)) {
+                if (foundType.equals(Long.class.getName()) && "int64".equals(prop.getFormat()))
                     match = true;
             }
         }
