@@ -4,7 +4,7 @@ clone limberest-demo
 
 build the demo
 
-deploy locally in Eclipse
+deploy locally
 
 submit request using postman
 

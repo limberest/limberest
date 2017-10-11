@@ -44,4 +44,3 @@ TODO: override root paths in Spring Boot.
 ### Optional services.yaml
 TODO: document services.yaml content and how located
 
-Next Topic: [Testing](testing)

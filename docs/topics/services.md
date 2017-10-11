@@ -9,7 +9,7 @@ The base implementation ordinarily takes care of request object binding.
 
 You declare service endpoints using [JAX-RS @Path](http://docs.oracle.com/javaee/7/api/javax/ws/rs/Path.html) annotations.
 Here's how this looks for the [MoviesService](https://github.com/limberest/limberest-demo/blob/master/src/io/limberest/demo/service/MoviesService.java)
-in [limberest-demo](../demo/):
+in [limberest-demo](https://limberest.io/ui/):
 ```java
 @Path("/movies")
 public class MoviesService extends JsonRestService {

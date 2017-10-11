@@ -15,7 +15,7 @@ Jsonables deal in [org.json.JSONObject](http://stleary.github.io/JSON-java/org/j
 This exposes a lightweight, ubiquitous binding protocol. By convention, every Jsonable declares a 
 constructor that takes a JSONObject. Take a look at the constructor for the
 [Credit](https://github.com/limberest/limberest-demo/blob/master/src/io/limberest/demo/model/Credit.java)
-class in [limberest-demo](../demo/):
+class in [limberest-demo](https://limberest.io/ui/):
 ```java
     public Credit(JSONObject json) {
         bind(json);

@@ -5,7 +5,7 @@ layout: topic
 Limberest comes with the ability to auto-generate API documentation based on 
 [JAX-RS](http://docs.oracle.com/javaee/7/api/javax/ws/rs/Path.html) and 
 [Swagger](https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X)
-annotations.  Here's an example from the [limberest-demo](../demo)
+annotations.  Here's an example from the [limberest-demo](https://limberest.io/ui/)
 [MovieService](https://github.com/limberest/limberest-demo/blob/master/src/io/limberest/demo/service/MovieService.java)
 `put()` method that shows what Swagger annotations look like:
 ```java

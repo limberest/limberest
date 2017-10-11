@@ -5,7 +5,7 @@ layout: topic
 ### Authentication
 Authentication in your Limberest service is enforced by overriding 
 [isAuthenticationRequired()](../javadoc/io/limberest/service/http/RestService.html#isAuthenticationRequired-io.limberest.service.http.Request-).
-Here's how the [limberest-demo](../demo) 
+Here's how the [limberest-demo](https://limberest.io/ui/) 
 [MoviesService](https://github.com/limberest/limberest-demo/blob/master/src/io/limberest/demo/service/MoviesService.java)
 requires authentication for all HTTP methods except GET:
 ```java

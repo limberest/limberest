@@ -6,7 +6,7 @@ HTTP query parameters are captured by Limberest into a [Query](../javadoc/io/lim
 object.  The method `Query.getFilters()` returns a map that your service can use to filter results.  
 Query also provides the built-in `match()` method which can be used with with Java
 [Streams](http://www.oracle.com/technetwork/articles/java/ma14-java-se-8-streams-2177646.html) for 
-convenient autofiltering.  Here's an example from [limberest-demo](../demo/)'s
+convenient autofiltering.  Here's an example from [limberest-demo](https://limberest.io/ui/)'s
 [MoviesPersistFile](https://github.com/limberest/limberest-demo/blob/master/src/io/limberest/demo/persist/MoviesPersistFile.java): 
 ```java
     @Override

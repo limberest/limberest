@@ -7,7 +7,7 @@ you'll want a way of enforcing constraints so that your service is not in the
 habit of accepting bad requests.  This is where the Limberest validation API
 comes in.
 
-Let's harken back to [limberest-demo](../demo) and take a look at the
+Let's harken back to [limberest-demo](https://limberest.io/ui/) and take a look at the
 [MoviesService](https://github.com/limberest/limberest-demo/blob/master/src/io/limberest/demo/service/MoviesService.java)
 `post` method to see how validation is invoked:
 ```java
@@ -120,4 +120,4 @@ By default, multiple outcomes are combined into a status with the highest indivi
 list of messages.  This behavior can be overridden by passing a custom 
 [Consolidator](../javadoc/io/limberest/validate/Result.Consolidator) to `Result.getStatus()`.
 
-Next Topic: [Access Control](auth)
+Next Topic: [Testing](testing)
