@@ -117,7 +117,7 @@ const demo = require('../lib/limberest-demo');
 ...
 ```
 This illustrates a number of concepts:
-  0. You can leverage helper and third-party [Node.js](https://nodejs.org/en/) modules through `require()` syntax.
+  0. You can leverage helper functions and third-party [Node.js](https://nodejs.org/en/) modules through `require()` syntax.
      In fact, while building cases it's very convenient to run them from the command-line:
      ```
      node movie-crud
