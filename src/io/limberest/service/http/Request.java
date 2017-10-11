@@ -1,5 +1,6 @@
 package io.limberest.service.http;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -29,6 +30,9 @@ public class Request<T> {
     private Query query;
     public Query getQuery() { return query; }
     
+    private URL base;
+    public URL getBase() { return base; }
+    
     private Map<String,String> headers = new HashMap<>();
     public Map<String,String> getHeaders() { return headers; }
     
@@ -51,8 +55,9 @@ public class Request<T> {
     public T getBody() { return body; }
     void setBody(T body) { this.body = body; }
 
-    Request(HttpMethod method, ResourcePath path, Query query, Map<String,String> headers) {
+    Request(HttpMethod method, URL base, ResourcePath path, Query query, Map<String,String> headers) {
         this.method = method;
+        this.base = base;
         this.path = path;
         this.query = query;
         this.headers = headers;

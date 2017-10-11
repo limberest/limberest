@@ -2,6 +2,7 @@ package io.limberest.service.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -100,6 +101,8 @@ public class RestServlet extends HttpServlet {
                 }
             }
             
+            StringBuffer urlBuf = request.getRequestURL();
+            URL base = new URL(urlBuf.substring(0, urlBuf.length() - path.length())); 
             ResourcePath resourcePath = new ResourcePath(path);
             ServiceRegistry registry = ServiceRegistry.getInstance();
             Service<?> service = null;
@@ -153,7 +156,7 @@ public class RestServlet extends HttpServlet {
                 headers.put(headerName, request.getHeader(headerName));
             }
                 
-            Request serviceRequest = new Request(method, resourcePath, query, headers);
+            Request serviceRequest = new Request(method, base, resourcePath, query, headers);
             if (service.isAuthenticationRequired(serviceRequest) || request.getHeader("Authorization") != null) {
                 // TODO authenticate() populates response status message with tomcat default
                 AuthenticationResponseWrapper authWrapper = new AuthenticationResponseWrapper(response, responseContentType);
