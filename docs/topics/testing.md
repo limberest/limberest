@@ -63,7 +63,7 @@ Tests execute in your browser, and results are retained in [local storage](https
 so nothing is saved back to the server.  Unless you install and run [limberest-demo](https://github.com/limberest/limberest-demo/blob/master/README.md)
 locally, you won't be able to submit POST, PUT or DELETE requests since those require authorization.
 
-You can even edit the request content or expected result YAML by clicking the pencil icon ![Values selections](../img/values-selections.png).
+You can even edit the request content or expected result YAML by clicking the pencil icon ![Edit button](../img/edit-button.png).
 All your changes are saved in browser local storage, so experiment freely with successful and unsuccessful results.
 
 ### [Cases](https://limberest.io/ui/cases)
