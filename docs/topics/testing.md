@@ -2,7 +2,7 @@
 layout: topic
 ---
 ## Testing
-Automated API testing is the most popular feature of Limberest. When execution a test, 
+Automated API testing is the most popular feature of Limberest. When executing a test, 
 you'll invoke actual REST calls to exercise *any* API (not just those built on Limberest).
 Every aspect of a test can be parameterized using [Values](#values).
 
@@ -14,7 +14,7 @@ in [Postman](https://www.getpostman.com/).  For example, the [limberest-demo](ht
 project has an exported [movies-api collection](https://github.com/limberest/limberest-demo/blob/master/test/movies-api.postman).
 
 Every request in the collection can be run individually, or linked together in Limberest [Cases](#cases).
-An intuitive way to visualize a request is through in the Limberest UI.  Here's what the 
+An intuitive way to visualize a request is through the Limberest UI.  Here's what the 
 ['GET movies/{id}'](https://limberest.io/ui/testing/movies-api/GET/movies/{id}) request looks like:
 
 !['GET movies/id' request](../img/get-movies-id-request.png)
@@ -67,7 +67,7 @@ You can even edit the request content or expected result YAML by clicking the pe
 All your changes are saved in browser local storage, so experiment freely with successful and unsuccessful results.
 
 ### [Cases](https://limberest.io/ui/cases)
-Tests based on single requests can be fragile.  What if we were to run DELETE before POST?  We'd likely get an HTTP 404 response,
+Tests based on single requests can be fragile.  What if we were to run DELETE before GET?  We'd likely get an HTTP 404 response,
 which would disagree with the expected result.  Real-world APIs need an orchestration approach, and that's what Limberest cases deliver.
 Cases use JavaScript to string together multiple requests.  They can include conditionality and populate values programmatically, and they
 can easily parse JSON response content.  This gives you the power to build tests as complex as the API you're evaluating.
@@ -148,7 +148,7 @@ Result: {
   "message": "Test succeeded"
 }
 ```
-If you clone the [limberest-demo](https://github.com/limberest/limberest-demo) project you can run the command 
+If you clone the [limberest-demo](https://github.com/limberest/limberest-demo) project, you can run the command 
 above from the test/cases/ directory.
 
 In fact, the [limberest-js](https://www.npmjs.com/package/limberest) node module has all kinds of capabilities for

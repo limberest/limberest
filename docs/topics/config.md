@@ -44,3 +44,9 @@ TODO: override root paths in Spring Boot.
 ### Optional services.yaml
 TODO: document services.yaml content and how located
 
+### Limberest JS
+TODO: config options for limberest-js
+
+### Limberest UI
+TODO: config options for limberest-ui
+
