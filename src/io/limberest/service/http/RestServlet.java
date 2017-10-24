@@ -3,10 +3,8 @@ package io.limberest.service.http;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletConfig;
@@ -40,8 +38,6 @@ import io.limberest.util.ExecutionTimer;
 @WebServlet(urlPatterns={"/api/*"}, loadOnStartup=0)
 public class RestServlet extends HttpServlet {
 
-    // TODO yaml option instead of servlet init param
-    public static final String SCAN_PACKAGES = "io.limberest.scan.packages";
     private static final Logger logger = LoggerFactory.getLogger(RestServlet.class);
 
     @Override
@@ -56,22 +52,14 @@ public class RestServlet extends HttpServlet {
 
         String webappContextPath = servletContext.getContextPath();
         logger.debug("webappContextPath: {}", webappContextPath);
-
-        String scanPackagesParam = config.getInitParameter(SCAN_PACKAGES);
-        if (scanPackagesParam != null) {
-            List<String> scanPackages = Arrays.asList(scanPackagesParam.split(","));
-            new Initializer().scan(scanPackages);
+        
+        try {
+            // TODO log
+            new Initializer().scan();
         }
-        else {
-            try {
-                // TODO log
-                new Initializer().scan();
-            }
-            catch (IOException ex) {
-                logger.error("Unable to scan all packages", ex);
-            }
+        catch (IOException ex) {
+            logger.error("Unable to scan all packages", ex);
         }
-
     }
 
     @SuppressWarnings({"rawtypes", "unchecked"})

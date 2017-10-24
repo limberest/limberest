@@ -3,6 +3,7 @@ package io.limberest.service.registry;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
@@ -15,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import com.google.common.reflect.ClassPath;
 import com.google.common.reflect.ClassPath.ClassInfo;
 
+import io.limberest.config.LimberestConfig;
+import io.limberest.config.LimberestConfig.Settings;
 import io.limberest.service.ResourcePath;
 import io.limberest.service.http.RestService;
 import io.limberest.service.registry.ServiceRegistry.RegistryKey;
@@ -22,8 +25,7 @@ import io.limberest.util.ExecutionTimer;
 import io.limberest.util.ExecutionTimer.LogLevel;
 
 /**
- * TODO optional way to set includes (packages) instead of excludes
- * TODO optional way to set classloader names to exclude
+ * Scans for Limberest service annotations.
  */
 public class Initializer {
 
@@ -33,7 +35,18 @@ public class Initializer {
      * By default we exclude all ancestor classloaders of the loader for this.
      */
     public void scan() throws IOException {
-        scan(Initializer.class.getClassLoader());
+        List<String> scanPackages = null;
+        Settings settings = LimberestConfig.getSettings();
+        Map<?,?> scan = settings.getMap("scan");
+        if (scan != null)
+            scanPackages = settings.getStringList("packages", scan);
+        
+        if (scanPackages != null) {
+            scan(scanPackages);
+        }
+        else {
+            scan(Initializer.class.getClassLoader());
+        }
     }
 
     public void scan(ClassLoader classLoader) throws IOException {
