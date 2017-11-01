@@ -21,6 +21,7 @@ An intuitive way to visualize a request is through the Limberest UI.  Here's wha
 
 (See ['POST movies'](https://limberest.io/ui/testing/movies-api/POST/movies) for an example of a request that includes a body.) 
 
+### <a name="results">[Results](https://github.com/limberest/limberest-demo/tree/master/test/results/expected/movies-api)</a>
 When you run a test in Limberest, it generates results in [YAML](http://yaml.org/) format.  After execution, here's 
 what the Result tab looks like for 'GET movies/{id}':
 
@@ -35,7 +36,7 @@ the response body, but also its status and headers.  If the request had a body, 
 The [expected result YAML](https://github.com/limberest/limberest-demo/blob/master/test/results/expected/movies-api/GET_movies_{id}.yaml) 
 is retrieved from GitHub, where the results for all tests and cases are reposited.
 
-### [Values](https://limberest.io/ui/values)
+### <a name="values">[Values](https://limberest.io/ui/values)</a>
 Values provide a way to repeatedly run tests with varying input.  Values files are JSON.  They can be in
 [Postman environment](https://www.getpostman.com/docs/postman/environments_and_globals/manage_environments) format,
 or as (simpler and preferred) straight-JSON objects.  Values can hold environment-specific parameters like these:
@@ -66,7 +67,7 @@ locally, you won't be able to submit POST, PUT or DELETE requests since those re
 You can even edit the request content or expected result YAML by clicking the pencil icon ![Edit button](../img/edit-button.png).
 All your changes are saved in browser local storage, so experiment freely with successful and unsuccessful results.
 
-### [Cases](https://limberest.io/ui/cases)
+### <a name="cases">[Cases](https://limberest.io/ui/cases)</a>
 Tests based on single requests can be fragile.  What if we were to run DELETE before GET?  We'd likely get an HTTP 404 response,
 which would disagree with the expected result.  Real-world APIs need an orchestration approach, and that's what Limberest cases deliver.
 Cases use JavaScript to string together multiple requests.  They can include conditionality and populate values programmatically, and they

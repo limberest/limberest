@@ -8,8 +8,51 @@ document.createElement('main');
 
 <main class="page-content home" aria-label="Content">
   <div class="wrapper">
-    {{ content }}
-  </div>
+<div class="site-left">
+  <a href="https://search.maven.org/#artifactdetails%7Cio.limberest%7Climberest%7C1.0.11%7Cjar" class="top-btn">Implement</a><br>
+  You're a Java developer and you aim to quickly spin up and host a REST API.
+  <ol>
+    <li>Add <code>implements Jsonable</code> to your Java model class(es)
+      <ul>
+        <li>This gives you easily-customizable <a href="topics/binding">autobinding</a></li>
+      </ul>
+    </li>
+    <li>Extend <a href="javadoc/io/limberest/json/JsonRestService">JsonRestService</a> to create your service
+      <ul>
+        <li>Use JAX-RS <code>@Path</code> annotations to <a href="topics/services">declare your endpoints</a></li>
+        <li>Implement <code>get()</code>, <code>post()</code>, <code>put()</code>, and/or <code>delete()</code>
+        <li>Optionally add Swagger annotations for auto-generated <a href="topics/swagger">API docs</a>
+          and <a href="topics/validation">validation</a></li>
+      </ul>
+    </li>
+  </ol>
+</div>
+
+  
+<div class="site-right">
+<a href="https://www.npmjs.com/package/limberest" class="top-btn">Consume</a><br>
+You know JavaScript, and you want to build automated tests to exercise your API.
+  <ol>
+    <li>Export a <a href="https://www.getpostman.com/docs/postman/collections/creating_collections">Postman collection</a> that has the
+    parameterized requests that'll form the basis of your test cases
+      <ul>
+        <li>
+          Runtime <a href="topics/testing#values">values</a> are supplied by standard JSON object files, or can be assigned through script
+        </li>
+      </ul>
+    </li>
+    <li>Write a <a href="topics/testing#cases">test case</a> that orchestrates requests
+      <ul>
+        <li>
+          Every run produces a highly-readable <a href="topics/testing#results">YAML result</a> file
+        </li>
+        <li>
+          Expected results are compared versus actual to determine test case success
+        </li>
+      </ul>
+    </li>
+  </ol>
+</div>
 </main>
 
 <div class="wrapper">
@@ -18,11 +61,11 @@ document.createElement('main');
     <p>
     Everything in Limberest exists to help you build a service API.
     Bring your own model, persistence, UI and container.  Limberest is not trying to be a platform.
-    <a href="dependencies">Dependencies</a> are scant and unlikely to conflict.
+    <a href="dependencies">Dependencies</a> are scant.
     </p>
     <p>
     Yet Limberest has everything you need to get up and running quickly.
-    Follow the <a href="cookbook/">cookbook</a> to walk through the steps, or jump straight to the
+    Read through the <a href="topics/">documentation</a>, or jump straight to the
     fully-baked implementation in <a href="https://github.com/limberest/limberest-demo">limberest-demo</a>.
     </p>   
   </div>
@@ -30,7 +73,8 @@ document.createElement('main');
     <h3>Flexible</h3>
     <p>
     Limberest can be deployed in a variety of ways; from a straight-up jar dependency, to
-    a self-contained, prebuilt War distribution.  There are even fully-hosted ecosystems available (todo: ref).
+    a self-contained, prebuilt War distribution.  You can integrate <a href="topics/testing">Limberest Tests</a> into your build cycle through
+    the our <a href="https://github.com/marketplace/limberest-ui">GitHub App</a>.
     </p>
     <p>
     While Limberest is naturally geared to channel you toward a hypermedia constrained approach, your services

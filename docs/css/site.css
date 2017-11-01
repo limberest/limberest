@@ -181,3 +181,35 @@ main {
 }
 .site-footer {
 }
+.site-left {
+  float: left;
+  width: 40%;
+  padding-right: 15px;  
+}
+.site-left code {
+  color: black;
+}
+.top-btn {
+  background-color: #212121;
+  /* box-shadow: 4px 4px 2px gray; */
+  font-size: 24px;
+  padding: 15px;
+  border: 2px solid gray;
+  border-radius: 4px;
+  margin-bottom: 15px;  
+  display: inline-block;
+}
+.top-btn:hover {
+  border: 2px solid #f48fb1;
+  text-decoration: none;
+}
+.top-btn a:hover {
+  text-decoration: none;
+}
+.site-right {
+  float: right;
+  width: 40%;
+}
+.site-right code {
+  color: black;
+}
