@@ -31,9 +31,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
-
 /**
  * Binds a JSONObject to a JavaBean.
  * TODO: bean info caching
@@ -228,8 +225,6 @@ public class Objectifier {
                 return new ArrayList<>();
             else if (Set.class.isAssignableFrom(collectionType))
                 return new HashSet<>();
-            else if (Multiset.class.isAssignableFrom(collectionType))
-                return HashMultiset.create();
             else
                 throw new JSONException("Unsupported collection type: " + collectionType);
         }

@@ -2,8 +2,6 @@ package io.limberest.json;
 
 import org.json.JSONObject;
 
-import io.swagger.annotations.ApiModelProperty;
-
 /**
  * By convention Jsonables should have a constructor that takes
  * a single argument of type {@link org.json.JSONObject}.
@@ -17,7 +15,6 @@ public interface Jsonable {
      * representing this.
      * @return a JSON object
      */
-    @ApiModelProperty(hidden=true)
     default JSONObject toJson() {
         return new Jsonator(this).getJson();
     };
@@ -25,8 +22,7 @@ public interface Jsonable {
     /**
      * May be overridden to name the JSON object returned from {@link #toJson()}.
      */
-    @ApiModelProperty(hidden=true)
-    default String getJsonName() {
+    default String jsonName() {
         return null;
     }
     

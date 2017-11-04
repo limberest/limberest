@@ -21,7 +21,7 @@ public class JsonList<E extends Jsonable> implements Jsonable {
     public List<E> getList() { return list; }
 
     private String jsonName;
-    public String getJsonName() { return jsonName; }
+    public String jsonName() { return jsonName; }
 
     /**
      * Useful when list is paginated.
@@ -87,13 +87,13 @@ public class JsonList<E extends Jsonable> implements Jsonable {
         if (isObject) {
             JSONObject jsonObj = new JsonObject();
             for (Jsonable item : list) {
-                String jsonName = item.getJsonName();
+                String jsonName = item.jsonName();
                 if (jsonName == null) {
                     // default to the Class name in lower camel
                     String ucName = item.getClass().getSimpleName();
                     jsonName = ucName.substring(0, 1).toLowerCase() + ucName.substring(1);
                 }
-                jsonObj.put(item.getJsonName(), item.toJson());
+                jsonObj.put(item.jsonName(), item.toJson());
             }
             json.put(jsonName, jsonObj);
         }

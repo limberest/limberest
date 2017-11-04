@@ -4,6 +4,7 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.time.Instant;
 import java.util.Collection;
@@ -15,8 +16,6 @@ import java.util.Map.Entry;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import io.swagger.annotations.ApiModelProperty;
 
 /**
  * Default binding for Jsonables.
@@ -46,7 +45,7 @@ public class Jsonator {
                   Object o = reader.invoke(jsonable, (Object[])null);
                   if (o instanceof Jsonable) {
                       Jsonable j = (Jsonable) o;
-                      String jsonName = j.getJsonName();
+                      String jsonName = j.jsonName();
                       if (jsonName == null)
                           jsonName = pd.getName();
                       json.put(jsonName, j.toJson());
@@ -95,7 +94,7 @@ public class Jsonator {
             String name = String.valueOf(entry.getKey());
             if (val instanceof Jsonable) {
                 Jsonable j = (Jsonable) val;
-                String jsonName = j.getJsonName();
+                String jsonName = j.jsonName();
                 if (jsonName == null)
                     jsonName = name;
                 json.put(jsonName, j.toJson());
@@ -112,6 +111,7 @@ public class Jsonator {
     private static Map<Method,Boolean> hiddenMethods;
     /**
      * For swagger "hidden" annotation, lowest declaring subclass governs.
+     * Uses reflection to avoid dependency on the swagger stack.
      * This method is especially expensive, so preliminary caching begins here.
      */
     protected boolean isHidden(Method method) {
@@ -133,11 +133,18 @@ public class Jsonator {
         while (c != null) {
             try {
                 Method m = c.getMethod(method.getName(), method.getParameterTypes());
-                ApiModelProperty apiModelProp = m.getAnnotation(ApiModelProperty.class);
-                if (apiModelProp != null)
-                    hidden = apiModelProp.hidden();
+                Annotation[] as = m.getAnnotations();
+                if (as != null) {
+                    for (Annotation a : as) {
+                    	if (a.getClass().getName().equals("io.swagger.annotations.ApiModelProperty")) {
+                    		Method hiddenMethod = a.getClass().getMethod("hidden");
+                    		hidden = hiddenMethod.invoke(a).equals(Boolean.TRUE);
+                    	}
+                    }
+                	
+                }
             }
-            catch (NoSuchMethodException ex) {
+            catch (ReflectiveOperationException ex) {
             }
             c = c.getSuperclass();
         }
