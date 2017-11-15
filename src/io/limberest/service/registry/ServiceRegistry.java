@@ -46,6 +46,20 @@ public class ServiceRegistry {
         }
         return instance;
     }
+    
+    private static Provider provider;
+    public static Provider getProvider() {
+        if (provider == null) {
+            provider = new Provider() {
+                public Service<?> getService(Class<? extends Service<?>> serviceClass)
+                        throws ServiceException, InstantiationException, IllegalAccessException {
+                    return serviceClass.newInstance();                
+                }
+            };
+        }
+        return provider;
+    }
+    public static void setProvider(Provider serviceProvider) { provider = serviceProvider; } 
 
     private Map<RegistryKey,Class<? extends Service<?>>> services = new HashMap<>();
     public void put(RegistryKey key, Class<? extends RestService<?>> service) {
@@ -57,7 +71,7 @@ public class ServiceRegistry {
         Service<?> service = null;
         Class<? extends Service<?>> serviceClass = getServiceClass(key);
         if (serviceClass != null) {
-            service = serviceClass.newInstance();
+            service = getProvider().getService(serviceClass);
         }
         return service;
     }
