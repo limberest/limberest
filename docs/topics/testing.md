@@ -2,7 +2,7 @@
 layout: topic
 ---
 ## Testing
-Automated API testing is the most popular feature of Limberest. When executing a test, 
+Automated API testing is the most versatile feature of Limberest. When executing a test, 
 you'll invoke actual REST calls to exercise *any* API (not just those built on Limberest).
 Every aspect of a test can be parameterized using [Values](#values).
 
