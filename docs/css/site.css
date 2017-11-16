@@ -105,10 +105,10 @@ main {
   border: none;
 }
 .home a {
-  color: #f48fb1;
+  color: #2aefda;
 }
 .home a:visited {
-  color: #f48fb1;
+  color: #2aefda;
 }
 .home-col {
   margin-top:22px;  
@@ -200,7 +200,7 @@ main {
   display: inline-block;
 }
 .top-btn:hover {
-  border: 2px solid #f48fb1;
+  border: 2px solid #2aefda;
   text-decoration: none;
 }
 .top-btn a:hover {
