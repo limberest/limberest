@@ -6,8 +6,8 @@ Automated API testing is the most versatile feature of Limberest. When executing
 you'll invoke actual REST calls to exercise *any* API (not just those built on Limberest).
 Every aspect of a test can be parameterized using [Values](#values).
 
-### [Tests](https://limberest.io/ui/testing)
-Individual tests are grouped in JSON artifacts that include parameterized request information.
+### [Requests](https://limberest.io/ui/requests)
+Individual HTTP requests are grouped in JSON artifacts that can include parameterized endpoints, headers and payloads.
 Limberest has its own native JSON format, but the easiest way to get started is to
 [create and export a collection](https://www.getpostman.com/docs/postman/collections/creating_collections) 
 in [Postman](https://www.getpostman.com/).  For example, the [limberest-demo](https://github.com/limberest/limberest-demo)
