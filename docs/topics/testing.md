@@ -79,42 +79,45 @@ test case:
 const limberest = require('limberest');
 const demo = require('../lib/limberest-demo');
 ...
-  demo.cleanupMovie(values, (err, response) => {
-    if (err) {
-      logger.error(err);
-    }
-    else {
-      logger.info('Cleanup completed for: ' + values.id);
-      
-      limberest.loadGroup(options.location + '/movies-api.postman', (err, group) => {
-        if (err) {
-          logger.error(err);
-        }
-        else {
-          // start a new case
-          var testCase = new limberest.Case(caseName, options);
-          testCase.authHeader = demo.getAuthHeader();
+var group = 'movies-api.postman'; // to be replaced once loaded
 
-          // create a movie
-          var post = group.getTest('POST', 'movies');
-          testCase.run(post, values, (err, response) => {
-            if (!err) {
-              // update it (with programmatically-set rating)
-              values.rating = 4.5;
-              var put = group.getTest('PUT', 'movies/{id}');
-              testCase.run(put, values, (err, response) => {
-                if (!err) {
-                  // confirm update
-                  var get = group.getTest('GET', 'movies/{id}');
-                  testCase.run(get, values, (err, response) => {
-                    if (!err) {
-                      // delete it
-                      var del = group.getTest('DELETE', 'movies/{id}');
-                      testCase.run(del, values, (err, response) => {
-                        // confirm delete
-                        testCase.run(get, values, (err, response) => {
-                          // verify results
-                          var res = testCase.verify(values, (err, result) => {
+limberest.loadGroup(options.location + '/' + group)
+.then(loadedGroup => {
+  group = loadedGroup;
+  return demo.cleanupMovie(group, values);
+})
+.then(() => {
+  logger.info('Cleanup completed for movie: ' + values.id);
+  var post = group.getRequest('POST', 'movies');
+  return testCase.run(post, values);
+})
+.then(response => {
+  // update it (with programmatically-set rating)
+  values.rating = 4.5;
+  var put = group.getRequest('PUT', 'movies/{id}');
+  return testCase.run(put, values);
+})
+.then(response => {
+  // confirm update
+  var get = group.getRequest('GET', 'movies/{id}');
+  return testCase.run(get, values);
+})
+.then(response => {
+  // delete it
+  var del = group.getRequest('DELETE', 'movies/{id}');
+  return testCase.run(del, values);
+})
+.then(response => {
+  // confirm delete
+  var get = group.getRequest('GET', 'movies/{id}');
+  return testCase.run(get, values);
+})
+.then(response => {
+  // load results
+  return limberest.loadFile(options, 'results/expected/movies-api/movie-crud.yaml');
+})
+.then(expectedResult => {
+  var res = testCase.verifyResult(expectedResult, values);
 ...
 ```
 This illustrates a number of concepts:
@@ -125,13 +128,12 @@ This illustrates a number of concepts:
      ```
   0. You can perform preliminary cleanup.  The demo.cleanupMovie() function invokes a DELETE and doesn't care whether
      the response comes back with HTTP 200 or 404.  We start our case execution with a clean slate.
-  0. You can employ asynchronicity, which is a natural paradigm for request/response processing.
-     In this example, notice how we pass callback implementations using 
-     [ES6 arrow function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
-     syntax to postpone execution until the response from the previous operation is received.
-  0. You can invoke requests repeatedly, as we've done with GET above to confirm both our UPDATE and our DELETE
-     operation outcomes.
-  0. You can programmatically override or supplement values, as we've done by assigning `values.rating = 4.5`.
+  0. You can employ asynchronicity, which is a natural paradigm for request/response processing in JavaScript.
+     Limberest helper functions like `testCase.run()` use JavaScript's concise and intuitive
+     [Promise syntax](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Using_promises) syntax
+     with [ES6 arrow functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions)
+     to postpone execution until the response from the previous operation is received.
+  0. You can programmatically override or supplement values, as we've done before our PUT by assigning `values.rating = 4.5`.
      The updated values are substituted in the request and also passed to testCase.verify() so they'll be used
      when evaluating the expected vs. actual result YAML.  This gives you the flexibility to pull values from
      an API response and use them to populate subsequent requests.
