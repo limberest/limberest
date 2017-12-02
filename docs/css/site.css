@@ -8,7 +8,16 @@ pre, code {
   font-size: 14px;
 }
 main {
-    display:block;
+  display: block;
+}
+td, th {
+  display: table-cell;
+  vertical-align: inherit;
+  padding-left: 10px;
+}
+th {
+  border-bottom: 1px solid lightgray;
+  color: #616161;
 }
 .header {
   max-width: 100%;
@@ -178,6 +187,9 @@ main {
 }
 .topic {
 	margin: 0 25px;
+}
+.topic-heading {
+  margin-bottom: 8px;
 }
 .site-footer {
 }

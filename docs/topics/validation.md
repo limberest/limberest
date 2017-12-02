@@ -120,4 +120,4 @@ By default, multiple outcomes are combined into a status with the highest indivi
 list of messages.  This behavior can be overridden by passing a custom 
 [Consolidator](../javadoc/io/limberest/validate/Result.Consolidator) to `Result.getStatus()`.
 
-Next Topic: [Testing](testing)
+Next Topic: [Access Control](auth)

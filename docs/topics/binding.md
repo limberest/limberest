@@ -77,7 +77,7 @@ You're probably aware that JSON object property order is not considered signific
 This is a central tenet of the JSON format specification.  Limberest makes use of a custom
 [JSONObject extension](../javadoc/io/limberest/json/JsonObject) that provides repeatable, 
 predictable ordering of JSON properties.  This makes it possible to write automated tests that 
-evaluate outcomes by straight text comparison of formatted JSON (see the [Testing](testing) topic).
+evaluate outcomes by straight text comparison of formatted JSON (see the [Testing](requests) topics).
 It also makes it easy for humans to perform eyeball comparisons and locate mismatches.
 This is not to be construed as an indication that JSON property ordering is significant in Limberest.
 
