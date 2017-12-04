@@ -2,10 +2,10 @@
 layout: topic
 ---
 ## Cases
-Tests based on single requests can be fragile.  What if we were to run DELETE before GET?  We'd likely get an HTTP 404 response,
+Tests based on single requests can be fragile.  What if we were to run GET right after DELETE?  We'd likely get an HTTP 404 response,
 which would disagree with the expected result.  Real-world APIs need an orchestration approach, and that's what Limberest cases deliver.
 Cases use JavaScript to string together multiple requests.  They can include conditionality and populate values programmatically, and they
-can easily parse JSON response content.  This gives you the power to build tests as complex as the API you're evaluating.
+can easily parse JSON response content.  This gives you the power to build tests as complex as the API you're exercising.
 
 Take a look at this snippet from the limberest-demo [movie-crud.js](https://github.com/limberest/limberest-demo/blob/master/test/cases/movie-crud.js)
 test case:

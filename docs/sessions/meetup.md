@@ -1,60 +1,51 @@
 {% include title.html title="REST API Testing with Limberest" subtext="West Denver Software Engineering Meetup" byline="December 7, 2017 by Don Oakes and Rich Whitehead" %}
 
-## Patterns
-  - [HTTP](https://www.w3.org/Protocols/HTTP/HTTP2.html), [REST](https://en.wikipedia.org/wiki/Representational_state_transfer), [JSON](http://www.json.org/)
-  - Status Codes are [standard](https://www.w3.org/Protocols/HTTP/HTRESP.html) and [meaningful](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
-  - Simplicity is paramount
-  - Guidance through [tooling](../../getting-started/install-designer/) 
+## Background
+  - History
+  - Motivation
+  - Components
+  - Movies API
 
-## 1. Consume
+## 1. Start with Postman
 
-### [Microservice REST Adapter](http://centurylinkcloud.github.io/mdw/docs/help/RestfulAdapter.html)
+### [The Postman App](https://www.getpostman.com/apps)
+  - Ad hoc requests
+  - Collections
+  - Scripting limitations
+  - Exporting
 
-#### Design Aspects
-  - Straight HTTP
-  - Request/response binding
-  - Transformation
-  - Automated Retry
-  - Context Help
-
-#### Runtime View
-  - Process state
-  - Request/response
-  - Response code evaluation
-  - Service Summary
+### [Limberest UI](https://limberest.io/ui/requests)
+  - Requests
+  - GitHub origin
+  - Sequencing fragility
+  - Results yaml
+  - Execution logs
+  - Parameterized values
   
-## 2. Orchestrate
+## 2. Orchestrate with Limberest
 
-### [Execution Plan](http://centurylinkcloud.github.io/mdw/docs/help/InvokeMultipleSubprocesses.html)
-  - Dynamic
-  - Asset-driven
-  - Lookup patterns
-  - Parallelism
-  - Value binding
-  - Error Handling
+### [Limberest JS](https://www.npmjs.com/package/limberest)
+  - JavaScript Cases
+  - The movies-crud example
+  - Programmatic values
+  - Synchronicity and promises
+  - Editing in the web UI
+  - Saving to origin
+  - Swagger validation cases
   
-### [Service Summary](http://git.lab.af.qwest.net:7990/projects/SD/repos/sd-workflow/browse/assets/io/ctl/sd/dev/service-summary.md)
+### [Node.js](https://nodejs.org/en/)
   - Automatically populated
   - Invocations
   - Updates
   - Dependency management
   
-## 3. Produce
-
-### Exposing REST Services
-  - [JAX-RS](http://docs.oracle.com/javaee/6/tutorial/doc/giepu.html) [@Path Annotations](http://docs.oracle.com/javaee/6/api/javax/ws/rs/Path.html)
-  - [Swagger Annotations](https://github.com/swagger-api/swagger-core/wiki/Annotations-1.5.X)
-  - [Autobinding](https://limberest.io/limberest/topics/binding)
-  - [Validation](https://limberest.io/limberest/topics/validation)
-
-### Deployment and Testing
-  - [Tomcat Guide](../../guides/tomcat-guide/)
-  - [Spring Boot](http://127.0.0.1:4000/docs/getting-started/quick-start/)
-  - [Hyperion platform](https://hyperion-ui-test1.pcfomactl.dev.intranet/home.html)
-  - [Cloud Foundry setup](../../guides/SetupGuideForCloudFoundry/)
-  - [Postman automated tests](../../help/groovyTestScriptSyntax.html#serviceApiTesting)
+  
   
 ## Resources
   - [MDW Cookbook](../../guides/mdw-cookbook/)
   - Built-In [Service APIs]()
   - [mdw-demo]()
+  
+## Roadmap
+  - GitHub App hosted solution
+  - Kotlin-language test cases
