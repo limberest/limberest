@@ -91,6 +91,19 @@ th {
   text-decoration: none;
   color: #455a64;
 }
+.title {
+  font-size: 32px;
+  color: #00695C;
+  font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+}
+.subtext {
+  font-size: 24px;
+  color: #00838F;
+  font-family: Lato, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+}
+
 .active-group {
   color: #455a64 !important;
 }
