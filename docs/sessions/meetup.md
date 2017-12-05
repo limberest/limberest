@@ -4,7 +4,6 @@
   - History
   - Motivation
   - Components
-  - Movies API
 
 ## 1. Start with Postman
 
@@ -17,10 +16,10 @@
 ### [Limberest UI](https://limberest.io/ui/requests)
   - Requests
   - GitHub origin
-  - Sequencing fragility
   - Results yaml
-  - Execution logs
   - Parameterized values
+  - Execution logs
+  - Sequencing fragility
   
 ## 2. Orchestrate with Limberest
 
