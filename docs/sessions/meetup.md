@@ -34,17 +34,14 @@
   - Swagger validation cases
   
 ### [Node.js](https://nodejs.org/en/)
-  - Automatically populated
-  - Invocations
-  - Updates
-  - Dependency management
-  
-  
+  - Command-line execution
+  - Options
+  - Continuous integration
   
 ## Resources
-  - [MDW Cookbook](../../guides/mdw-cookbook/)
-  - Built-In [Service APIs]()
-  - [mdw-demo]()
+  - [Documentation](https://limberest.io/limberest/topics/requests)
+  - [limberest-demo](https://github.com/limberest/limberest-demo)
+  - [limberest-ui](https://limberest.io/ui/requests)
   
 ## Roadmap
   - GitHub App hosted solution
