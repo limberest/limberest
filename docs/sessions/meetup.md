@@ -40,7 +40,7 @@
   - Continuous integration
   
 ## Resources
-  - [Documentation](https://limberest.io/limberest/topics/requests)
+  - [documentation](https://limberest.io/limberest/topics/requests)
   - [limberest-demo](https://github.com/limberest/limberest-demo)
   - [limberest-ui](https://limberest.io/ui/requests)
   
