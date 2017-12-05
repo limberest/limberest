@@ -13,6 +13,8 @@
   - Scripting limitations
   - Exporting
 
+## 2. Orchestrate with Limberest
+
 ### [Limberest UI](https://limberest.io/ui/requests)
   - Requests
   - GitHub origin
@@ -21,8 +23,6 @@
   - Execution logs
   - Sequencing fragility
   
-## 2. Orchestrate with Limberest
-
 ### [Limberest JS](https://www.npmjs.com/package/limberest)
   - JavaScript Cases
   - The movies-crud example
