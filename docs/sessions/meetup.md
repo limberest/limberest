@@ -1,4 +1,4 @@
-{% include title.html title="REST API Testing with Limberest" subtext="West Denver Software Engineering Meetup" byline="December 7, 2017 by Don Oakes and Rich Whitehead" %}
+{% include title.html title="REST API Testing with Limberest" subtext="West Denver Software Engineering Meetup" byline="December 7, 2017 by Don Oakes" %}
 
 ## Background
   - History
