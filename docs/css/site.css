@@ -8,11 +8,14 @@ pre {
   font-size: 14px;
 }
 div.highlight {
-  
-}
-pre.highlight {
   border: none !important;
   margin-bottom: 0;
+}
+pre.highlight {
+  background-color: #eceff1;
+  background: #eceff1;
+  border: 1px solid lightgray;  
+  margin-bottom: 15px;
 }
 code {
   background-color: #eceff1;
