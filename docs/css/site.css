@@ -4,7 +4,18 @@ body {
   font-feature-settings: "kern" 1;
   font-kerning: normal;
 }
-pre, code {
+pre {
+  font-size: 14px;
+}
+div.highlight {
+  
+}
+pre.highlight {
+  border: none !important;
+  margin-bottom: 0;
+}
+code {
+  background-color: #eceff1;
   font-size: 14px;
 }
 main {
