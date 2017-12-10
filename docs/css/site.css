@@ -102,7 +102,7 @@ th {
   color: #78909c;
 }
 .site-nav a:hover {
-  text-decoration: none;
+  text-decoration: underline;
   color: #455a64;
 }
 .title-section {
@@ -171,6 +171,9 @@ th {
   display: inline-block;
   background-color: #616161;
   border-radius: 5px;
+  color: #eeeeee;
+}
+.site-btn:hover {
   color: #eeeeee;
 }
 .site-btn:visited {
