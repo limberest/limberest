@@ -40,7 +40,7 @@ public class Request<T> {
     /**
      * Authenticated user.
      */
-    protected String getUser() { return user; }
+    public String getUser() { return user; }
     void setUser(String user) { this.user = user; }
     
     private Predicate<String> userRolePredicate;
