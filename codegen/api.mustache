@@ -4,80 +4,45 @@ package {{package}};
 {{#imports}}
 import {{import}};
 {{/imports}}
+
+{{#operations}}
 @Path("{{baseName}}")
 @Api("{{classname}}")
-{{#operations}}
 public class {{classname}} extends JsonRestService {
   {{#operation}}
-  /**
-   * {{summary}}
-   * {{notes}}
-   {{#allParams}}
-   * @param {{paramName}} {{description}}{{#required}} (required){{/required}}{{^required}} (optional{{#defaultValue}}, default to {{{.}}}{{/defaultValue}}){{/required}}
-   {{/allParams}}
-   {{#returnType}}
-   * @return {{returnType}}
-   {{/returnType}}
-   * @throws ServiceException
-   {{#isDeprecated}}
-   * @deprecated
-   {{/isDeprecated}}
-   {{#externalDocs}}
-   * {{description}}
-   * @see <a href="{{url}}">{{summary}} Documentation</a>
-   {{/externalDocs}}
-   */
+
   {{#isDeprecated}}
   @Deprecated
   {{/isDeprecated}}
-  public {{#returnType}}{{{returnType}}} {{/returnType}}{{^returnType}}void {{/returnType}}{{operationId}}({{#allParams}}{{{dataType}}} {{paramName}}{{#hasMore}}, {{/hasMore}}{{/allParams}}) throws ApiException {
-    Object {{localVariablePrefix}}localVarPostBody = {{#bodyParam}}{{paramName}}{{/bodyParam}}{{^bodyParam}}null{{/bodyParam}};
-    {{#allParams}}{{#required}}
-    // verify the required parameter '{{paramName}}' is set
-    if ({{paramName}} == null) {
-      throw new ApiException(400, "Missing the required parameter '{{paramName}}' when calling {{operationId}}");
-    }
-    {{/required}}{{/allParams}}
-    // create path and map variables
-    String {{localVariablePrefix}}localVarPath = "{{{path}}}"{{#pathParams}}
-      .replaceAll("\\{" + "{{baseName}}" + "\\}", {{localVariablePrefix}}apiClient.escapeString({{{paramName}}}.toString())){{/pathParams}};
-
-    // query params
-    {{javaUtilPrefix}}List<Pair> {{localVariablePrefix}}localVarQueryParams = new {{javaUtilPrefix}}ArrayList<Pair>();
-    {{javaUtilPrefix}}List<Pair> {{localVariablePrefix}}localVarCollectionQueryParams = new {{javaUtilPrefix}}ArrayList<Pair>();
-    {{javaUtilPrefix}}Map<String, String> {{localVariablePrefix}}localVarHeaderParams = new {{javaUtilPrefix}}HashMap<String, String>();
-    {{javaUtilPrefix}}Map<String, Object> {{localVariablePrefix}}localVarFormParams = new {{javaUtilPrefix}}HashMap<String, Object>();
-
-    {{#queryParams}}
-    {{localVariablePrefix}}{{#collectionFormat}}localVarCollectionQueryParams.addAll({{localVariablePrefix}}apiClient.parameterToPairs("{{{collectionFormat}}}", {{/collectionFormat}}{{^collectionFormat}}localVarQueryParams.addAll({{localVariablePrefix}}apiClient.parameterToPair({{/collectionFormat}}"{{baseName}}", {{paramName}}));
-    {{/queryParams}}
-
-    {{#headerParams}}if ({{paramName}} != null)
-      {{localVariablePrefix}}localVarHeaderParams.put("{{baseName}}", {{localVariablePrefix}}apiClient.parameterToString({{paramName}}));
-    {{/headerParams}}
-
-    {{#formParams}}if ({{paramName}} != null)
-      {{localVariablePrefix}}localVarFormParams.put("{{baseName}}", {{paramName}});
-    {{/formParams}}
-
-    final String[] {{localVariablePrefix}}localVarAccepts = {
-      {{#produces}}"{{{mediaType}}}"{{#hasMore}}, {{/hasMore}}{{/produces}}
-    };
-    final String {{localVariablePrefix}}localVarAccept = {{localVariablePrefix}}apiClient.selectHeaderAccept({{localVariablePrefix}}localVarAccepts);
-
-    final String[] {{localVariablePrefix}}localVarContentTypes = {
-      {{#consumes}}"{{{mediaType}}}"{{#hasMore}}, {{/hasMore}}{{/consumes}}
-    };
-    final String {{localVariablePrefix}}localVarContentType = {{localVariablePrefix}}apiClient.selectHeaderContentType({{localVariablePrefix}}localVarContentTypes);
-
-    String[] {{localVariablePrefix}}localVarAuthNames = new String[] { {{#authMethods}}"{{name}}"{{#hasMore}}, {{/hasMore}}{{/authMethods}} };
-
-    {{#returnType}}
-    GenericType<{{{returnType}}}> {{localVariablePrefix}}localVarReturnType = new GenericType<{{{returnType}}}>() {};
-    return {{localVariablePrefix}}apiClient.invokeAPI({{localVariablePrefix}}localVarPath, "{{httpMethod}}", {{localVariablePrefix}}localVarQueryParams, {{localVariablePrefix}}localVarCollectionQueryParams, {{localVariablePrefix}}localVarPostBody, {{localVariablePrefix}}localVarHeaderParams, {{localVariablePrefix}}localVarFormParams, {{localVariablePrefix}}localVarAccept, {{localVariablePrefix}}localVarContentType, {{localVariablePrefix}}localVarAuthNames, {{localVariablePrefix}}localVarReturnType);
-    {{/returnType}}{{^returnType}}
-    {{localVariablePrefix}}apiClient.invokeAPI({{localVariablePrefix}}localVarPath, "{{httpMethod}}", {{localVariablePrefix}}localVarQueryParams, {{localVariablePrefix}}localVarCollectionQueryParams, {{localVariablePrefix}}localVarPostBody, {{localVariablePrefix}}localVarHeaderParams, {{localVariablePrefix}}localVarFormParams, {{localVariablePrefix}}localVarAccept, {{localVariablePrefix}}localVarContentType, {{localVariablePrefix}}localVarAuthNames, null);
-    {{/returnType}}
+  @ApiOperation(value="{{summary}}"{{#notes}},
+      notes="{{notes}}"{{/notes}}{{#returnType}},
+      response={{returnBaseType}}.class{{#returnContainer}}, responseContainer="{{returnContainer}}"{{/returnContainer}}{{/returnType}})
+  public Response<JSONObject> {{operationId}}(Request<JSONObject> request) throws ServiceException {
+  
+    {{#validateRequest}}
+    Result result = new SwaggerValidator(request).validate(request, true);
+    if (result.isError())
+      throw new ValidationException(result);
+      
+    {{/validateRequest}}
+    {{#bodyParam}}
+    {{bodyParam.dataType}} {{bodyParam.paramName}} = new {{bodyParam.dataType}}(request.getBody());
+    {{/bodyParam}}
+    {{#isRestfulCreate}}
+    return new Response<>({{bodyParam.paramName}}.toJson());
+    {{/isRestfulCreate}}
+    {{^isRestfulCreate}}
+    {{#isListContainer}}
+    JsonList<{{returnBaseType}}> jsonList = new JsonList<>(new ArrayList<{{returnBaseType}}>());
+    return new Response<>(jsonList.toJson());
+    {{/isListContainer}}
+    {{#isMapContainer}}
+    return new Response<>(new JSONObject());
+    {{/isMapContainer}}
+    {{^returnContainer}}
+    return new Response<>(new {{returnBaseType}}().toJson());
+    {{/returnContainer}}
+    {{/isRestfulCreate}}
   }
   {{/operation}}
 }

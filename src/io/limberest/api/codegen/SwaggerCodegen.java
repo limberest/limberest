@@ -22,7 +22,7 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
     public static final String NAME = "limberest";
 
     public static final String AUTOGEN_COMMENT = "autogenComment";
-    public static final String SERVICE_PATHS = "servicePaths";
+    public static final String VALIDATE_REQUEST = "validateRequest";
 
     @Override
     public String getName() {
@@ -57,9 +57,9 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         modelPackage = "io.limberest.client.model";
 
         // limberest-specific
-        cliOptions.add(CliOption.newBoolean(AUTOGEN_COMMENT, "Autogen notice with warning not to edit"));
+        cliOptions.add(CliOption.newBoolean(AUTOGEN_COMMENT, "Insert autogen notice with warning not to edit"));
+        cliOptions.add(CliOption.newString(VALIDATE_REQUEST, "Include validation calls in API implementation methods"));
         cliOptions.add(CliOption.newBoolean(USE_BEANVALIDATION, "Use BeanValidation API annotations"));
-        cliOptions.add(CliOption.newString(SERVICE_PATHS, "Override default service path annotations"));
 
         // relevant once we submit a PR to swagger-code to become a java library
         supportedLibraries.put(NAME, getHelp());
@@ -78,6 +78,9 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         if (additionalProperties.containsKey(AUTOGEN_COMMENT)) {
             this.setAutogenComment(convertPropertyToBoolean(AUTOGEN_COMMENT));
         }
+        if (additionalProperties.containsKey(VALIDATE_REQUEST)) {
+            this.setValidateRequest(convertPropertyToBoolean(VALIDATE_REQUEST));
+        }
         if (additionalProperties.containsKey(USE_BEANVALIDATION)) {
             this.setUseBeanValidation(convertPropertyToBoolean(USE_BEANVALIDATION));
         }
@@ -89,7 +92,18 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         importMapping.put("Jsonable", "io.limberest.json.Jsonable");
         importMapping.put("JsonRestService", "io.limberest.json.JsonRestService");
         importMapping.put("ServiceException", "io.limberest.service.ServiceException");
-
+        importMapping.put("Request", "io.limberest.service.http.Request");
+        importMapping.put("Response", "io.limberest.service.http.Response");
+        if (validateRequest) {
+            importMapping.put("SwaggerValidator", "io.limberest.api.validate.SwaggerValidator");
+            importMapping.put("ValidationException", "io.limberest.demo.model.ValidationException");
+        }
+        importMapping.put("JsonList", "io.limberest.json.JsonList");
+        importMapping.put("ArrayList", "json.util.ArrayList");
+        importMapping.put("Api", "io.swagger.annotations.Api");
+        importMapping.put("ApiImplicitParams", "io.swagger.annotations.ApiImplicitParam");
+        importMapping.put("ApiImplicitParam", "io.swagger.annotations.ApiImplicitParams");
+        importMapping.put("ApiOperation", "io.swagger.annotations.ApiOperation");
     }
 
     @Override
@@ -115,12 +129,48 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         CodegenOperation op = super.fromOperation(path, httpMethod, operation, definitions, swagger);
         op.imports.add("JsonRestService");
         op.imports.add("ServiceException");
+        op.imports.add("Request");
+        op.imports.add("Response");
+        op.imports.add("JSONObject");
+        if (validateRequest) {
+            op.imports.add("SwaggerValidator");
+            op.imports.add("ValidationException");
+        }
+        if (op.isListContainer) {
+            op.imports.add("JsonList");
+            op.imports.add("ArrayList");
+        }
+        op.imports.add("Api");
+        op.imports.add("ApiOperation");
+        if (op.hasParams) {
+            op.imports.add("ApiImplicitParams");
+            op.imports.add("ApiImplicitParam");
+        }
+
         return op;
     }
 
     @Override
     public void postProcessModelProperty(CodegenModel model, CodegenProperty property) {
         super.postProcessModelProperty(model, property);
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> postProcessOperations(Map<String,Object> objs) {
+        objs = super.postProcessOperations(objs);
+        Map<String,Object> operations = (Map<String,Object>) objs.get("operations");
+        if (operations != null) {
+            List<CodegenOperation> ops = (List<CodegenOperation>) operations.get("operation");
+            for (CodegenOperation operation : ops) {
+                if (operation.returnContainer != null && !operation.returnContainer.isEmpty()) {
+                    operation.returnContainer = Character.toUpperCase(operation.returnContainer.charAt(0))
+                            + operation.returnContainer.substring(1);
+                }
+            }
+        }
+
+        return operations;
     }
 
     private Map<String,String> pathToTag = new HashMap<>();
@@ -137,35 +187,24 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         opList.add(co);
 
         co.baseName = resourcePath;
+        if (co.baseName.startsWith("/"))
+            co.baseName = co.baseName.substring(1);
 
         pathToTag.put(resourcePath, tag);
-        System.out.println("TAG: " + tag + "   PATH: " + resourcePath);
 
-
-
-//        String basePath = resourcePath;
-//        if (basePath.startsWith("/")) {
-//            basePath = basePath.substring(1);
-//        }
-//        int pos = basePath.indexOf("/");
-//        if (pos > 0) {
-//            basePath = basePath.substring(0, pos);
-//        }
-//
-////        if (basePath.equals("")) {
-////            basePath = "default";
-////        } else {
-////            co.subresourceOperation = !co.path.isEmpty();
-////        }
-//        List<CodegenOperation> opList = operations.get(basePath);
-//        if (opList == null) {
-//            opList = new ArrayList<CodegenOperation>();
-//            operations.put(basePath, opList);
-//        }
-//        opList.add(co);
-//        co.baseName = basePath;
+        // restful flags -- need to be set here after rejigging baseName
+        co.isRestfulShow = co.isRestfulShow();
+        co.isRestfulIndex = co.isRestfulIndex();
+        co.isRestfulCreate = co.isRestfulCreate();
+        co.isRestfulUpdate = co.isRestfulUpdate();
+        co.isRestfulDestroy = co.isRestfulDestroy();
+        co.isRestful = co.isRestful();
     }
 
     protected boolean autogenComment = false;
     public void setAutogenComment(boolean autogenComment) { this.autogenComment = autogenComment; }
+
+    protected boolean validateRequest = false;
+    public void setValidateRequest(boolean validateRequest) { this.validateRequest = validateRequest; }
+
 }
