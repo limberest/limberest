@@ -9,6 +9,7 @@ import io.swagger.codegen.CliOption;
 import io.swagger.codegen.CodegenConstants;
 import io.swagger.codegen.CodegenModel;
 import io.swagger.codegen.CodegenOperation;
+import io.swagger.codegen.CodegenParameter;
 import io.swagger.codegen.CodegenProperty;
 import io.swagger.codegen.CodegenType;
 import io.swagger.codegen.languages.AbstractJavaCodegen;
@@ -23,6 +24,7 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
 
     public static final String AUTOGEN_COMMENT = "autogenComment";
     public static final String VALIDATE_REQUEST = "validateRequest";
+    public static final String IMPLICIT_PARAMS = "implicitParams";
 
     @Override
     public String getName() {
@@ -58,7 +60,10 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
 
         // limberest-specific
         cliOptions.add(CliOption.newBoolean(AUTOGEN_COMMENT, "Insert autogen notice with warning not to edit"));
-        cliOptions.add(CliOption.newString(VALIDATE_REQUEST, "Include validation calls in API implementation methods"));
+        cliOptions.add(CliOption.newString(VALIDATE_REQUEST, "Include validation calls in API implementation methods").defaultValue(Boolean.TRUE.toString()));
+        additionalProperties.put(VALIDATE_REQUEST, true);
+        cliOptions.add(CliOption.newBoolean(IMPLICIT_PARAMS, "Generate @ApiImplicitParam annotations in API code").defaultValue(Boolean.TRUE.toString()));
+        additionalProperties.put(IMPLICIT_PARAMS, true);
         cliOptions.add(CliOption.newBoolean(USE_BEANVALIDATION, "Use BeanValidation API annotations"));
 
         // relevant once we submit a PR to swagger-code to become a java library
@@ -80,6 +85,9 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         }
         if (additionalProperties.containsKey(VALIDATE_REQUEST)) {
             this.setValidateRequest(convertPropertyToBoolean(VALIDATE_REQUEST));
+        }
+        if (additionalProperties.containsKey(IMPLICIT_PARAMS)) {
+            this.setImplicitParams(convertPropertyToBoolean(IMPLICIT_PARAMS));
         }
         if (additionalProperties.containsKey(USE_BEANVALIDATION)) {
             this.setUseBeanValidation(convertPropertyToBoolean(USE_BEANVALIDATION));
@@ -173,6 +181,20 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         return operations;
     }
 
+    @Override
+    public void postProcessParameter(CodegenParameter parameter) {
+        super.postProcessParameter(parameter);
+        // set param type (TODO: using example field since paramType ("in") is not available)
+        if (parameter.isBodyParam)
+            parameter.example = "body";
+        else if (parameter.isPathParam)
+            parameter.example = "path";
+        else if (parameter.isQueryParam)
+            parameter.example = "query";
+        else if (parameter.isHeaderParam)
+            parameter.example = "header";
+    }
+
     private Map<String,String> pathToTag = new HashMap<>();
 
     @Override
@@ -204,7 +226,10 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
     protected boolean autogenComment = false;
     public void setAutogenComment(boolean autogenComment) { this.autogenComment = autogenComment; }
 
-    protected boolean validateRequest = false;
+    protected boolean validateRequest = true;
     public void setValidateRequest(boolean validateRequest) { this.validateRequest = validateRequest; }
+
+    protected boolean implicitParams = true;
+    public void setImplicitParams(boolean implicitParams) { this.implicitParams = implicitParams; }
 
 }

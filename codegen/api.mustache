@@ -17,6 +17,11 @@ public class {{classname}} extends JsonRestService {
   @ApiOperation(value="{{summary}}"{{#notes}},
       notes="{{notes}}"{{/notes}}{{#returnType}},
       response={{returnBaseType}}.class{{#returnContainer}}, responseContainer="{{returnContainer}}"{{/returnContainer}}{{/returnType}})
+  {{#implicitParams}}{{#hasParams}}  @ApiImplicitParams({
+  {{#allParams}}
+      @ApiImplicitParam(name="{{paramName}}", paramType="{{example}}", dataType="{{dataType}}"{{#description}}, value="{{description}}"{{/description}}{{#required}}, required=true{{/required}}{{#defaultValue}}, defaultValue="{{defaultValue}}"{{/defaultValue}}),
+  {{/allParams}}
+  }){{/hasParams}}{{/implicitParams}}
   public Response<JSONObject> {{operationId}}(Request<JSONObject> request) throws ServiceException {
   
     {{#validateRequest}}
