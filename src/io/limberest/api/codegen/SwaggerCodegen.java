@@ -96,6 +96,7 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
             writePropertyBack(USE_BEANVALIDATION, useBeanValidation);
         }
 
+        importMapping.put("Path", "javax.ws.rs.Path");
         importMapping.put("JSONObject", "org.json.JSONObject");
         importMapping.put("Jsonable", "io.limberest.json.Jsonable");
         importMapping.put("JsonRestService", "io.limberest.json.JsonRestService");
@@ -104,10 +105,11 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         importMapping.put("Response", "io.limberest.service.http.Response");
         if (validateRequest) {
             importMapping.put("SwaggerValidator", "io.limberest.api.validate.SwaggerValidator");
-            importMapping.put("ValidationException", "io.limberest.demo.model.ValidationException");
+            importMapping.put("ValidationException", "io.limberest.validate.ValidationException");
+            importMapping.put("Result", "io.limberest.validate.Result");
         }
         importMapping.put("JsonList", "io.limberest.json.JsonList");
-        importMapping.put("ArrayList", "json.util.ArrayList");
+        importMapping.put("ArrayList", "java.util.ArrayList");
         importMapping.put("Api", "io.swagger.annotations.Api");
         importMapping.put("ApiImplicitParams", "io.swagger.annotations.ApiImplicitParam");
         importMapping.put("ApiImplicitParam", "io.swagger.annotations.ApiImplicitParams");
@@ -135,6 +137,7 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
     @Override
     public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, Map<String,Model> definitions, Swagger swagger) {
         CodegenOperation op = super.fromOperation(path, httpMethod, operation, definitions, swagger);
+        op.imports.add("Path");
         op.imports.add("JsonRestService");
         op.imports.add("ServiceException");
         op.imports.add("Request");
@@ -143,6 +146,7 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         if (validateRequest) {
             op.imports.add("SwaggerValidator");
             op.imports.add("ValidationException");
+            op.imports.add("Result");
         }
         if (op.isListContainer) {
             op.imports.add("JsonList");
@@ -153,6 +157,12 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         if (op.hasParams) {
             op.imports.add("ApiImplicitParams");
             op.imports.add("ApiImplicitParam");
+            for (CodegenParameter param : op.allParams) {
+                if (!param.isPrimitiveType) {
+                    // qualify with model package
+                    param.dataType = modelPackage + "." + param.dataType;
+                }
+            }
         }
 
         return op;
@@ -166,14 +176,13 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
     @Override
     @SuppressWarnings("unchecked")
     public Map<String, Object> postProcessOperations(Map<String,Object> objs) {
-        objs = super.postProcessOperations(objs);
         Map<String,Object> operations = (Map<String,Object>) objs.get("operations");
         if (operations != null) {
             List<CodegenOperation> ops = (List<CodegenOperation>) operations.get("operation");
-            for (CodegenOperation operation : ops) {
-                if (operation.returnContainer != null && !operation.returnContainer.isEmpty()) {
-                    operation.returnContainer = Character.toUpperCase(operation.returnContainer.charAt(0))
-                            + operation.returnContainer.substring(1);
+            for (CodegenOperation op : ops) {
+                if (op.returnContainer != null && !op.returnContainer.isEmpty()) {
+                    op.returnContainer = Character.toUpperCase(op.returnContainer.charAt(0))
+                            + op.returnContainer.substring(1);
                 }
             }
         }

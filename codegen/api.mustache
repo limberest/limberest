@@ -38,7 +38,7 @@ public class {{classname}} extends JsonRestService {
     {{/isRestfulCreate}}
     {{^isRestfulCreate}}
     {{#isListContainer}}
-    JsonList<{{returnBaseType}}> jsonList = new JsonList<>(new ArrayList<{{returnBaseType}}>());
+    JsonList<{{returnBaseType}}> jsonList = new JsonList<>(new ArrayList<{{returnBaseType}}>(), "{{baseName}}");
     return new Response<>(jsonList.toJson());
     {{/isListContainer}}
     {{#isMapContainer}}
