@@ -45,7 +45,12 @@ public class {{classname}} extends JsonRestService {
     return new Response<>(new JSONObject());
     {{/isMapContainer}}
     {{^returnContainer}}
+    {{#returnBaseType}}
     return new Response<>(new {{returnBaseType}}().toJson());
+    {{/returnBaseType}}
+    {{^returnBaseType}}
+    return new Response<>();
+    {{/returnBaseType}}
     {{/returnContainer}}
     {{/isRestfulCreate}}
   }
