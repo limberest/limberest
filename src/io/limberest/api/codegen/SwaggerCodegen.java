@@ -1,5 +1,7 @@
 package io.limberest.api.codegen;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,9 +100,13 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         return codegenModel;
     }
 
+    @Override
+    public String toApiName(String name) {
+        return super.toApiName(pathToTag.get(name));
+    }
+
     public String toApiFilename(String name) {
         String filename = toApiName(name);
-        System.out.println("\n\nTO API FILE: " + name + "->" + filename);
         return filename;
     }
 
@@ -109,7 +115,6 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         CodegenOperation op = super.fromOperation(path, httpMethod, operation, definitions, swagger);
         op.imports.add("JsonRestService");
         op.imports.add("ServiceException");
-        System.out.println("PATH: " + path);
         return op;
     }
 
@@ -118,11 +123,47 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         super.postProcessModelProperty(model, property);
     }
 
+    private Map<String,String> pathToTag = new HashMap<>();
+
     @Override
     public void addOperationToGroup(String tag, String resourcePath, Operation operation, CodegenOperation co,
-            Map<String, List<CodegenOperation>> operations) {
-        super.addOperationToGroup(tag, resourcePath, operation, co, operations);
-        additionalProperties.put(SERVICE_PATHS, resourcePath);
+            Map<String,List<CodegenOperation>> operations) {
+        List<CodegenOperation> opList = operations.get(resourcePath);
+        if (opList == null) {
+            opList = new ArrayList<CodegenOperation>();
+            operations.put(resourcePath, opList);
+        }
+        co.operationId = co.httpMethod.toLowerCase();
+        opList.add(co);
+
+        co.baseName = resourcePath;
+
+        pathToTag.put(resourcePath, tag);
+        System.out.println("TAG: " + tag + "   PATH: " + resourcePath);
+
+
+
+//        String basePath = resourcePath;
+//        if (basePath.startsWith("/")) {
+//            basePath = basePath.substring(1);
+//        }
+//        int pos = basePath.indexOf("/");
+//        if (pos > 0) {
+//            basePath = basePath.substring(0, pos);
+//        }
+//
+////        if (basePath.equals("")) {
+////            basePath = "default";
+////        } else {
+////            co.subresourceOperation = !co.path.isEmpty();
+////        }
+//        List<CodegenOperation> opList = operations.get(basePath);
+//        if (opList == null) {
+//            opList = new ArrayList<CodegenOperation>();
+//            operations.put(basePath, opList);
+//        }
+//        opList.add(co);
+//        co.baseName = basePath;
     }
 
     protected boolean autogenComment = false;

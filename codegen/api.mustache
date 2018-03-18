@@ -4,11 +4,10 @@ package {{package}};
 {{#imports}}
 import {{import}};
 {{/imports}}
-OPS:{{operations}}
+@Path("{{baseName}}")
+@Api("{{classname}}")
 {{#operations}}
-@Path("{{servicePaths}}")
 public class {{classname}} extends JsonRestService {
-
   {{#operation}}
   /**
    * {{summary}}
