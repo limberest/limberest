@@ -1,7 +1,6 @@
 package io.limberest.api.codegen;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -124,48 +123,17 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         return codegenModel;
     }
 
+    /**
+     * Name here is resource path.
+     */
     @Override
     public String toApiName(String name) {
-        return super.toApiName(pathToTag.get(name));
+        return services.forPath(name).name;
     }
 
     public String toApiFilename(String name) {
         String filename = toApiName(name);
         return filename;
-    }
-
-    @Override
-    public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, Map<String,Model> definitions, Swagger swagger) {
-        CodegenOperation op = super.fromOperation(path, httpMethod, operation, definitions, swagger);
-        op.imports.add("Path");
-        op.imports.add("JsonRestService");
-        op.imports.add("ServiceException");
-        op.imports.add("Request");
-        op.imports.add("Response");
-        op.imports.add("JSONObject");
-        if (validateRequest) {
-            op.imports.add("SwaggerValidator");
-            op.imports.add("ValidationException");
-            op.imports.add("Result");
-        }
-        if (op.isListContainer) {
-            op.imports.add("JsonList");
-            op.imports.add("ArrayList");
-        }
-        op.imports.add("Api");
-        op.imports.add("ApiOperation");
-        if (op.hasParams) {
-            op.imports.add("ApiImplicitParams");
-            op.imports.add("ApiImplicitParam");
-            for (CodegenParameter param : op.allParams) {
-                if (!param.isPrimitiveType) {
-                    // qualify with model package
-                    param.dataType = modelPackage + "." + param.dataType;
-                }
-            }
-        }
-
-        return op;
     }
 
     @Override
@@ -204,7 +172,41 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
             parameter.example = "header";
     }
 
-    private Map<String,String> pathToTag = new HashMap<>();
+    private CodegenServices services = new CodegenServices();
+
+    @Override
+    public CodegenOperation fromOperation(String path, String httpMethod, Operation operation, Map<String,Model> definitions, Swagger swagger) {
+        CodegenOperation op = super.fromOperation(path, httpMethod, operation, definitions, swagger);
+        op.imports.add("Path");
+        op.imports.add("JsonRestService");
+        op.imports.add("ServiceException");
+        op.imports.add("Request");
+        op.imports.add("Response");
+        op.imports.add("JSONObject");
+        if (validateRequest) {
+            op.imports.add("SwaggerValidator");
+            op.imports.add("ValidationException");
+            op.imports.add("Result");
+        }
+        if (op.isListContainer) {
+            op.imports.add("JsonList");
+            op.imports.add("ArrayList");
+        }
+        op.imports.add("Api");
+        op.imports.add("ApiOperation");
+        if (op.hasParams) {
+            op.imports.add("ApiImplicitParams");
+            op.imports.add("ApiImplicitParam");
+            for (CodegenParameter param : op.allParams) {
+                if (!param.isPrimitiveType) {
+                    // qualify with model package
+                    param.dataType = modelPackage + "." + param.dataType;
+                }
+            }
+        }
+
+        return op;
+    }
 
     @Override
     public void addOperationToGroup(String tag, String resourcePath, Operation operation, CodegenOperation co,
@@ -221,7 +223,9 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         if (co.baseName.startsWith("/"))
             co.baseName = co.baseName.substring(1);
 
-        pathToTag.put(resourcePath, tag);
+        System.out.println(co.httpMethod + " MAPPING: " + resourcePath + " --> " + tag);
+
+        services.add(resourcePath, tag);
 
         // restful flags -- need to be set here after rejigging baseName
         co.isRestfulShow = co.isRestfulShow();
