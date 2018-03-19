@@ -8,7 +8,7 @@ import java.util.Map;
  */
 public class CodegenServices {
 
-    private boolean squash;
+    protected boolean squash;
     private Map<String,Service> services;
 
     public CodegenServices() {
@@ -19,7 +19,7 @@ public class CodegenServices {
         Service service = services.get(path);
         if (service == null) {
             // check this service name on different (shorter) path
-            Service existing = forName(name);
+            Service existing = squash ? null : forName(name);
             if (existing == null) {
                 service = new Service(path, name);
             }
