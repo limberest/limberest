@@ -35,7 +35,12 @@ public class CodegenServices {
             else {
                 // need to create a unique Service for longer path
                 String extra = path.substring(existing.path.length());
-                service = new Service(tag + toClassNamePart(extra), path);
+                String serviceName = tag;
+                if (serviceName.length() == 0 || serviceName.equals("Default"))
+                    serviceName = path.replace('{', '_').replaceAll("}", "");
+                else
+                    serviceName = tag + toClassNamePart(extra);
+                service = new Service(serviceName, path);
             }
         }
         services.put(path, service);
