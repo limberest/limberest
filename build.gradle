@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'io.limberest'
-version = '1.0.15'
+version = '1.1.2'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
@@ -58,7 +58,7 @@ task javadocs(type: Javadoc, dependsOn: cleanJavadocs) {
     options.links 'http://docs.oracle.com/javase/8/docs/api/'
     options.links 'http://docs.swagger.io/swagger-core/current/apidocs/'
     options.links 'http://stleary.github.io/JSON-java/'
-    options.bottom '<i>Copyright &#169; 2017</i>'
+    options.bottom '<i>Copyright &#169; 2018</i>'
     destinationDir = file('docs/javadoc')
 }
 

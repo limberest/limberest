@@ -138,7 +138,7 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
      */
     @Override
     public String toApiName(String name) {
-        return services.forPath(name).name;
+        return services.forPath(name).getName();
     }
 
     public String toApiFilename(String name) {
@@ -222,22 +222,34 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
 
         String servicePath = resourcePath;
         if (squashApiPaths) {
-            Service service = services.forName(tag);
+            Service service = services.forTag(tag);
             if (service != null)
                 servicePath = service.path;
             co.path = co.path.substring(servicePath.length());
         }
 
-        services.add(servicePath, tag);
+        String method = co.httpMethod.toLowerCase();
+        boolean replaceExisting = services.add(servicePath, tag, method);
 
         List<CodegenOperation> opList = operations.get(servicePath);
         if (opList == null) {
-            opList = new ArrayList<CodegenOperation>();
+            opList = new ArrayList<>();
             operations.put(servicePath, opList);
         }
-
-        co.operationId = co.httpMethod.toLowerCase();
+        if (replaceExisting) {
+            CodegenOperation toRemove = null;
+            for (CodegenOperation op : opList) {
+                if (op.httpMethod.equals(co.httpMethod)) {
+                    toRemove = op;
+                    break;
+                }
+            }
+            if (toRemove != null)
+                opList.remove(toRemove);
+        }
         opList.add(co);
+
+        co.operationId = method;
 
         co.baseName = resourcePath;
         if (co.baseName.startsWith("/"))
