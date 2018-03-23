@@ -1,10 +1,10 @@
 package io.limberest.api.codegen;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import io.limberest.api.codegen.CodegenServices.Service;
+import io.limberest.api.codegen.CodegenServices.Squash;
 import io.swagger.codegen.CliOption;
 import io.swagger.codegen.CodegenConstants;
 import io.swagger.codegen.CodegenModel;
@@ -49,7 +49,7 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
 
     }
 
-    private CodegenServices services = new CodegenServices();
+    private CodegenServices services;
 
     public SwaggerCodegen() {
         super();
@@ -67,7 +67,13 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         additionalProperties.put(VALIDATE_REQUEST, true);
         cliOptions.add(CliOption.newBoolean(IMPLICIT_PARAMS, "Generate @ApiImplicitParam annotations in API code").defaultValue(Boolean.TRUE.toString()));
         additionalProperties.put(IMPLICIT_PARAMS, true);
-        cliOptions.add(CliOption.newBoolean(SQUASH_API_PATHS, "Within a tag, squeeze all paths into a common API class"));
+        CliOption squash = CliOption.newString(SQUASH_API_PATHS, "Squeeze subpaths into a common API class").defaultValue(CodegenServices.Squash.loose.toString());
+        Map<String,String> squashEnum = new LinkedHashMap<>();
+        squashEnum.put(Squash.none.toString(), "Every path generates a separate API class");
+        squashEnum.put(Squash.loose.toString(), "(Default) Use existing class for subpaths unless operations conflict");
+        squashEnum.put(Squash.tight.toString(), "Force subpaths into existing class even if operations overlap");
+        squash.setEnum(squashEnum);
+        cliOptions.add(squash);
         cliOptions.add(CliOption.newBoolean(USE_BEANVALIDATION, "Use BeanValidation API annotations"));
 
         // relevant once we submit a PR to swagger-code to become a java library
@@ -94,7 +100,7 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
             this.setImplicitParams(convertPropertyToBoolean(IMPLICIT_PARAMS));
         }
         if (additionalProperties.containsKey(SQUASH_API_PATHS)) {
-            this.setSquashApiPaths(convertPropertyToBoolean(SQUASH_API_PATHS));
+            this.setSquashApiPaths(additionalProperties.get(SQUASH_API_PATHS).toString());
         }
         if (additionalProperties.containsKey(USE_BEANVALIDATION)) {
             this.setUseBeanValidation(convertPropertyToBoolean(USE_BEANVALIDATION));
@@ -122,7 +128,7 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         importMapping.put("ApiImplicitParam", "io.swagger.annotations.ApiImplicitParams");
         importMapping.put("ApiOperation", "io.swagger.annotations.ApiOperation");
 
-        services.squash = squashApiPaths;
+        services = new CodegenServices(Squash.valueOf(squashApiPaths));
     }
 
     @Override
@@ -220,40 +226,9 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
     public void addOperationToGroup(String tag, String resourcePath, Operation operation, CodegenOperation co,
             Map<String,List<CodegenOperation>> operations) {
 
-        String servicePath = resourcePath;
-        if (squashApiPaths) {
-            Service service = services.forTag(tag);
-            if (service != null)
-                servicePath = service.path;
-            co.path = co.path.substring(servicePath.length());
-        }
-
-        String method = co.httpMethod.toLowerCase();
-        boolean replaceExisting = services.add(servicePath, tag, method);
-
-        List<CodegenOperation> opList = operations.get(servicePath);
-        if (opList == null) {
-            opList = new ArrayList<>();
-            operations.put(servicePath, opList);
-        }
-        if (replaceExisting) {
-            CodegenOperation toRemove = null;
-            for (CodegenOperation op : opList) {
-                if (op.httpMethod.equals(co.httpMethod)) {
-                    toRemove = op;
-                    break;
-                }
-            }
-            if (toRemove != null)
-                opList.remove(toRemove);
-        }
-        opList.add(co);
-
-        co.operationId = method;
-
-        co.baseName = resourcePath;
-        if (co.baseName.startsWith("/"))
-            co.baseName = co.baseName.substring(1);
+        services.add(resourcePath, co);
+        operations.clear();
+        operations.putAll(services.getOperations());
 
         // restful flags -- need to be set here after rejigging baseName
         co.isRestfulShow = co.isRestfulShow();
@@ -273,7 +248,6 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
     protected boolean implicitParams = true;
     public void setImplicitParams(boolean implicitParams) { this.implicitParams = implicitParams; }
 
-    protected boolean squashApiPaths = false;
-    public void setSquashApiPaths(boolean squashApiPaths) { this.squashApiPaths = squashApiPaths; }
-
+    protected String squashApiPaths = Squash.loose.toString();
+    public void setSquashApiPaths(String squashApiPaths) { this.squashApiPaths = squashApiPaths; }
 }

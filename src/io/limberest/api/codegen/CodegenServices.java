@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.swagger.codegen.CodegenOperation;
 import io.swagger.codegen.DefaultCodegen;
 
 /**
@@ -12,59 +13,111 @@ import io.swagger.codegen.DefaultCodegen;
  */
 public class CodegenServices {
 
-    protected Map<String,Service> services;
-    protected boolean squash;
+    public enum Squash {
+        none,
+        loose,
+        tight
+    }
 
-    public CodegenServices() {
+    private Map<String,Service> services;
+    private Squash squash;
+
+    public CodegenServices(Squash squash) {
+        this.squash = squash;
         this.services = new LinkedHashMap<>();
     }
 
-    /**
-     * Returns true if existing method should be removed from operations.
-     * (never the case except squashed with pre-existing service method).
-     */
-    public boolean add(String path, String tag, String methodName) {
-        // String serviceName = toServiceName(tag, path);
+    public void add(String path, CodegenOperation operation) {
         Service service = services.get(path);
         if (service == null) {
-            // check this service name on different (shorter) path
-            Service existing = squash ? null : forTag(tag);
-            if (existing == null) {
-                service = new Service(tag, path);
+            int slashCurly = path.indexOf("/{");
+            if (slashCurly == -1 || squash == Squash.none || path.substring(slashCurly + 1).indexOf("/") > 0) {
+                // path becomes service name
+                service = new Service(path);
+                services.put(path, service);
             }
             else {
-                // need to create a unique Service for longer path
-                String extra = path.substring(existing.path.length());
-                String serviceName = tag;
-                if (serviceName.length() == 0 || serviceName.equals("Default"))
-                    serviceName = path.replace('{', '_').replaceAll("}", "");
-                else
-                    serviceName = tag + toClassNamePart(extra);
-                service = new Service(serviceName, path);
+                String squashedPath = path.substring(0, slashCurly);
+                Service squashedService = services.get(squashedPath);
+                if (squashedService == null) {
+                    service = new Service(squashedPath);
+                    services.put(squashedPath, service);
+                }
+                else {
+                    Method method = squashedService.getMethod(operation.httpMethod.toLowerCase());
+                    if (squash == Squash.tight) {
+                        // no new service
+                        service = squashedService;
+                        if (method != null) {
+                            // new (longer-pathed) method will be added instead
+                            squashedService.methods.remove(method);
+                        }
+                    }
+                    else {  // LOOSE
+                        // new service if method conflicts
+                        if (method != null) {
+                            service = new Service(path);
+                            services.put(path, service);
+                            // move any existing squashed methods
+                            List<Method> toMove = new ArrayList<>();
+                            for (Method squashedMethod : squashedService.methods) {
+                                if (squashedMethod.path.equals(path))
+                                    toMove.add(squashedMethod);
+                            }
+                            for (Method m : toMove) {
+                                squashedService.methods.remove(m);
+                                service.methods.add(m);
+                            }
+                        }
+                        else {
+                            service = squashedService;
+                        }
+                    }
+                }
             }
         }
-        services.put(path, service);
-        if (squash) {
-            Method method = service.getMethod(methodName);
-            if (method != null) {
-                method.path = path;  // update to longer path
-                return true;
-            }
-        }
-        service.methods.add(new Method(methodName, path));
-        return false;
+
+        service.methods.add(new Method(path, operation));
+        // TODO: slf4j
+        System.out.println("ADD: " + service);
     }
 
-    Service forTag(String tag) {
-        for (Service service : services.values()) {
-            if (service.tag.equals(tag))
-                return service;
+    Map<String,List<CodegenOperation>> getOperations() {
+        Map<String,List<CodegenOperation>> operations = new LinkedHashMap<>();
+        for (String path : services.keySet()) {
+            List<CodegenOperation> ops = new ArrayList<>();
+            Service service = services.get(path);
+            for (Method method : service.methods) {
+                CodegenOperation op = method.operation;
+                if (method.path.equals(service.path)) {
+                    op.path = "";
+                }
+                else {
+                    // operation is on subpath
+                    op.path = method.path.substring(service.path.length());
+                }
+
+                op.operationId = method.getName();
+
+                op.baseName = path;
+                if (op.baseName.startsWith("/"))
+                    op.baseName = op.baseName.substring(1);
+
+                ops.add(op);
+            }
+            operations.put(path, ops);
         }
-        return null;
+        return operations;
     }
 
     Service forPath(String path) {
-        return services.get(path);
+        System.out.println("PATH: " + path);
+        String opsPath = path;
+        return services.get(opsPath);
+    }
+
+    static String nameFromPath(String path) {
+        return path.replace('{', '_').replaceAll("}", "");
     }
 
     static String toClassNamePart(String in) {
@@ -82,19 +135,17 @@ public class CodegenServices {
     }
 
     public class Service {
-        protected String tag;
         protected String path;
         protected List<Method> methods;
 
-        Service(String tag, String path) {
-            this.tag = tag;
+        Service(String path) {
             this.path = path;
             this.methods = new ArrayList<>();
         }
 
         Method getMethod(String name) {
             for (Method method : methods) {
-                if (method.name.equals(name))
+                if (method.getName().equals(name))
                     return method;
             }
             return null;
@@ -104,23 +155,31 @@ public class CodegenServices {
          * Generated class name
          */
         String getName() {
-            String serviceName = tag;
-            if (serviceName.length() == 0 || serviceName.equals("Default")) {
-                // use path segment, which is more meaningful
-                serviceName = path.replace('{', '_').replaceAll("}", "");
+            return DefaultCodegen.camelize(path.replace('{', '_').replaceAll("}", ""));
+        }
+
+        public String toString() {
+            String m = "";
+            for (int i = 0; i < methods.size(); i++) {
+                if (i > 0)
+                    m += ",";
+                m += methods.get(i).getName();
             }
-            return DefaultCodegen.camelize(serviceName);
+            return path + " -> " + getName() + " (" + m + ")";
         }
     }
 
     public class Method {
-        protected String name;
-        // same as service path except when squashed
         protected String path;
+        protected CodegenOperation operation;
 
-        Method(String name, String path) {
-            this.name = name;
+        Method(String path, CodegenOperation operation) {
             this.path = path;
+            this.operation = operation;
+        }
+
+        String getName() {
+            return operation.httpMethod.toLowerCase();
         }
     }
 }
