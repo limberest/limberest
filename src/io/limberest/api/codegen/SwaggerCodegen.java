@@ -1,5 +1,6 @@
 package io.limberest.api.codegen;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -131,9 +132,13 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
         services = new CodegenServices(Squash.valueOf(squashApiPaths));
     }
 
+    private List<String> modelNames = new ArrayList<>();
+
     @Override
     public CodegenModel fromModel(String name, Model model, Map<String,Model> allDefinitions) {
         CodegenModel codegenModel = super.fromModel(name, model, allDefinitions);
+        if (!modelNames.contains(name))
+            modelNames.add(name);
         codegenModel.imports.add("JSONObject");
         codegenModel.imports.add("Jsonable");
         return codegenModel;
@@ -144,12 +149,14 @@ public class SwaggerCodegen extends AbstractJavaCodegen implements BeanValidatio
      */
     @Override
     public String toApiName(String name) {
-        return services.forPath(name).getName();
+        String serviceName = services.forPath(name).getName();
+        if (modelNames.contains(serviceName))
+            serviceName += "Api"; // avoid collisions
+        return serviceName;
     }
 
     public String toApiFilename(String name) {
-        String filename = toApiName(name);
-        return filename;
+        return toApiName(name);
     }
 
     @Override

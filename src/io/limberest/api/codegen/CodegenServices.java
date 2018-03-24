@@ -111,7 +111,6 @@ public class CodegenServices {
     }
 
     Service forPath(String path) {
-        System.out.println("PATH: " + path);
         String opsPath = path;
         return services.get(opsPath);
     }
