@@ -32,10 +32,15 @@ public class {{classname}} extends JsonRestService {
       
     {{/validateRequest}}
     {{#bodyParam}}
-    {{bodyParam.dataType}} {{bodyParam.paramName}} = new {{bodyParam.dataType}}(request.getBody());
+    {{{bodyParam.dataType}}} {{bodyParam.paramName}} = new {{{bodyParam.dataType}}}(request.getBody());
     {{/bodyParam}}
     {{#isRestfulCreate}}
+    {{#hasBodyParam}}
     return new Response<>({{bodyParam.paramName}}.toJson());
+    {{/hasBodyParam}}
+    {{^hasBodyParam}}
+    return new Response<>(new JSONObject());
+    {{/hasBodyParam}}
     {{/isRestfulCreate}}
     {{^isRestfulCreate}}
     {{#isListContainer}}
