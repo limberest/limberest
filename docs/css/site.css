@@ -230,12 +230,7 @@ th {
 }
 .site-footer {
 }
-.site-left {
-  float: left;
-  width: 40%;
-  padding-right: 15px;  
-}
-.site-left code {
+.site code {
   color: black;
 }
 .top-btn {
@@ -254,11 +249,4 @@ th {
 }
 .top-btn a:hover {
   text-decoration: none;
-}
-.site-right {
-  float: right;
-  width: 40%;
-}
-.site-right code {
-  color: black;
 }

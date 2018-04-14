@@ -7,53 +7,28 @@ document.createElement('main');
 </script>
 
 <main class="page-content home" aria-label="Content">
-  <div class="wrapper">
-<div class="site-left">
-  <a href="/topics/services" class="top-btn">Implement</a><br>
-  You're a Java developer and you aim to quickly spin up and host a REST API.
-  <ol>
-    <li>Add <code>implements Jsonable</code> to your Java model class(es)
-      <ul>
-        <li>This gives you easily-customizable <a href="topics/binding">autobinding</a></li>
-      </ul>
-    </li>
-    <li>Extend <a href="javadoc/io/limberest/json/JsonRestService">JsonRestService</a> to create your service
-      <ul>
-        <li>Use JAX-RS <code>@Path</code> annotations to <a href="topics/services">declare your endpoints</a></li>
-        <li>Implement <code>get()</code>, <code>post()</code>, <code>put()</code>, and/or <code>delete()</code>
-        <li>Optionally, add Swagger annotations for auto-generated <a href="topics/swagger">API docs</a>
-          and <a href="topics/validation">validation</a></li>
-      </ul>
-    </li>
-  </ol>
+<div class="wrapper">
+  <div class="site">
+    <a href="/topics/services" class="top-btn">Implement</a><br>
+    You're a Java developer and you aim to quickly spin up and host a REST API.
+    <ol>
+      <li>Add <code>implements Jsonable</code> to your Java model class(es)
+        <ul>
+          <li>This gives you easily-customizable <a href="topics/binding">autobinding</a></li>
+        </ul>
+      </li>
+      <li>Extend <a href="javadoc/io/limberest/json/JsonRestService">JsonRestService</a> to create your service
+        <ul>
+          <li>Use JAX-RS <code>@Path</code> annotations to <a href="topics/services">declare your endpoints</a></li>
+          <li>Implement <code>get()</code>, <code>post()</code>, <code>put()</code>, and/or <code>delete()</code>
+          <li>Optionally, add Swagger annotations for auto-generated <a href="topics/swagger">API docs</a>
+            and <a href="topics/validation">validation</a></li>
+        </ul>
+      </li>
+    </ol>
+  </div>
 </div>
-
   
-<div class="site-right">
-<a href="/topics/requests" class="top-btn">Exercise</a><br>
-You're familiar with JavaScript, and you need automated tests to put your API through its paces.
-  <ol>
-    <li>Export a Postman collection</a> with the parameterized <a href="topics/requests">requests</a> 
-      that'll form the basis of your test cases
-      <ul>
-        <li>
-          Runtime <a href="topics/values">values</a> are supplied by standard JSON object files, or can be assigned through script
-        </li>
-      </ul>
-    </li>
-    <li>Write a <a href="topics/cases">test case</a> that orchestrates requests
-      <ul>
-        <li>
-          Every run produces a highly-readable <a href="topics/results">YAML result</a> file
-        </li>
-        <li>
-          Expected results are compared versus actual to determine test case success
-        </li>
-      </ul>
-    </li>
-  </ol>
-</div>
-</main>
 <div class="wrapper" style="clear:both;">
   <div class="home-col">
     <h3>Lightweight</h3>
@@ -72,8 +47,7 @@ You're familiar with JavaScript, and you need automated tests to put your API th
     <h3>Flexible</h3>
     <p>
     Limberest can be deployed in a variety of ways; from a straight-up jar dependency, to
-    a self-contained, prebuilt War distribution.  You can integrate <a href="topics/requests">Limberest Tests</a> into your build cycle through
-    the our <a href="https://github.com/marketplace/limberest-ui">GitHub App</a>.
+    a self-contained, prebuilt War distribution.
     </p>
     <p>
     While Limberest is naturally geared to channel you toward a hypermedia constrained approach, your services
