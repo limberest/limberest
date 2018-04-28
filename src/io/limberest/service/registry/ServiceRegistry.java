@@ -15,13 +15,13 @@ import io.limberest.service.http.RestService;
 public class ServiceRegistry {
 
     public static class RegistryKey {
-        
+
         private ResourcePath path;
         public ResourcePath getPath() { return path; }
-        
+
         private String contentType;
         public String getContentType() { return contentType; }
-        
+
         public RegistryKey(ResourcePath path, String contentType) {
             this.path = path;
             this.contentType = contentType.toLowerCase();
@@ -38,7 +38,7 @@ public class ServiceRegistry {
             return toString().hashCode();
         }
     }
-    
+
     private static ServiceRegistry instance;
     public static ServiceRegistry getInstance() {
         if (instance == null) {
@@ -46,20 +46,15 @@ public class ServiceRegistry {
         }
         return instance;
     }
-    
+
     private static Provider provider;
     public static Provider getProvider() {
         if (provider == null) {
-            provider = new Provider() {
-                public Service<?> getService(Class<? extends Service<?>> serviceClass)
-                        throws ServiceException, InstantiationException, IllegalAccessException {
-                    return serviceClass.newInstance();                
-                }
-            };
+            provider = new DefaultProvider();
         }
         return provider;
     }
-    public static void setProvider(Provider serviceProvider) { provider = serviceProvider; } 
+    public static void setProvider(Provider serviceProvider) { provider = serviceProvider; }
 
     private Map<RegistryKey,Class<? extends Service<?>>> services = new HashMap<>();
     public void put(RegistryKey key, Class<? extends RestService<?>> service) {
@@ -75,7 +70,7 @@ public class ServiceRegistry {
         }
         return service;
     }
-    
+
     protected Class<? extends Service<?>> getServiceClass(RegistryKey key) {
         Class<? extends Service<?>> serviceClass = services.get(key);
         if (serviceClass == null) {
@@ -85,7 +80,7 @@ public class ServiceRegistry {
         }
         return serviceClass;
     }
-    
+
     /**
      * The best registered path match is determined by the longest matching sequence of path segments.
      */
@@ -101,12 +96,12 @@ public class ServiceRegistry {
         }
         return longestPathMatch;
     }
-    
+
     public ResourcePath getMatchedPath(ResourcePath requestPath, String contentType) {
         RegistryKey pathMatch = getPathMatch(new RegistryKey(requestPath, contentType));
         return pathMatch == null ? null : pathMatch.getPath();
     }
-    
+
     public Collection<Class<? extends Service<?>>> getClasses() {
         return services.values();
     }

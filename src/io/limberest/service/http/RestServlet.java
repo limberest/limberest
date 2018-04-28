@@ -2,6 +2,8 @@ package io.limberest.service.http;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -27,7 +29,9 @@ import io.limberest.service.ResourcePath;
 import io.limberest.service.Service;
 import io.limberest.service.ServiceException;
 import io.limberest.service.http.Request.HttpMethod;
+import io.limberest.service.registry.DefaultProvider;
 import io.limberest.service.registry.Initializer;
+import io.limberest.service.registry.Provider;
 import io.limberest.service.registry.ServiceRegistry;
 import io.limberest.service.registry.ServiceRegistry.RegistryKey;
 import io.limberest.util.ExecutionTimer;
@@ -52,13 +56,35 @@ public class RestServlet extends HttpServlet {
 
         String webappContextPath = servletContext.getContextPath();
         logger.debug("webappContextPath: {}", webappContextPath);
-        
+
         try {
             // TODO log
             new Initializer().scan();
         }
         catch (IOException ex) {
             logger.error("Unable to scan all packages", ex);
+        }
+
+        // reflective spring injection if appropriate (eg: spring boot app)
+        try {
+            ClassLoader classLoader = getClass().getClassLoader();
+            Class<?> utilsClass = classLoader.loadClass("org.springframework.web.context.support.WebApplicationContextUtils");
+            Method getWebApplicationContext = utilsClass.getMethod("getWebApplicationContext", ServletContext.class);
+            Object appContext = getWebApplicationContext.invoke(null, config.getServletContext());
+            if (appContext == null) {
+                logger.debug("Using " + DefaultProvider.class + " since Spring WebApplicationContext is null");
+            }
+            Class<? extends Provider> providerClass = classLoader.loadClass("io.limberest.service.registry.SpringProvider").asSubclass(Provider.class);
+            Constructor<? extends Provider> constructor = providerClass.getConstructor(classLoader.loadClass("org.springframework.context.ApplicationContext"));
+            Provider springProvider = constructor.newInstance(appContext);
+            ServiceRegistry.setProvider(springProvider);
+        }
+        catch (ClassNotFoundException ex) {
+            logger.debug("Using " + DefaultProvider.class + " due to " + ex.getMessage());
+            logger.trace(ex.getMessage(), ex);
+        }
+        catch (ReflectiveOperationException ex) {
+            logger.error(ex.getMessage(), ex);
         }
     }
 
@@ -88,9 +114,9 @@ public class RestServlet extends HttpServlet {
                     throw new ServiceException(Status.BAD_REQUEST, "Missing path: " + request.getServletPath());
                 }
             }
-            
+
             StringBuffer urlBuf = request.getRequestURL();
-            URL base = new URL(urlBuf.substring(0, urlBuf.length() - path.length())); 
+            URL base = new URL(urlBuf.substring(0, urlBuf.length() - path.length()));
             ResourcePath resourcePath = new ResourcePath(path);
             ServiceRegistry registry = ServiceRegistry.getInstance();
             Service<?> service = null;
@@ -143,7 +169,7 @@ public class RestServlet extends HttpServlet {
                 String headerName = headerNames.nextElement();
                 headers.put(headerName, request.getHeader(headerName));
             }
-                
+
             Request serviceRequest = new Request(method, base, resourcePath, query, headers);
             if (service.isAuthenticationRequired(serviceRequest) || request.getHeader("Authorization") != null) {
                 // TODO authenticate() populates response status message with tomcat default
@@ -152,9 +178,9 @@ public class RestServlet extends HttpServlet {
                     throw new ServiceException(new Status(authWrapper.code, authWrapper.message));
                 }
             }
-            
+
             service.initialize(serviceRequest, request.getUserPrincipal(), r -> request.isUserInRole(r));
-            
+
             if (service.authorize(serviceRequest)) {
                 BufferedReader reader = request.getReader();
                 StringBuffer requestBuffer = new StringBuffer(request.getContentLength() < 0 ? 0 : request.getContentLength());
@@ -211,7 +237,7 @@ public class RestServlet extends HttpServlet {
                 timer.log("RestServlet: http " + request.getMethod() + " completed in:");
         }
     }
-    
+
     protected String getFallbackContentType(HttpMethod method) {
         Settings settings = LimberestConfig.getSettings();
         Map<?,?> reqMap = settings.getMap("request");
@@ -223,7 +249,7 @@ public class RestServlet extends HttpServlet {
         }
         return "application/json";
     }
-    
+
     /**
      * Prevent authenticate() from committing the response with HTML instead of JSON.
      */
@@ -232,7 +258,7 @@ public class RestServlet extends HttpServlet {
         int code = Status.UNAUTHORIZED.getCode();
         String message = "Authentication failure";
         String contentType;
-        
+
         public AuthenticationResponseWrapper(HttpServletResponse response, String contentType) {
             super(response);
             this.contentType = contentType;
