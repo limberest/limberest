@@ -6,7 +6,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.limberest.service.registry.Provider;
+import io.limberest.provider.Provider;
 import io.limberest.service.registry.ServiceRegistry;
 import io.limberest.util.YamlLoader;
 
@@ -45,9 +45,9 @@ public class LimberestConfig {
                 settings = new Settings(new File(sysProp));
             }
             else {
-                String res = provider.getResource(LIMBEREST_CONFIG_FILE);
+                String res = provider.loadResource(LIMBEREST_CONFIG_FILE);
                 if (res == null)
-                    res = provider.getResource("limberest.yml"); // for cretins
+                    res = provider.loadResource("limberest.yml"); // for cretins
                 if (res == null)
                     throw new IOException("Not found: " + LIMBEREST_CONFIG_FILE);
                 settings = new Settings(res);

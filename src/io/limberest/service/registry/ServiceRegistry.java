@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.limberest.provider.DefaultProvider;
+import io.limberest.provider.Provider;
 import io.limberest.service.ResourcePath;
 import io.limberest.service.Service;
 import io.limberest.service.ServiceException;

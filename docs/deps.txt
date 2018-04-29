@@ -1,0 +1,476 @@
+Starting a Gradle Daemon (subsequent builds will be faster)
+Gradle now uses separate output directories for each JVM language, but this build assumes a single directory for all classes from a source set. This behaviour has been deprecated and is scheduled to be removed in Gradle 5.0
+	at build_els0o1je8y34vdi5wdzglcdl5$_run_closure3$_closure14.doCall(C:\eclipse_workspace\limberest\build.gradle:28)
+	(Run with --stacktrace to get the full stack trace of this deprecation warning.)
+:dependencies
+
+------------------------------------------------------------
+Root project
+------------------------------------------------------------
+
+apiElements - API elements for main. (n)
+No dependencies
+
+archives - Configuration for archive artifacts.
+No dependencies
+
+compile - Dependencies for source set 'main' (deprecated, use 'implementation ' instead).
++--- javax.servlet:javax.servlet-api:3.1.0
++--- javax.ws.rs:javax.ws.rs-api:2.1
++--- javax.validation:validation-api:2.0.1.Final
++--- org.json:json:20180130
++--- org.slf4j:slf4j-api:1.7.25
++--- org.reflections:reflections:0.9.11
+|    +--- com.google.guava:guava:20.0
+|    \--- org.javassist:javassist:3.21.0-GA
++--- com.google.guava:guava:20.0
++--- io.swagger:swagger-annotations:1.5.19
++--- io.swagger:swagger-core:1.5.19
+|    +--- org.apache.commons:commons-lang3:3.2.1
+|    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    +--- com.fasterxml.jackson.core:jackson-databind:2.9.5
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5
+|    |    +--- org.yaml:snakeyaml:1.18
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- io.swagger:swagger-models:1.5.19
+|    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    |    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    |    \--- io.swagger:swagger-annotations:1.5.19
+|    +--- com.google.guava:guava:20.0
+|    \--- javax.validation:validation-api:1.1.0.Final -> 2.0.1.Final
++--- io.swagger:swagger-models:1.5.19 (*)
++--- io.swagger:swagger-servlet:1.5.19
+|    +--- io.swagger:swagger-core:1.5.19 (*)
+|    +--- org.reflections:reflections:0.9.11 (*)
+|    \--- com.google.guava:guava:20.0
+\--- javax.xml.bind:jaxb-api:2.2.12
+
+compileClasspath - Compile classpath for source set 'main'.
++--- javax.servlet:javax.servlet-api:3.1.0
++--- javax.ws.rs:javax.ws.rs-api:2.1
++--- javax.validation:validation-api:2.0.1.Final
++--- org.json:json:20180130
++--- org.slf4j:slf4j-api:1.7.25
++--- org.reflections:reflections:0.9.11
+|    +--- com.google.guava:guava:20.0
+|    \--- org.javassist:javassist:3.21.0-GA
++--- com.google.guava:guava:20.0
++--- io.swagger:swagger-annotations:1.5.19
++--- io.swagger:swagger-core:1.5.19
+|    +--- org.apache.commons:commons-lang3:3.2.1 -> 3.4
+|    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    +--- com.fasterxml.jackson.core:jackson-databind:2.9.5
+|    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.0 -> 2.9.5
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5
+|    |    +--- org.yaml:snakeyaml:1.18
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- io.swagger:swagger-models:1.5.19
+|    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    |    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    |    \--- io.swagger:swagger-annotations:1.5.19
+|    +--- com.google.guava:guava:20.0
+|    \--- javax.validation:validation-api:1.1.0.Final -> 2.0.1.Final
++--- io.swagger:swagger-models:1.5.19 (*)
++--- io.swagger:swagger-servlet:1.5.19
+|    +--- io.swagger:swagger-core:1.5.19 (*)
+|    +--- org.reflections:reflections:0.9.11 (*)
+|    \--- com.google.guava:guava:20.0
++--- javax.xml.bind:jaxb-api:2.2.12
++--- io.swagger:swagger-codegen:2.3.1
+|    +--- io.swagger:swagger-parser:1.0.33
+|    |    +--- io.swagger:swagger-core:1.5.17 -> 1.5.19 (*)
+|    |    +--- org.slf4j:slf4j-ext:1.6.3 -> 1.7.12
+|    |    |    +--- org.slf4j:slf4j-api:1.7.12 -> 1.7.25
+|    |    |    \--- ch.qos.cal10n:cal10n-api:0.8.1
+|    |    +--- org.slf4j:slf4j-api:1.6.3 -> 1.7.25
+|    |    \--- commons-io:commons-io:2.4
+|    +--- io.swagger:swagger-compat-spec-parser:1.0.33
+|    |    +--- io.swagger:swagger-core:1.5.17 -> 1.5.19 (*)
+|    |    +--- io.swagger:swagger-parser:1.0.33 (*)
+|    |    +--- com.github.java-json-tools:json-schema-validator:2.2.8
+|    |    |    +--- com.github.java-json-tools:json-schema-core:1.2.8
+|    |    |    |    +--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    |    |    +--- org.mozilla:rhino:1.7R4
+|    |    |    |    +--- com.github.fge:jackson-coreutils:1.8
+|    |    |    |    |    +--- com.github.fge:msg-simple:1.1
+|    |    |    |    |    |    +--- com.github.fge:btf:1.2
+|    |    |    |    |    |    |    \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    |    |    |    |    \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    |    |    |    +--- com.fasterxml.jackson.core:jackson-databind:2.2.3 -> 2.9.5 (*)
+|    |    |    |    |    +--- com.google.guava:guava:16.0.1 -> 20.0
+|    |    |    |    |    \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    |    |    \--- com.github.fge:uri-template:0.9
+|    |    |    |         +--- com.github.fge:msg-simple:1.1 (*)
+|    |    |    |         +--- com.google.guava:guava:16.0.1 -> 20.0
+|    |    |    |         \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    |    +--- javax.mail:mailapi:1.4.3
+|    |    |    |    \--- javax.activation:activation:1.1
+|    |    |    +--- joda-time:joda-time:2.9.7
+|    |    |    +--- com.googlecode.libphonenumber:libphonenumber:8.0.0
+|    |    |    +--- com.google.code.findbugs:jsr305:3.0.1
+|    |    |    \--- net.sf.jopt-simple:jopt-simple:5.0.3
+|    |    +--- com.github.fge:json-patch:1.6
+|    |    |    +--- com.github.fge:jackson-coreutils:1.6 -> 1.8 (*)
+|    |    |    \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    \--- org.apache.httpcomponents:httpclient:4.5.2
+|    |         +--- org.apache.httpcomponents:httpcore:4.4.4
+|    |         +--- commons-logging:commons-logging:1.2
+|    |         \--- commons-codec:commons-codec:1.9
+|    +--- io.swagger:swagger-core:1.5.17 -> 1.5.19 (*)
+|    +--- com.samskivert:jmustache:1.12
+|    +--- commons-io:commons-io:2.4
+|    +--- org.slf4j:slf4j-ext:1.7.12 (*)
+|    +--- org.slf4j:slf4j-api:1.7.12 -> 1.7.25
+|    +--- org.slf4j:slf4j-simple:1.7.12
+|    |    \--- org.slf4j:slf4j-api:1.7.12 -> 1.7.25
+|    +--- org.apache.commons:commons-lang3:3.4
+|    +--- commons-cli:commons-cli:1.2
+|    \--- com.atlassian.commonmark:commonmark:0.9.0
+\--- org.springframework:spring-context:5.0.5.RELEASE
+     +--- org.springframework:spring-aop:5.0.5.RELEASE
+     |    +--- org.springframework:spring-beans:5.0.5.RELEASE
+     |    |    \--- org.springframework:spring-core:5.0.5.RELEASE
+     |    |         \--- org.springframework:spring-jcl:5.0.5.RELEASE
+     |    \--- org.springframework:spring-core:5.0.5.RELEASE (*)
+     +--- org.springframework:spring-beans:5.0.5.RELEASE (*)
+     +--- org.springframework:spring-core:5.0.5.RELEASE (*)
+     \--- org.springframework:spring-expression:5.0.5.RELEASE
+          \--- org.springframework:spring-core:5.0.5.RELEASE (*)
+
+compileOnly - Compile only dependencies for source set 'main'.
++--- io.swagger:swagger-codegen:2.3.1
+|    +--- io.swagger:swagger-parser:1.0.33
+|    |    +--- io.swagger:swagger-core:1.5.17
+|    |    |    +--- org.apache.commons:commons-lang3:3.2.1 -> 3.4
+|    |    |    +--- org.slf4j:slf4j-api:1.7.22
+|    |    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.8.9
+|    |    |    +--- com.fasterxml.jackson.core:jackson-databind:2.8.9
+|    |    |    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.8.0 -> 2.8.9
+|    |    |    |    \--- com.fasterxml.jackson.core:jackson-core:2.8.9
+|    |    |    +--- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.8.9
+|    |    |    |    +--- com.fasterxml.jackson.core:jackson-core:2.8.9
+|    |    |    |    \--- org.yaml:snakeyaml:1.17
+|    |    |    +--- io.swagger:swagger-models:1.5.17
+|    |    |    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.8.9
+|    |    |    |    +--- org.slf4j:slf4j-api:1.7.22
+|    |    |    |    \--- io.swagger:swagger-annotations:1.5.17
+|    |    |    +--- com.google.guava:guava:20.0
+|    |    |    \--- javax.validation:validation-api:1.1.0.Final
+|    |    +--- org.slf4j:slf4j-ext:1.6.3 -> 1.7.12
+|    |    |    +--- org.slf4j:slf4j-api:1.7.12 -> 1.7.22
+|    |    |    \--- ch.qos.cal10n:cal10n-api:0.8.1
+|    |    +--- org.slf4j:slf4j-api:1.6.3 -> 1.7.22
+|    |    \--- commons-io:commons-io:2.4
+|    +--- io.swagger:swagger-compat-spec-parser:1.0.33
+|    |    +--- io.swagger:swagger-core:1.5.17 (*)
+|    |    +--- io.swagger:swagger-parser:1.0.33 (*)
+|    |    +--- com.github.java-json-tools:json-schema-validator:2.2.8
+|    |    |    +--- com.github.java-json-tools:json-schema-core:1.2.8
+|    |    |    |    +--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    |    |    +--- org.mozilla:rhino:1.7R4
+|    |    |    |    +--- com.github.fge:jackson-coreutils:1.8
+|    |    |    |    |    +--- com.github.fge:msg-simple:1.1
+|    |    |    |    |    |    +--- com.github.fge:btf:1.2
+|    |    |    |    |    |    |    \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    |    |    |    |    \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    |    |    |    +--- com.fasterxml.jackson.core:jackson-databind:2.2.3 -> 2.8.9 (*)
+|    |    |    |    |    +--- com.google.guava:guava:16.0.1 -> 20.0
+|    |    |    |    |    \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    |    |    \--- com.github.fge:uri-template:0.9
+|    |    |    |         +--- com.github.fge:msg-simple:1.1 (*)
+|    |    |    |         +--- com.google.guava:guava:16.0.1 -> 20.0
+|    |    |    |         \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    |    +--- javax.mail:mailapi:1.4.3
+|    |    |    |    \--- javax.activation:activation:1.1
+|    |    |    +--- joda-time:joda-time:2.9.7
+|    |    |    +--- com.googlecode.libphonenumber:libphonenumber:8.0.0
+|    |    |    +--- com.google.code.findbugs:jsr305:3.0.1
+|    |    |    \--- net.sf.jopt-simple:jopt-simple:5.0.3
+|    |    +--- com.github.fge:json-patch:1.6
+|    |    |    +--- com.github.fge:jackson-coreutils:1.6 -> 1.8 (*)
+|    |    |    \--- com.google.code.findbugs:jsr305:2.0.1 -> 3.0.1
+|    |    \--- org.apache.httpcomponents:httpclient:4.5.2
+|    |         +--- org.apache.httpcomponents:httpcore:4.4.4
+|    |         +--- commons-logging:commons-logging:1.2
+|    |         \--- commons-codec:commons-codec:1.9
+|    +--- io.swagger:swagger-core:1.5.17 (*)
+|    +--- com.samskivert:jmustache:1.12
+|    +--- commons-io:commons-io:2.4
+|    +--- org.slf4j:slf4j-ext:1.7.12 (*)
+|    +--- org.slf4j:slf4j-api:1.7.12 -> 1.7.22
+|    +--- org.slf4j:slf4j-simple:1.7.12
+|    |    \--- org.slf4j:slf4j-api:1.7.12 -> 1.7.22
+|    +--- org.apache.commons:commons-lang3:3.4
+|    +--- commons-cli:commons-cli:1.2
+|    \--- com.atlassian.commonmark:commonmark:0.9.0
+\--- org.springframework:spring-context:5.0.5.RELEASE
+     +--- org.springframework:spring-aop:5.0.5.RELEASE
+     |    +--- org.springframework:spring-beans:5.0.5.RELEASE
+     |    |    \--- org.springframework:spring-core:5.0.5.RELEASE
+     |    |         \--- org.springframework:spring-jcl:5.0.5.RELEASE
+     |    \--- org.springframework:spring-core:5.0.5.RELEASE (*)
+     +--- org.springframework:spring-beans:5.0.5.RELEASE (*)
+     +--- org.springframework:spring-core:5.0.5.RELEASE (*)
+     \--- org.springframework:spring-expression:5.0.5.RELEASE
+          \--- org.springframework:spring-core:5.0.5.RELEASE (*)
+
+default - Configuration for default artifacts.
++--- javax.servlet:javax.servlet-api:3.1.0
++--- javax.ws.rs:javax.ws.rs-api:2.1
++--- javax.validation:validation-api:2.0.1.Final
++--- org.json:json:20180130
++--- org.slf4j:slf4j-api:1.7.25
++--- org.reflections:reflections:0.9.11
+|    +--- com.google.guava:guava:20.0
+|    \--- org.javassist:javassist:3.21.0-GA
++--- com.google.guava:guava:20.0
++--- io.swagger:swagger-annotations:1.5.19
++--- io.swagger:swagger-core:1.5.19
+|    +--- org.apache.commons:commons-lang3:3.2.1
+|    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    +--- com.fasterxml.jackson.core:jackson-databind:2.9.5
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5
+|    |    +--- org.yaml:snakeyaml:1.18
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- io.swagger:swagger-models:1.5.19
+|    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    |    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    |    \--- io.swagger:swagger-annotations:1.5.19
+|    +--- com.google.guava:guava:20.0
+|    \--- javax.validation:validation-api:1.1.0.Final -> 2.0.1.Final
++--- io.swagger:swagger-models:1.5.19 (*)
++--- io.swagger:swagger-servlet:1.5.19
+|    +--- io.swagger:swagger-core:1.5.19 (*)
+|    +--- org.reflections:reflections:0.9.11 (*)
+|    \--- com.google.guava:guava:20.0
+\--- javax.xml.bind:jaxb-api:2.2.12
+
+implementation - Implementation only dependencies for source set 'main'. (n)
+No dependencies
+
+runtime - Runtime dependencies for source set 'main' (deprecated, use 'runtimeOnly ' instead).
++--- javax.servlet:javax.servlet-api:3.1.0
++--- javax.ws.rs:javax.ws.rs-api:2.1
++--- javax.validation:validation-api:2.0.1.Final
++--- org.json:json:20180130
++--- org.slf4j:slf4j-api:1.7.25
++--- org.reflections:reflections:0.9.11
+|    +--- com.google.guava:guava:20.0
+|    \--- org.javassist:javassist:3.21.0-GA
++--- com.google.guava:guava:20.0
++--- io.swagger:swagger-annotations:1.5.19
++--- io.swagger:swagger-core:1.5.19
+|    +--- org.apache.commons:commons-lang3:3.2.1
+|    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    +--- com.fasterxml.jackson.core:jackson-databind:2.9.5
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5
+|    |    +--- org.yaml:snakeyaml:1.18
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- io.swagger:swagger-models:1.5.19
+|    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    |    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    |    \--- io.swagger:swagger-annotations:1.5.19
+|    +--- com.google.guava:guava:20.0
+|    \--- javax.validation:validation-api:1.1.0.Final -> 2.0.1.Final
++--- io.swagger:swagger-models:1.5.19 (*)
++--- io.swagger:swagger-servlet:1.5.19
+|    +--- io.swagger:swagger-core:1.5.19 (*)
+|    +--- org.reflections:reflections:0.9.11 (*)
+|    \--- com.google.guava:guava:20.0
+\--- javax.xml.bind:jaxb-api:2.2.12
+
+runtimeClasspath - Runtime classpath of source set 'main'.
++--- javax.servlet:javax.servlet-api:3.1.0
++--- javax.ws.rs:javax.ws.rs-api:2.1
++--- javax.validation:validation-api:2.0.1.Final
++--- org.json:json:20180130
++--- org.slf4j:slf4j-api:1.7.25
++--- org.reflections:reflections:0.9.11
+|    +--- com.google.guava:guava:20.0
+|    \--- org.javassist:javassist:3.21.0-GA
++--- com.google.guava:guava:20.0
++--- io.swagger:swagger-annotations:1.5.19
++--- io.swagger:swagger-core:1.5.19
+|    +--- org.apache.commons:commons-lang3:3.2.1
+|    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    +--- com.fasterxml.jackson.core:jackson-databind:2.9.5
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5
+|    |    +--- org.yaml:snakeyaml:1.18
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- io.swagger:swagger-models:1.5.19
+|    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    |    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    |    \--- io.swagger:swagger-annotations:1.5.19
+|    +--- com.google.guava:guava:20.0
+|    \--- javax.validation:validation-api:1.1.0.Final -> 2.0.1.Final
++--- io.swagger:swagger-models:1.5.19 (*)
++--- io.swagger:swagger-servlet:1.5.19
+|    +--- io.swagger:swagger-core:1.5.19 (*)
+|    +--- org.reflections:reflections:0.9.11 (*)
+|    \--- com.google.guava:guava:20.0
+\--- javax.xml.bind:jaxb-api:2.2.12
+
+runtimeElements - Elements of runtime for main. (n)
+No dependencies
+
+runtimeOnly - Runtime only dependencies for source set 'main'. (n)
+No dependencies
+
+signatures
+No dependencies
+
+testCompile - Dependencies for source set 'test' (deprecated, use 'testImplementation ' instead).
++--- javax.servlet:javax.servlet-api:3.1.0
++--- javax.ws.rs:javax.ws.rs-api:2.1
++--- javax.validation:validation-api:2.0.1.Final
++--- org.json:json:20180130
++--- org.slf4j:slf4j-api:1.7.25
++--- org.reflections:reflections:0.9.11
+|    +--- com.google.guava:guava:20.0
+|    \--- org.javassist:javassist:3.21.0-GA
++--- com.google.guava:guava:20.0
++--- io.swagger:swagger-annotations:1.5.19
++--- io.swagger:swagger-core:1.5.19
+|    +--- org.apache.commons:commons-lang3:3.2.1
+|    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    +--- com.fasterxml.jackson.core:jackson-databind:2.9.5
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5
+|    |    +--- org.yaml:snakeyaml:1.18
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- io.swagger:swagger-models:1.5.19
+|    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    |    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    |    \--- io.swagger:swagger-annotations:1.5.19
+|    +--- com.google.guava:guava:20.0
+|    \--- javax.validation:validation-api:1.1.0.Final -> 2.0.1.Final
++--- io.swagger:swagger-models:1.5.19 (*)
++--- io.swagger:swagger-servlet:1.5.19
+|    +--- io.swagger:swagger-core:1.5.19 (*)
+|    +--- org.reflections:reflections:0.9.11 (*)
+|    \--- com.google.guava:guava:20.0
+\--- javax.xml.bind:jaxb-api:2.2.12
+
+testCompileClasspath - Compile classpath for source set 'test'.
++--- javax.servlet:javax.servlet-api:3.1.0
++--- javax.ws.rs:javax.ws.rs-api:2.1
++--- javax.validation:validation-api:2.0.1.Final
++--- org.json:json:20180130
++--- org.slf4j:slf4j-api:1.7.25
++--- org.reflections:reflections:0.9.11
+|    +--- com.google.guava:guava:20.0
+|    \--- org.javassist:javassist:3.21.0-GA
++--- com.google.guava:guava:20.0
++--- io.swagger:swagger-annotations:1.5.19
++--- io.swagger:swagger-core:1.5.19
+|    +--- org.apache.commons:commons-lang3:3.2.1
+|    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    +--- com.fasterxml.jackson.core:jackson-databind:2.9.5
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5
+|    |    +--- org.yaml:snakeyaml:1.18
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- io.swagger:swagger-models:1.5.19
+|    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    |    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    |    \--- io.swagger:swagger-annotations:1.5.19
+|    +--- com.google.guava:guava:20.0
+|    \--- javax.validation:validation-api:1.1.0.Final -> 2.0.1.Final
++--- io.swagger:swagger-models:1.5.19 (*)
++--- io.swagger:swagger-servlet:1.5.19
+|    +--- io.swagger:swagger-core:1.5.19 (*)
+|    +--- org.reflections:reflections:0.9.11 (*)
+|    \--- com.google.guava:guava:20.0
+\--- javax.xml.bind:jaxb-api:2.2.12
+
+testCompileOnly - Compile only dependencies for source set 'test'.
+No dependencies
+
+testImplementation - Implementation only dependencies for source set 'test'. (n)
+No dependencies
+
+testRuntime - Runtime dependencies for source set 'test' (deprecated, use 'testRuntimeOnly ' instead).
++--- javax.servlet:javax.servlet-api:3.1.0
++--- javax.ws.rs:javax.ws.rs-api:2.1
++--- javax.validation:validation-api:2.0.1.Final
++--- org.json:json:20180130
++--- org.slf4j:slf4j-api:1.7.25
++--- org.reflections:reflections:0.9.11
+|    +--- com.google.guava:guava:20.0
+|    \--- org.javassist:javassist:3.21.0-GA
++--- com.google.guava:guava:20.0
++--- io.swagger:swagger-annotations:1.5.19
++--- io.swagger:swagger-core:1.5.19
+|    +--- org.apache.commons:commons-lang3:3.2.1
+|    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    +--- com.fasterxml.jackson.core:jackson-databind:2.9.5
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5
+|    |    +--- org.yaml:snakeyaml:1.18
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- io.swagger:swagger-models:1.5.19
+|    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    |    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    |    \--- io.swagger:swagger-annotations:1.5.19
+|    +--- com.google.guava:guava:20.0
+|    \--- javax.validation:validation-api:1.1.0.Final -> 2.0.1.Final
++--- io.swagger:swagger-models:1.5.19 (*)
++--- io.swagger:swagger-servlet:1.5.19
+|    +--- io.swagger:swagger-core:1.5.19 (*)
+|    +--- org.reflections:reflections:0.9.11 (*)
+|    \--- com.google.guava:guava:20.0
+\--- javax.xml.bind:jaxb-api:2.2.12
+
+testRuntimeClasspath - Runtime classpath of source set 'test'.
++--- javax.servlet:javax.servlet-api:3.1.0
++--- javax.ws.rs:javax.ws.rs-api:2.1
++--- javax.validation:validation-api:2.0.1.Final
++--- org.json:json:20180130
++--- org.slf4j:slf4j-api:1.7.25
++--- org.reflections:reflections:0.9.11
+|    +--- com.google.guava:guava:20.0
+|    \--- org.javassist:javassist:3.21.0-GA
++--- com.google.guava:guava:20.0
++--- io.swagger:swagger-annotations:1.5.19
++--- io.swagger:swagger-core:1.5.19
+|    +--- org.apache.commons:commons-lang3:3.2.1
+|    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    +--- com.fasterxml.jackson.core:jackson-databind:2.9.5
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.9.5
+|    |    +--- org.yaml:snakeyaml:1.18
+|    |    \--- com.fasterxml.jackson.core:jackson-core:2.9.5
+|    +--- io.swagger:swagger-models:1.5.19
+|    |    +--- com.fasterxml.jackson.core:jackson-annotations:2.9.5
+|    |    +--- org.slf4j:slf4j-api:1.7.22 -> 1.7.25
+|    |    \--- io.swagger:swagger-annotations:1.5.19
+|    +--- com.google.guava:guava:20.0
+|    \--- javax.validation:validation-api:1.1.0.Final -> 2.0.1.Final
++--- io.swagger:swagger-models:1.5.19 (*)
++--- io.swagger:swagger-servlet:1.5.19
+|    +--- io.swagger:swagger-core:1.5.19 (*)
+|    +--- org.reflections:reflections:0.9.11 (*)
+|    \--- com.google.guava:guava:20.0
+\--- javax.xml.bind:jaxb-api:2.2.12
+
+testRuntimeOnly - Runtime only dependencies for source set 'test'. (n)
+No dependencies
+
+(*) - dependencies omitted (listed previously)
+
+BUILD SUCCESSFUL in 7s
+1 actionable task: 1 executed

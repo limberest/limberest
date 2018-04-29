@@ -6,6 +6,7 @@ io.limberest.api.validate.props
 io.limberest.config
 io.limberest.jackson
 io.limberest.json
+io.limberest.provider
 io.limberest.service
 io.limberest.service.http
 io.limberest.service.registry

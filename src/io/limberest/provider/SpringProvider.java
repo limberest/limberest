@@ -1,8 +1,9 @@
-package io.limberest.service.registry;
+package io.limberest.provider;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.ListableBeanFactory;
@@ -44,7 +45,7 @@ public class SpringProvider implements Provider {
     }
 
     @Override
-    public String getResource(String path) throws IOException {
+    public String loadResource(String path) throws IOException {
         Resource res = appContext.getResource("classpath:" + path);
         if (res == null)
             return null;
@@ -60,5 +61,11 @@ public class SpringProvider implements Provider {
             buffer.flush();
             return new String(buffer.toByteArray());
         }
+    }
+
+    @Override
+    public List<String> getScanPackages() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

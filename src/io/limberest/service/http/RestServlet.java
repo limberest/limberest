@@ -24,14 +24,14 @@ import org.slf4j.LoggerFactory;
 import io.limberest.config.LimberestConfig;
 import io.limberest.config.LimberestConfig.Settings;
 import io.limberest.json.StatusResponse;
+import io.limberest.provider.DefaultProvider;
+import io.limberest.provider.Provider;
 import io.limberest.service.Query;
 import io.limberest.service.ResourcePath;
 import io.limberest.service.Service;
 import io.limberest.service.ServiceException;
 import io.limberest.service.http.Request.HttpMethod;
-import io.limberest.service.registry.DefaultProvider;
 import io.limberest.service.registry.Initializer;
-import io.limberest.service.registry.Provider;
 import io.limberest.service.registry.ServiceRegistry;
 import io.limberest.service.registry.ServiceRegistry.RegistryKey;
 import io.limberest.util.ExecutionTimer;
@@ -72,7 +72,7 @@ public class RestServlet extends HttpServlet {
             ServiceRegistry.setProvider(springProvider);
         }
         catch (ClassNotFoundException ex) {
-            logger.debug("Using " + DefaultProvider.class + " due to " + ex.getMessage());
+            logger.debug("Using " + DefaultProvider.class + " due to " + ex);
             logger.trace(ex.getMessage(), ex);
         }
         catch (ReflectiveOperationException ex) {
@@ -80,8 +80,9 @@ public class RestServlet extends HttpServlet {
         }
 
         try {
-            // TODO log
-            new Initializer().scan();
+            Provider provider = ServiceRegistry.getProvider();
+            logger.info("Limberest provider: " + provider.getClass());
+            new Initializer().scan(provider);
         }
         catch (IOException ex) {
             logger.error("Unable to scan all packages", ex);
