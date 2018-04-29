@@ -43,7 +43,7 @@ public class Initializer {
             ExecutionTimer timer = new ExecutionTimer(LogLevel.Info, true);
             scanPackages = provider.getScanPackages();
             if (timer.isEnabled())
-                timer.log("Limberest initializer found " + scanPackages.size() + " packages to scan in ");
+                timer.log("Limberest initializer found " + scanPackages.size() + " packages to scan in");
             else
                 logger.info("Limberest initializer found " + scanPackages.size() + " packages to scan");
             if (scanPackages.size() > 100)
@@ -94,6 +94,6 @@ public class Initializer {
             }
         }
         if (timer.isEnabled())
-            timer.log("Limberest initializer scanned " + scanPackages.size() + " packages in ");
+            timer.log("Limberest initializer scanned " + scanPackages.size() + " packages in");
     }
 }

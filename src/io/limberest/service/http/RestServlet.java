@@ -66,7 +66,7 @@ public class RestServlet extends HttpServlet {
             if (appContext == null) {
                 logger.debug("Using " + DefaultProvider.class + " since Spring WebApplicationContext is null");
             }
-            Class<? extends Provider> providerClass = classLoader.loadClass("io.limberest.service.registry.SpringProvider").asSubclass(Provider.class);
+            Class<? extends Provider> providerClass = classLoader.loadClass("io.limberest.provider.SpringBootProvider").asSubclass(Provider.class);
             Constructor<? extends Provider> constructor = providerClass.getConstructor(classLoader.loadClass("org.springframework.context.ApplicationContext"));
             Provider springProvider = constructor.newInstance(appContext);
             ServiceRegistry.setProvider(springProvider);
