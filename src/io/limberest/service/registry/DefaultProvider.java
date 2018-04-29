@@ -1,7 +1,10 @@
 package io.limberest.service.registry;
 
+import java.io.IOException;
+
 import io.limberest.service.Service;
 import io.limberest.service.ServiceException;
+import io.limberest.util.FileLoader;
 
 public class DefaultProvider implements Provider {
 
@@ -10,6 +13,12 @@ public class DefaultProvider implements Provider {
             throws ServiceException, InstantiationException, IllegalAccessException {
         // TODO Auto-generated method stub
         return null;
+    }
+
+    @Override
+    public String getResource(String path) throws IOException {
+        byte[] bytes = new FileLoader(path).readFromClassLoader();
+        return bytes == null ? null : new String();
     }
 
 }

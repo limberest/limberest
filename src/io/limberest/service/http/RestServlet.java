@@ -57,14 +57,6 @@ public class RestServlet extends HttpServlet {
         String webappContextPath = servletContext.getContextPath();
         logger.debug("webappContextPath: {}", webappContextPath);
 
-        try {
-            // TODO log
-            new Initializer().scan();
-        }
-        catch (IOException ex) {
-            logger.error("Unable to scan all packages", ex);
-        }
-
         // reflective spring injection if appropriate (eg: spring boot app)
         try {
             ClassLoader classLoader = getClass().getClassLoader();
@@ -85,6 +77,14 @@ public class RestServlet extends HttpServlet {
         }
         catch (ReflectiveOperationException ex) {
             logger.error(ex.getMessage(), ex);
+        }
+
+        try {
+            // TODO log
+            new Initializer().scan();
+        }
+        catch (IOException ex) {
+            logger.error("Unable to scan all packages", ex);
         }
     }
 

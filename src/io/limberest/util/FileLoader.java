@@ -1,6 +1,5 @@
 package io.limberest.util;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -11,16 +10,15 @@ public class FileLoader {
     public FileLoader(String path) {
         this.path = path;
     }
-    
+
     public byte[] readFromClassLoader() throws IOException {
         return readFromClassLoader(getClass().getClassLoader());
     }
-    
+
     public byte[] readFromClassLoader(ClassLoader classLoader) throws IOException {
         try (InputStream is = classLoader.getResourceAsStream(path.startsWith("/") ? path : "/" + path)) {
             if (is == null)
-                throw new FileNotFoundException(path);
-            // TODO: better way?
+                return null;
             int bytesRead = 0;
             byte[] contents = new byte[0];
             byte[] buffer = new byte[1024];
