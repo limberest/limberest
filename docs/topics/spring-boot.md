@@ -5,7 +5,7 @@ layout: topic
 The [ply-demo](https://github.com/ply-ct/ply-demo) project is a full working example of deploying Limberest
 services in a Spring Boot environment.
 
-## Dependencies
+### Dependencies
 Here's what typical `dependencies` look like in build.gradle:
 ```gradle
 dependencies {
