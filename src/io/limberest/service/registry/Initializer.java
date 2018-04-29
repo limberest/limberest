@@ -1,6 +1,7 @@
 package io.limberest.service.registry;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -12,9 +13,6 @@ import javax.ws.rs.Produces;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.common.reflect.ClassPath;
-import com.google.common.reflect.ClassPath.ClassInfo;
 
 import io.limberest.config.LimberestConfig;
 import io.limberest.config.LimberestConfig.Settings;
@@ -40,7 +38,7 @@ public class Initializer {
         Map<?,?> scan = settings.getMap("scan");
         if (scan != null)
             scanPackages = settings.getStringList("packages", scan);
-        
+
         if (scanPackages != null) {
             scan(scanPackages);
         }
@@ -52,23 +50,55 @@ public class Initializer {
     public void scan(ClassLoader classLoader) throws IOException {
         ExecutionTimer timer = new ExecutionTimer(LogLevel.Info, true);
         List<String> excludes = new ArrayList<>();
-        ClassLoader excludeLoader = classLoader;
-        while ((excludeLoader = excludeLoader.getParent()) != null) {
-            for (ClassInfo classInfo : ClassPath.from(excludeLoader).getTopLevelClasses()) {
-                excludes.add(classInfo.getPackageName());
+        ClassLoader excludeLoader = classLoader.getParent();
+        if (excludeLoader != null) {
+            try {
+                Method method = getGetPackages(excludeLoader.getClass());
+                if (method != null) {
+                    method.setAccessible(true);
+                    Package[] packages = (Package[]) method.invoke(excludeLoader);
+                    logger.trace("Scan excludes packages for {}:", excludeLoader);
+                    for (Package pkg : packages) {
+                        logger.trace("   {}", pkg.getName());
+                        excludes.add(pkg.getName());
+                    }
+                }
+            }
+            catch (ReflectiveOperationException ex) {
+                throw new IOException(ex);
             }
         }
 
         List<String> packageNames = new ArrayList<>();
-        for (ClassInfo classInfo : ClassPath.from(Initializer.class.getClassLoader()).getTopLevelClasses()) {
-            String packageName = classInfo.getPackageName();
+        logger.trace("Scan found these packages for {}:", getClass().getClassLoader());
+        for (Package pkg : Package.getPackages()) {
+            String packageName = pkg.getName();
             if (!packageNames.contains(packageName) && !excludes.contains(packageName)) {
+                logger.trace("   {}", pkg.getName());
                 packageNames.add(packageName);
             }
         }
+
         if (timer.isEnabled())
-            timer.log("limberest initializer found " + packageNames.size() + " packages to scan in ");
+            timer.log("Limberest initializer found " + packageNames.size() + " packages to scan in ");
+        else
+            logger.info("Limberest initializer found " + packageNames.size() + " packages to scan");
+        if (packageNames.size() > 100)
+            logger.info("You can restrict scanned packages through configuration (https://limberest.io/limberest/topics/config");
         scan(packageNames);
+    }
+
+    private Method getGetPackages(Class<?> pkgClass) {
+        try {
+            return pkgClass.getDeclaredMethod("getPackages");
+        }
+        catch (NoSuchMethodException ex) {
+            Class<?> superClass = pkgClass.getSuperclass();
+            if (superClass == null)
+                return null;
+            else
+                return getGetPackages(superClass);
+        }
     }
 
     public void scan(List<String> scanPackages) {

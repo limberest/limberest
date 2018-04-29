@@ -1,5 +1,6 @@
 package io.limberest.util;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -19,16 +20,14 @@ public class FileLoader {
         try (InputStream is = classLoader.getResourceAsStream(path.startsWith("/") ? path : "/" + path)) {
             if (is == null)
                 return null;
-            int bytesRead = 0;
-            byte[] contents = new byte[0];
-            byte[] buffer = new byte[1024];
-            while ((bytesRead = is.read(buffer)) != -1) {
-                byte[] newContents = new byte[contents.length + bytesRead];
-                System.arraycopy(contents, 0, newContents, 0, contents.length);
-                System.arraycopy(buffer, 0, newContents, contents.length, bytesRead);
-                contents = newContents;
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int bytesRead;
+            byte[] data = new byte[1024];
+            while ((bytesRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, bytesRead);
             }
-            return contents;
+            buffer.flush();
+            return buffer.toByteArray();
         }
     }
 }

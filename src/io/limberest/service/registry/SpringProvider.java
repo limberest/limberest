@@ -1,8 +1,8 @@
 package io.limberest.service.registry;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
 import java.util.Map;
 
 import org.springframework.beans.factory.ListableBeanFactory;
@@ -46,6 +46,19 @@ public class SpringProvider implements Provider {
     @Override
     public String getResource(String path) throws IOException {
         Resource res = appContext.getResource("classpath:" + path);
-        return res == null ? null : new String(Files.readAllBytes(Paths.get(res.getURI())));
+        if (res == null)
+            return null;
+        try (InputStream is = res.getInputStream()) {
+            if (is == null)
+                return null;
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            int bytesRead;
+            byte[] data = new byte[1024];
+            while ((bytesRead = is.read(data, 0, data.length)) != -1) {
+                buffer.write(data, 0, bytesRead);
+            }
+            buffer.flush();
+            return new String(buffer.toByteArray());
+        }
     }
 }
