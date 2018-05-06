@@ -73,32 +73,35 @@ JSON and Java.  Since Jsonable is an interface, any existing model hierarchy can
 and exposed as a JSON REST service API.
 
 ### Date/Time
-Automatic [validation](validation) and binding works as follows for various date/date-time formats (Instant is preferred).
- - ```java
-       private java.time.Instant watched;
-       public java.time.Instant getWatched() { return watched; }
-       public void setWatched(java.time.Instant watched) { this.watched = watched; }
+Automatic [validation](validation) and binding works as follows for various date/date-time formats.
+ - `java.time.Instant` (preferred)
+   ```java
+       private Instant watched;
+       public Instant getWatched() { return watched; }
+       public void setWatched(Instant watched) { this.watched = watched; }
    ```
    ```json
    {
      "myInstant": "2007-12-03T10:15:30.00Z"
    }
    ```
- - ```java
-       private java.util.Date watched;
-       public java.util.Date getWatched() { return watched; }
-       public void setWatched(java.util.Date watched) { this.watched = watched; }
+ - `java.util.Date`
+   ```java
+       private Date watched;
+       public Date getWatched() { return watched; }
+       public void setWatched(Date watched) { this.watched = watched; }
    ```
    ```json
    {
      "myDate": "2007-12-03T10:15:30.00Z"
    }
    ```
- - ```java
+ - `java.time.LocalDate`
+   ```java
        // no time portion
-       private java.time.LocalDate watched;
-       public java.time.LocalDate getWatched() { return watched; }
-       public void setWatched(java.time.LocalDate watched) { this.watched = watched; }
+       private LocalDate watched;
+       public LocalDate getWatched() { return watched; }
+       public void setWatched(LocalDate watched) { this.watched = watched; }
    ```
    ```json
    {
@@ -106,7 +109,8 @@ Automatic [validation](validation) and binding works as follows for various date
    }
    ```
 ### Email
- - ```java
+ - Email validation
+   ```java
        private java.util.Date watched;
        public java.util.Date getWatched() { return watched; }
        public void setWatched(java.util.Date watched) { this.watched = watched; }
