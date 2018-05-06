@@ -7,6 +7,7 @@ import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -22,17 +23,17 @@ import org.json.JSONObject;
  * TODO: more thorough bean model caching
  */
 public class Jsonator {
-    
+
     private Jsonable jsonable;
-    
+
     public Jsonator(Jsonable jsonable) {
         this.jsonable = jsonable;
     }
-    
+
     public JSONObject getJson() {
         return getJson(new JsonObject());
     };
-    
+
     /**
      * TODO: edge cases with swagger dataType attribute (eg: date)
      */
@@ -65,9 +66,9 @@ public class Jsonator {
                   }
                 }
             }
-            
+
             return json;
-            
+
         }
         catch (IntrospectionException ex) {
             throw new JSONException(ex);
@@ -76,7 +77,7 @@ public class Jsonator {
             throw new JSONException(ex);
         }
     }
-    
+
     protected JSONArray getJson(Collection<?> coll) throws JSONException {
         JSONArray jsonArray = new JSONArray();
         for (Object o : coll) {
@@ -86,7 +87,7 @@ public class Jsonator {
         }
         return jsonArray;
     }
-    
+
     protected JSONObject getJson(Map<?,?> map) throws JSONException {
         JSONObject json = new JsonObject();
         for (final Entry<?,?> entry : map.entrySet()) {
@@ -107,7 +108,7 @@ public class Jsonator {
         }
         return json;
     }
-    
+
     private static Map<Method,Boolean> hiddenMethods;
     /**
      * For swagger "hidden" annotation, lowest declaring subclass governs.
@@ -120,7 +121,7 @@ public class Jsonator {
         Boolean hidden = hiddenMethods.get(method);
         if (hidden != null)
             return hidden;
-        
+
         hidden = false;
         if ("getClass".equals(method.getName()) && method.getParameterTypes().length == 0)
             hidden = true;
@@ -128,7 +129,7 @@ public class Jsonator {
             hidden = true;
         if ("getJsonName".equals(method.getName()) && method.getParameterTypes().length == 0)
             hidden = true;
-        
+
         Class<?> c = method.getDeclaringClass();
         while (c != null) {
             try {
@@ -141,24 +142,24 @@ public class Jsonator {
                     		hidden = hiddenMethod.invoke(a).equals(Boolean.TRUE);
                     	}
                     }
-                	
+
                 }
             }
             catch (ReflectiveOperationException ex) {
             }
             c = c.getSuperclass();
         }
-        
+
         hiddenMethods.put(method, hidden);
         return hidden;
     }
-    
+
     protected Object getJsonObject(Object o) {
         if (o == null) {
             return null;
         }
         else if (o instanceof JSONObject) {
-            return (JSONObject)o;
+            return o;
         }
         else if (o instanceof Jsonable) {
             return ((Jsonable)o).toJson();
@@ -172,6 +173,9 @@ public class Jsonator {
         else if (o instanceof Date) {
             return ((Date)o).toInstant().toString();
         }
+        else if (o instanceof LocalDate) {
+            return ((LocalDate)o).toString();
+        }
         else if (o instanceof Instant) {
             return ((Instant)o).toString();
         }
@@ -181,5 +185,5 @@ public class Jsonator {
         else {
             return JSONObject.wrap(o);
         }
-    }    
+    }
 }

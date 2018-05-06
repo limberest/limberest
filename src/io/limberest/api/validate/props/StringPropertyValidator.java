@@ -3,8 +3,6 @@ package io.limberest.api.validate.props;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import io.limberest.api.validate.DateTimeValidator;
-import io.limberest.api.validate.DateValidator;
 import io.limberest.api.validate.EmailValidator;
 import io.limberest.api.validate.StringValidator;
 import io.limberest.validate.Result;
@@ -36,10 +34,6 @@ public class StringPropertyValidator implements PropertyValidator<StringProperty
         StringValidator validator;
         if ("email".equals(property.getFormat()))
             validator = new EmailValidator();
-        else if ("date-time".equals(property.getFormat()))
-            validator = new DateTimeValidator();
-        else if ("date".equals(property.getFormat()))
-            validator = new DateValidator();
         else
             validator = new StringValidator();
         validator.setAllowableValues(property.getEnum());

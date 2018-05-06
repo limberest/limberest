@@ -27,16 +27,17 @@ public class NumberPropertyValidator
         }
         return result;
     }
-    
+
     protected Result validate(BigDecimal value, AbstractNumericProperty property, String path) throws ValidationException {
         return getValidator(property).validate(value, path);
     }
-    
+
     protected NumberValidator getValidator(AbstractNumericProperty property) {
         NumberValidator numVal = new NumberValidator();
         numVal.setMax(property.getMaximum());
         numVal.setMin(property.getMinimum());
         numVal.setExclusiveMax(property.getExclusiveMaximum());
+        numVal.setExclusiveMin(property.getExclusiveMinimum());
         numVal.setMultipleOf(property.getMultipleOf());
         return numVal;
     }

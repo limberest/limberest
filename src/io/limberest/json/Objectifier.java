@@ -12,6 +12,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -37,15 +39,15 @@ import org.json.JSONObject;
  *
  */
 public class Objectifier {
-    
+
     private static DateFormat DF = new SimpleDateFormat("yyyy-MM-dd");
-    
+
     private Object into;
-    
+
     public Objectifier(Object into) {
         this.into = into;
     }
-    
+
     public void from(JSONObject json) throws JSONException {
         String[] names = JSONObject.getNames(json);
         if (names != null) {
@@ -84,7 +86,7 @@ public class Objectifier {
         }
         return null;
     }
-    
+
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected Object getObject(Type t, Object o) throws ReflectiveOperationException {
         Type[] ats = null;
@@ -171,6 +173,9 @@ public class Objectifier {
             else if (t.equals(Instant.class)) {
                 return Instant.parse((String)o);
             }
+            else if (t.equals(LocalDate.class)) {
+                return LocalDate.parse((String)o, DateTimeFormatter.ISO_LOCAL_DATE);
+            }
             else if (t instanceof Class && ((Class)t).isEnum()) {
                 for (Object enumConst : ((Class)t).getEnumConstants()) {
                     if (enumConst.toString().equals(o))
@@ -181,11 +186,11 @@ public class Objectifier {
                 return o;
             }
         }
-        
+
         return null;
     }
-    
-    
+
+
     /**
      * Tries to force a number to match an expected type.
      * @param n number to coerce
@@ -202,16 +207,16 @@ public class Objectifier {
         Constructor<? extends Number> ctor = c.getConstructor(String.class);
         return ctor.newInstance(String.valueOf(n));
     }
-    
+
     private static final Map<String,Class<? extends Number>> primitiveNumToWrapper = new HashMap<>();
     static {
         primitiveNumToWrapper.put("double", Double.class);
         primitiveNumToWrapper.put("float", Float.class);
         primitiveNumToWrapper.put("int", Integer.class);
         primitiveNumToWrapper.put("long", Long.class);
-        primitiveNumToWrapper.put("short", short.class);        
+        primitiveNumToWrapper.put("short", short.class);
     }
-    
+
     /**
      * Creates a collection instance to which bound JSONArray element objects will be added.
      * If these default impls are not appropriate, this behavior can be overridden in a Jsonable constructor.
@@ -232,7 +237,7 @@ public class Objectifier {
             return collectionType.newInstance();
         }
     }
-    
+
     /**
      * Creates a map instance to which bound JSONObject elements will be added.
      * If these default impls are not appropriate, this behavior can be overridden in a Jsonable constructor.

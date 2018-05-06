@@ -4,6 +4,7 @@ import static io.limberest.service.http.Status.BAD_REQUEST;
 
 import java.math.BigDecimal;
 
+import io.limberest.service.http.Status;
 import io.limberest.validate.Result;
 import io.limberest.validate.ValidationException;
 
@@ -24,18 +25,23 @@ public class NumberValidator extends PrimitiveValidator<BigDecimal> {
     private Boolean exclusiveMax;
     public Boolean isExclusiveMax() { return exclusiveMax != null && exclusiveMax; }
     public void setExclusiveMax(Boolean exclusiveMax) { this.exclusiveMax = exclusiveMax; }
-    
+
     private BigDecimal multipleOf;
     public BigDecimal getMultipleOf() { return multipleOf; }
     public void setMultipleOf(BigDecimal multipleOf) { this.multipleOf = multipleOf; }
-    
+
     @Override
     public BigDecimal convert(Object value) throws ValidationException {
         if (value instanceof BigDecimal)
             return (BigDecimal)value;
-        return new BigDecimal(String.valueOf(value));
+        try {
+            return new BigDecimal(String.valueOf(value));
+        }
+        catch (NumberFormatException ex) {
+            throw new ValidationException(Status.BAD_REQUEST.getCode(), ex.getMessage(), ex);
+        }
     }
-    
+
     public Result validate(BigDecimal value, String path) throws ValidationException {
         Result result = new Result();
         if (getMax() != null) {
@@ -58,14 +64,14 @@ public class NumberValidator extends PrimitiveValidator<BigDecimal> {
                 result.also(BAD_REQUEST, msg);
             }
         }
-        
+
         if (getMultipleOf() != null) {
             if (value.remainder(getMultipleOf()) != BigDecimal.ZERO) {
                 String msg = path + ": value '" + value + "' is not a multiple of " + getMultipleOf() + ")";
                 result.also(BAD_REQUEST, msg);
             }
         }
-        
+
         return result;
     }
 }

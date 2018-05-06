@@ -15,6 +15,8 @@ import io.limberest.api.validate.params.ParameterValidator;
 import io.limberest.api.validate.params.ParameterValidators;
 import io.limberest.api.validate.params.PathParameterValidator;
 import io.limberest.api.validate.params.QueryParameterValidator;
+import io.limberest.api.validate.props.DatePropertyValidator;
+import io.limberest.api.validate.props.DateTimePropertyValidator;
 import io.limberest.api.validate.props.NumberPropertyValidator;
 import io.limberest.api.validate.props.PropertyValidator;
 import io.limberest.api.validate.props.PropertyValidators;
@@ -35,6 +37,8 @@ import io.swagger.models.parameters.Parameter;
 import io.swagger.models.parameters.PathParameter;
 import io.swagger.models.parameters.QueryParameter;
 import io.swagger.models.properties.AbstractNumericProperty;
+import io.swagger.models.properties.DateProperty;
+import io.swagger.models.properties.DateTimeProperty;
 import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 
@@ -91,6 +95,8 @@ public class SwaggerValidator implements Validator<JSONObject> {
         addValidator(QueryParameter.class, new QueryParameterValidator());
         addValidator(HeaderParameter.class, new HeaderParameterValidator());
         addValidator(BodyParameter.class, new BodyParameterValidator(propertyValidators));
+        addValidator(DateTimeProperty.class, new DateTimePropertyValidator());
+        addValidator(DateProperty.class, new DatePropertyValidator());
     }
 
     public Result validate(Request<JSONObject> request) throws ValidationException {

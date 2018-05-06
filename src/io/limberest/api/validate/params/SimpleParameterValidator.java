@@ -5,6 +5,7 @@ import static io.limberest.service.http.Status.INTERNAL_ERROR;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.time.Instant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,7 @@ import io.swagger.util.PrimitiveType;
 public class SimpleParameterValidator {
 
     private static final Logger logger = LoggerFactory.getLogger(SimpleParameterValidator.class);
-    
+
     protected Result validate(SwaggerRequest request, Parameter param, String value, boolean strict) throws ValidationException {
         Result result = new Result();
         if (value == null || value.isEmpty()) {
@@ -58,14 +59,15 @@ public class SimpleParameterValidator {
                         arrayValidator.setMaxItems(p.getMaxItems());
                         String[] values = value.split(","); // TODO non-csv (p.collectionFormat)
                         Object[] objs = new Object[values.length];
-                        for (int i = 0; i < values.length; i++) { 
+                        for (int i = 0; i < values.length; i++) {
                             Object obj = parse(keyClass, p, values[i], i, result);
                             objs[i] = validator.convert(obj);
                         }
                         result.also(arrayValidator.validate(objs, param.getName()));
                     }
                     else {
-                        if (Number.class.isAssignableFrom(keyClass) && value != null && (value.indexOf('>') >= 0 || value.indexOf('<') >= 0)) {
+                        if ((Number.class.isAssignableFrom(keyClass) || Instant.class.isAssignableFrom(keyClass))
+                                && value != null && (value.indexOf('>') >= 0 || value.indexOf('<') >= 0)) {
                             // allow comparison operators (>1931, <=1945, >=1930<1940)
                             String[] vals = value.split("[<>]=?");
                             for (int i = 0; i < vals.length; i++) {
@@ -87,8 +89,8 @@ public class SimpleParameterValidator {
         }
         return result;
     }
-    
-    protected Object parse(Class<?> keyClass, SerializableParameter param, String value, int index, Result result) 
+
+    protected Object parse(Class<?> keyClass, SerializableParameter param, String value, int index, Result result)
             throws ValidationException {
         try {
             // parse by instantiating
@@ -114,15 +116,15 @@ public class SimpleParameterValidator {
             throw new ValidationException(INTERNAL_ERROR.getCode(), ex.getMessage(), ex);
         }
     }
-    
+
     protected String invalidTypeMessage(SerializableParameter param, String value, int index) {
         return "invalid " + param.getType() + " value for " + param.getIn() + " param " + param.getName()
             + (index == -1 ? "" : "[" + index + "]") + ": " + value;
     }
-    
+
     protected PrimitiveValidator<?> getValidator(Class<?> keyClass, SerializableParameter param) {
         PrimitiveValidator<?> validator;
-        
+
         if (Number.class.isAssignableFrom(keyClass)) {
             NumberValidator numVal = new NumberValidator();
             numVal.setMax(param.getMaximum());
@@ -133,12 +135,12 @@ public class SimpleParameterValidator {
             StringValidator stringVal = new StringValidator();
             stringVal.setMinLength(param.getMinLength());
             stringVal.setMaxLength(param.getMaxLength());
-            validator = stringVal; 
+            validator = stringVal;
         }
-        
+
         validator.setAllowableValues(param.getEnum());
-        
+
         return validator;
-        
+
     }
 }
