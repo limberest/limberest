@@ -74,7 +74,7 @@ and exposed as a JSON REST service API.
 
 ### Date/Time
 Automatic [validation](validation) and binding works as follows for various date/date-time formats.
- - `java.time.Instant` (preferred)
+ - **java.time.Instant** (preferred)
    ```java
        private Instant watched;
        public Instant getWatched() { return watched; }
@@ -85,7 +85,7 @@ Automatic [validation](validation) and binding works as follows for various date
      "myInstant": "2007-12-03T10:15:30.00Z"
    }
    ```
- - `java.util.Date`
+ - **java.util.Date**
    ```java
        private Date watched;
        public Date getWatched() { return watched; }
@@ -96,7 +96,7 @@ Automatic [validation](validation) and binding works as follows for various date
      "myDate": "2007-12-03T10:15:30.00Z"
    }
    ```
- - `java.time.LocalDate`
+ - **java.time.LocalDate**
    ```java
        // no time portion
        private LocalDate watched;
@@ -109,18 +109,9 @@ Automatic [validation](validation) and binding works as follows for various date
    }
    ```
 ### Email
- - Email validation
-   ```java
-       private java.util.Date watched;
-       public java.util.Date getWatched() { return watched; }
-       public void setWatched(java.util.Date watched) { this.watched = watched; }
+ - **javax.validation.constraints.Email** annotation
    ```
-   ```json
-   {
-     "myInstant": "2007-12-03T10:15:30.00Z"
-   }
-   ```
-       @javax.validation.constraints.Email
+       @Email
        private String email;
        public String getEmail() { return email; }
        public void setEmail(String email) { this.email = email; }
