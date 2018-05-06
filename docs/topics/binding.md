@@ -108,6 +108,7 @@ Automatic [validation](validation) and binding works as follows for various date
      "myLocalDate": "2007-12-03"
    }
    ```
+
 ### Email
  - **javax.validation.constraints.Email** annotation
    ```
