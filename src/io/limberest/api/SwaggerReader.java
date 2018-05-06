@@ -14,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import io.swagger.annotations.Info;
 import io.swagger.annotations.SwaggerDefinition;
+import io.swagger.converter.ModelConverters;
 import io.swagger.models.Contact;
 import io.swagger.models.ExternalDocs;
 import io.swagger.models.License;
@@ -33,7 +34,7 @@ import io.swagger.util.PathUtils;
 /**
  * Duplicated from io.swagger.servlet.Reader except where noted below.
  * This is to avoid auto-inclusion of Swagger's ServletResourceReaderExtension.
- * 
+ *
  * TODO: config option to include alternative reader extensions
  */
 public class SwaggerReader {
@@ -42,6 +43,7 @@ public class SwaggerReader {
 
     private SwaggerReader(Swagger swagger) {
         this.swagger = swagger;
+        ModelConverters.getInstance().addConverter(new SwaggerModelConverter());
     }
 
     /**
@@ -146,7 +148,7 @@ public class SwaggerReader {
                         }
                     }
                 }
-                                    
+
                 Path path = swagger.getPath(parsedPath);
                 if (path == null) {
                     path = new Path();

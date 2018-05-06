@@ -16,7 +16,7 @@ public class PropertyValidators {
         List<PropertyValidator<T>> validators = new ArrayList<>();
         for (Map.Entry<Class<? extends Property>, List<PropertyValidator<? extends Property>>> entry : propertyValidators.entrySet()) {
             if (entry.getKey().isAssignableFrom(p.getClass())) {
-                for (PropertyValidator<? extends Property> val : (List<PropertyValidator<? extends Property>>)entry.getValue()) {
+                for (PropertyValidator<? extends Property> val : entry.getValue()) {
                     validators.add((PropertyValidator<T>)val);
                 }
             }
@@ -29,7 +29,7 @@ public class PropertyValidators {
         List<ArrayPropertyValidator<T>> validators = new ArrayList<>();
         for (Map.Entry<Class<? extends Property>, List<PropertyValidator<? extends Property>>> entry : propertyValidators.entrySet()) {
             if (entry.getKey().isAssignableFrom(p.getClass())) {
-                for (PropertyValidator<? extends Property> val : (List<PropertyValidator<? extends Property>>)entry.getValue()) {
+                for (PropertyValidator<? extends Property> val : entry.getValue()) {
                     if (val instanceof ArrayPropertyValidator)
                         validators.add((ArrayPropertyValidator<T>)val);
                 }

@@ -3,6 +3,9 @@ package io.limberest.api.validate.props;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import io.limberest.api.validate.DateTimeValidator;
+import io.limberest.api.validate.DateValidator;
+import io.limberest.api.validate.EmailValidator;
 import io.limberest.api.validate.StringValidator;
 import io.limberest.validate.Result;
 import io.limberest.validate.ValidationException;
@@ -24,16 +27,24 @@ public class StringPropertyValidator implements PropertyValidator<StringProperty
         }
         return result;
     }
-    
+
     protected Result validate(String value, StringProperty property, String path) throws ValidationException {
         return getValidator(property).validate(value, path);
     }
-    
+
     protected StringValidator getValidator(StringProperty property) {
-        StringValidator stringValidator = new StringValidator();
-        stringValidator.setAllowableValues(property.getEnum());
-        stringValidator.setMinLength(property.getMinLength());
-        stringValidator.setMaxLength(property.getMaxLength());
-        return stringValidator;
+        StringValidator validator;
+        if ("email".equals(property.getFormat()))
+            validator = new EmailValidator();
+        else if ("date-time".equals(property.getFormat()))
+            validator = new DateTimeValidator();
+        else if ("date".equals(property.getFormat()))
+            validator = new DateValidator();
+        else
+            validator = new StringValidator();
+        validator.setAllowableValues(property.getEnum());
+        validator.setMinLength(property.getMinLength());
+        validator.setMaxLength(property.getMaxLength());
+        return validator;
     }
 }

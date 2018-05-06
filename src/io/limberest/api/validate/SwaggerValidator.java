@@ -39,14 +39,14 @@ import io.swagger.models.properties.Property;
 import io.swagger.models.properties.StringProperty;
 
 public class SwaggerValidator implements Validator<JSONObject> {
-    
+
     private PropertyValidators propertyValidators = new PropertyValidators();
     protected PropertyValidators getPropertyValidators() { return propertyValidators; }
     private ParameterValidators parameterValidators = new ParameterValidators();
     protected ParameterValidators getParameterValidators() { return parameterValidators; }
-    
+
     private Request<JSONObject> request;
-    
+
     private SwaggerRequest swaggerRequest;
     protected SwaggerRequest getSwaggerRequest() throws ValidationException {
         if (swaggerRequest == null) {
@@ -61,7 +61,7 @@ public class SwaggerValidator implements Validator<JSONObject> {
         }
         return swaggerRequest;
     }
-    
+
     public SwaggerValidator(Request<JSONObject> request) {
         this.request = request;
         addDefaultValidators();
@@ -83,7 +83,7 @@ public class SwaggerValidator implements Validator<JSONObject> {
         this.parameterValidators = parameterValidators;
         this.propertyValidators = propertyValidators;
     }
-    
+
     protected void addDefaultValidators() {
         addValidator(StringProperty.class, new StringPropertyValidator());
         addValidator(AbstractNumericProperty.class, new NumberPropertyValidator());
@@ -96,7 +96,7 @@ public class SwaggerValidator implements Validator<JSONObject> {
     public Result validate(Request<JSONObject> request) throws ValidationException {
         return validate(request, false);
     }
-    
+
     public Result validate(Request<JSONObject> request, boolean strict) throws ValidationException {
         this.request = request;
         ExecutionTimer timer = new ExecutionTimer(true);
@@ -112,7 +112,7 @@ public class SwaggerValidator implements Validator<JSONObject> {
             timer.log("SwaggerValidator: validate:");
         }
     }
-    
+
     public Result validatePath(ResourcePath path, boolean strict) throws ValidationException {
         Result result = new Result();
         ResourcePath swaggerPath = getSwaggerRequest().getPath();
@@ -177,7 +177,7 @@ public class SwaggerValidator implements Validator<JSONObject> {
     public <T extends Parameter> void addValidator(Class<T> parameterType, ParameterValidator<T> validator) {
         parameterValidators.add(parameterType, validator);
     }
-    
+
     /**
      * Add a validator for a property class.
      * @param propertyClass Any Property whose class this is assignable from will use the specified validator.
@@ -185,6 +185,6 @@ public class SwaggerValidator implements Validator<JSONObject> {
      */
     public <T extends Property> void addValidator(Class<T> propertyClass, PropertyValidator<T> validator) {
         propertyValidators.add(propertyClass, validator);
-    }    
-    
+    }
+
 }

@@ -26,14 +26,14 @@ import io.swagger.util.PrimitiveType;
 import io.swagger.util.ReflectionUtils;
 
 public class BodyParameterValidator implements ParameterValidator<BodyParameter> {
-    
+
     private SwaggerRequest swaggerRequest;
     private PropertyValidators propertyValidators;
-    
+
     public BodyParameterValidator(PropertyValidators propertyValidators) {
         this.propertyValidators = propertyValidators;
     }
-    
+
     @Override
     public Result validate(SwaggerRequest request, BodyParameter parameter, Object value, boolean strict) throws ValidationException {
         this.swaggerRequest = request;
@@ -56,7 +56,7 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
         }
         return result;
     }
-    
+
     /**
      * Validate a json object against its swagger model.
      * @param json object
@@ -88,7 +88,7 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
         Result result = new Result();
         String name = prop.getName();
         path += path == null || path.isEmpty() ? name : "." + name;
-        
+
         if (json.has(name)) {
             if (prop.getReadOnly() != null && prop.getReadOnly()) {
                 result.also(BAD_REQUEST, path + " is read-only");
@@ -114,7 +114,7 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
                     }
                 }
                 else {
-                    result.also(typeMatch); 
+                    result.also(typeMatch);
                 }
             }
         }
@@ -122,7 +122,7 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
             String msg = path + " is required";
             result.also(BAD_REQUEST, msg);
         }
-        
+
         return result;
     }
 
@@ -152,7 +152,7 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
         }
         return result;
     }
-    
+
     private Result validateExtraneous(JSONObject json, Model model, String path) throws ValidationException {
         Result result = new Result();
         for (String name : JSONObject.getNames(json)) {
@@ -163,7 +163,7 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
         }
         return result;
     }
-    
+
     protected Result matchType(Object obj, Property prop, String path) throws ValidationException {
         String expectedType = prop.getType();
         if ("array".equals(expectedType)) {
@@ -185,7 +185,7 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
                     expectedType = refType.getTypeName();
             }
         }
-            
+
         String foundType = obj.getClass().getName();
         boolean match = foundType.equals(expectedType);
         if (!match) {
@@ -203,7 +203,6 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
                     match = true;
             }
         }
-        
         if (match)
             return new Result();
         else
