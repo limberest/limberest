@@ -72,6 +72,56 @@ of Credit Jsonables.  The limberest-demo model object tree results in complete t
 JSON and Java.  Since Jsonable is an interface, any existing model hierarchy can be hooked up to Limberest
 and exposed as a JSON REST service API.
 
+### Date/Time
+Automatic [validation](validation) and binding works as follows for various date/date-time formats (Instant is preferred).
+ - ```java
+       private java.time.Instant watched;
+       public java.time.Instant getWatched() { return watched; }
+       public void setWatched(java.time.Instant watched) { this.watched = watched; }
+   ```
+   ```json
+   {
+     "myInstant": "2007-12-03T10:15:30.00Z"
+   }
+   ```
+ - ```java
+       private java.util.Date watched;
+       public java.util.Date getWatched() { return watched; }
+       public void setWatched(java.util.Date watched) { this.watched = watched; }
+   ```
+   ```json
+   {
+     "myDate": "2007-12-03T10:15:30.00Z"
+   }
+   ```
+ - ```java
+       // no time portion
+       private java.time.LocalDate watched;
+       public java.time.LocalDate getWatched() { return watched; }
+       public void setWatched(java.time.LocalDate watched) { this.watched = watched; }
+   ```
+   ```json
+   {
+     "myLocalDate": "2007-12-03"
+   }
+   ```
+### Email
+ - ```java
+       private java.util.Date watched;
+       public java.util.Date getWatched() { return watched; }
+       public void setWatched(java.util.Date watched) { this.watched = watched; }
+   ```
+   ```json
+   {
+     "myInstant": "2007-12-03T10:15:30.00Z"
+   }
+   ```
+       @javax.validation.constraints.Email
+       private String email;
+       public String getEmail() { return email; }
+       public void setEmail(String email) { this.email = email; }
+   ```   
+
 ### JSON Property Ordering
 You're probably aware that JSON object property order is not considered significant.
 This is a central tenet of the JSON format specification.  Limberest makes use of a custom
