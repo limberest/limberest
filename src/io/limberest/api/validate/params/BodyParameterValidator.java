@@ -13,6 +13,7 @@ import io.limberest.api.validate.SwaggerRequest;
 import io.limberest.api.validate.props.ArrayPropertyValidator;
 import io.limberest.api.validate.props.PropertyValidator;
 import io.limberest.api.validate.props.PropertyValidators;
+import io.limberest.json.JsonObject;
 import io.limberest.service.http.Status;
 import io.limberest.validate.Result;
 import io.limberest.validate.ValidationException;
@@ -201,6 +202,12 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
             else if (Integer.class.getName().equals(expectedType)) {
                 if (foundType.equals(Long.class.getName()) && "int64".equals(prop.getFormat()))
                     match = true;
+            }
+            else if (JSONObject.class.getName().equals(expectedType)) {
+                if (foundType.equals(JsonObject.class.getName()))
+                    match = true;
+                else if (JSONObject.class.isAssignableFrom(obj.getClass()))
+                    match = true; // someone may have extended JSONObject
             }
         }
         if (match)
