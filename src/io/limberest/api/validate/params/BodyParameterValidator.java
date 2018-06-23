@@ -156,10 +156,13 @@ public class BodyParameterValidator implements ParameterValidator<BodyParameter>
 
     private Result validateExtraneous(JSONObject json, Model model, String path) throws ValidationException {
         Result result = new Result();
-        for (String name : JSONObject.getNames(json)) {
-            if (!model.getProperties().containsKey(name)) {
-                String msg = (path == null || path.isEmpty() ? name : path + "." + name) + ": unknown property";
-                result.also(BAD_REQUEST, msg);
+        String[] names = JSONObject.getNames(json);
+        if (names != null) {
+            for (String name : names) {
+                if (!model.getProperties().containsKey(name)) {
+                    String msg = (path == null || path.isEmpty() ? name : path + "." + name) + ": unknown property";
+                    result.also(BAD_REQUEST, msg);
+                }
             }
         }
         return result;
