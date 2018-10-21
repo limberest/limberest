@@ -1,9 +1,7 @@
 package io.limberest.api;
 
-import java.util.Map;
 import java.util.Set;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +10,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import io.limberest.config.LimberestConfig;
-import io.limberest.config.LimberestConfig.Settings;
 import io.limberest.jackson.JacksonPrettyPrinter;
 import io.limberest.json.JsonObject;
 import io.swagger.models.Swagger;
@@ -23,19 +20,18 @@ import io.swagger.util.Yaml;
  * TODO: Caching.
  */
 public class ServiceApi {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(ServiceApi.class);
 
     public enum Format {
         json,
         yaml
     }
-    
-    public JSONObject getSwaggerJson(String path) throws ServiceApiException {
+
+    public JsonObject getSwaggerJson(String path) throws ServiceApiException {
         Swagger swagger = getSwagger(path);
         try {
             // Re-parse as JsonObject to ensure ordering of definitions and paths.
-            // TODO: make this optional (see limberest.yaml comments in limberest-demo)
             JsonObject swaggerJson = new JsonObject(Json.mapper().writeValueAsString(swagger));
             if (swaggerJson.has("definitions"))
                 swaggerJson.put("definitions", new JsonObject(swaggerJson.getJSONObject("definitions").toString()));
@@ -47,35 +43,28 @@ public class ServiceApi {
             throw new ServiceApiException(ex.getMessage(), ex);
         }
     }
-    
+
     public String getSwaggerString(String path, Format format) throws ServiceApiException {
-        int prettyIndent = 0;
-        Settings settings = LimberestConfig.getSettings();
-        Map<?,?> api = settings.getMap("api");
-        if (api != null)
-            prettyIndent = settings.getInt("prettyIndent", api);
-        return getSwaggerString(path, format, prettyIndent);
+        return getSwaggerString(path, format, LimberestConfig.getSettings().json());
     }
-    
-    public String getSwaggerString(String path, Format format, int prettyIndent) 
+
+    public String getSwaggerString(String path, Format format, LimberestConfig.JsonFormat jsonConfig)
     throws ServiceApiException {
         try {
             Swagger swagger = getSwagger(path);
-            // TODO orderedKeys in limberest.yaml
-            boolean orderedKeys = true;
-            if (format == Format.json && orderedKeys) {
-                JSONObject swaggerJson = getSwaggerJson(path);
-                return swaggerJson.toString(prettyIndent);
+            if (format == Format.json && jsonConfig.orderedKeys) {
+                JsonObject swaggerJson = getSwaggerJson(path);
+                return swaggerJson.toString(jsonConfig.prettyIndent);
             }
             else {
-                return getWriter(format, prettyIndent).writeValueAsString(swagger);
+                return getWriter(format, jsonConfig.prettyIndent).writeValueAsString(swagger);
             }
-        } 
+        }
         catch (JsonProcessingException ex) {
             throw new ServiceApiException(ex.getMessage(), ex);
         }
     }
-    
+
     public Swagger getSwagger(String path) throws ServiceApiException {
         try {
             SwaggerScanner scanner = new SwaggerScanner(path);
@@ -95,15 +84,15 @@ public class ServiceApi {
             throw new ServiceApiException(ex.getMessage(), ex);
         }
     }
-    
+
     protected ObjectWriter getWriter(Format format, int prettyIndent) {
         ObjectMapper mapper = getMapper(format);
         if (prettyIndent > 0)
             return mapper.writer(new JacksonPrettyPrinter(prettyIndent));
         else
-            return mapper.writer();        
+            return mapper.writer();
     }
-    
+
     protected ObjectMapper getMapper(Format format) {
         return format == Format.yaml ? Yaml.mapper() : Json.mapper();
     }

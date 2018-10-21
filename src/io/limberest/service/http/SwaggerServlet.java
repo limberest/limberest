@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import io.limberest.api.ServiceApi;
 import io.limberest.api.ServiceApi.Format;
+import io.limberest.config.LimberestConfig;
 
 /**
  * Scans a service path for Swagger annotations and generates the service spec in JSON or YAML.
@@ -36,7 +37,7 @@ public class SwaggerServlet extends HttpServlet {
     }
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) 
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws ServletException, IOException {
 
         try {
@@ -57,21 +58,22 @@ public class SwaggerServlet extends HttpServlet {
                     }
                 }
             }
-            
+
             String servicePath = path == null || path.equals(SWAGGER_PATH) ? "/" : path;
             servicePath = servicePath.replace('.', '/');
-            
+
             if (format == Format.yaml)
                 response.setContentType("text/yaml");
             else
                 response.setContentType("application/json");
-            
+
             ServiceApi serviceApi = new ServiceApi();
             String indent = request.getParameter(PRETTY_INDENT_PARAM);
-        
+
             if (indent != null) {
-                int prettyIndent = Integer.parseInt(indent);
-                response.getWriter().println(serviceApi.getSwaggerString(servicePath, format, prettyIndent));
+                LimberestConfig.JsonFormat json = LimberestConfig.getSettings().json();
+                json.prettyIndent = Integer.parseInt(indent);
+                response.getWriter().println(serviceApi.getSwaggerString(servicePath, format, json));
             }
             else {
                 response.getWriter().println(serviceApi.getSwaggerString(servicePath, format));

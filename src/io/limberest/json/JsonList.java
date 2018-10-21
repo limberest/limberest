@@ -33,11 +33,11 @@ public class JsonList<E extends Jsonable> implements Jsonable {
     public JsonList(List<E> list, String jsonName) {
         this(list, jsonName, false);
     }
-    
+
     public JsonList(JSONObject json, Class<E> type) {
         this(json, type, false);
     }
-    
+
     /**
      * @param json serialized list json
      * @param type java class for Jsonable elements
@@ -83,9 +83,9 @@ public class JsonList<E extends Jsonable> implements Jsonable {
 
     @Override
     public JSONObject toJson() {
-        JSONObject json = new JsonObject();
+        JsonObject json = new JsonObject();
         if (isObject) {
-            JSONObject jsonObj = new JsonObject();
+            JsonObject jsonObj = new JsonObject();
             for (Jsonable item : list) {
                 String jsonName = item.jsonName();
                 if (jsonName == null) {
@@ -108,7 +108,7 @@ public class JsonList<E extends Jsonable> implements Jsonable {
             json.put("total", total);
         return json;
     }
-    
+
     private E createJsonable(JSONObject json, Class<E> type) {
         try {
             Constructor<E> ctor = type.getConstructor(JSONObject.class);
@@ -118,7 +118,7 @@ public class JsonList<E extends Jsonable> implements Jsonable {
             throw new JSONException("Unable to create Jsonable type: " + type, ex);
         }
     }
-    
+
     private E createJsonable(JSONObject json, Class<E> type, String name) {
         try {
             try {

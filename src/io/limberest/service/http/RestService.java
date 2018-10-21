@@ -16,9 +16,6 @@ import io.limberest.service.Service;
 import io.limberest.service.ServiceException;
 import io.limberest.service.http.Request.HttpMethod;
 
-/**
- * TODO: Patch.
- */
 public abstract class RestService<T> implements Service<T> {
 
     public abstract T getBody(String text) throws ServiceException;
@@ -28,7 +25,7 @@ public abstract class RestService<T> implements Service<T> {
      * @return response text
      */
     public abstract String getText(T body, int prettyIndent) throws ServiceException;
-    
+
     @Override
     public void initialize(Request<T> request, Principal principal, Predicate<String> roleChecker)
             throws ServiceException {
@@ -36,7 +33,7 @@ public abstract class RestService<T> implements Service<T> {
             request.setUser(principal.getName());
         request.setUserRolePredicate(roleChecker);
     }
-    
+
     /**
      * Return true if authentication is required.
      * Note: Containers may indicate authenticated if authentication not set up.
@@ -45,7 +42,7 @@ public abstract class RestService<T> implements Service<T> {
     public boolean isAuthenticationRequired(Request<T> request) throws ServiceException {
         return false;
     }
-    
+
     @Override
     public boolean authorize(Request<T> request) throws ServiceException {
         List<String> roles = getRolesAllowedAccess(request);
@@ -66,12 +63,12 @@ public abstract class RestService<T> implements Service<T> {
             }
         }
     }
-    
+
     /**
      * If the request user belongs to any of these roles, access is granted.
      * @return set of roles, or null if anyone's allowed
-     * 
-     * NOTE: {@link #isAuthenticationRequired(Request)} must return true for this 
+     *
+     * NOTE: {@link #isAuthenticationRequired(Request)} must return true for this
      * to work with Java container authentication.
      */
     public List<String> getRolesAllowedAccess(Request<T> request) throws ServiceException {
@@ -100,16 +97,16 @@ public abstract class RestService<T> implements Service<T> {
             else if (request.getMethod() == HttpMethod.PATCH) {
                 response =  patch(request);
             }
-            
+
             else {
                 throw new ServiceException(Status.NOT_IMPLEMENTED, request.getMethod() + " Not Implemented");
             }
-            
+
             int prettyIndent = 0;
             Settings settings = LimberestConfig.getSettings();
-            Map<?,?> resp = settings.getMap("response");
-            if (resp != null)
-                prettyIndent = settings.getInt("prettyIndent", resp);
+            Map<?,?> json = settings.getMap("json");
+            if (json != null)
+                prettyIndent = settings.getInt("prettyIndent", json);
             response.setText(getText(response.getBody(), prettyIndent));
             return response;
         }
@@ -153,7 +150,7 @@ public abstract class RestService<T> implements Service<T> {
             throws ServiceException{
         throw new ServiceException(Status.NOT_IMPLEMENTED, HttpMethod.PATCH + " not implemented");
     }
-    
+
     /**
      * Delete an existing entity or relationship.
      * Content is supported but not recommended.

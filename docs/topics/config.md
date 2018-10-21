@@ -70,15 +70,15 @@ scan
 api:
   definitionClasses: # controls swagger API definition info
     - io.limberest.demo.api.Definition
-  prettyIndent: 2
 
 request:
   fallbackContentType:
     get: application/json
   
-response:
+json:
   prettyIndent: 2
-
+  orderedKeys: true
+  falseValuesOutput: true  
 ```
 
 Next Topic: [Spring Boot](spring-boot)

@@ -2,6 +2,7 @@ package io.limberest.config;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,13 +32,16 @@ public class LimberestConfig {
         }
         Settings() {
         }
+
+        private JsonFormat json;
+        public JsonFormat json() {
+            if (json == null) {
+                json = new JsonFormat(this);
+            }
+            return json;
+        }
     }
 
-    /**
-     * TODO: Consider service loader:
-     * http://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html
-     * TODO: Consider env prop same as sys prop
-     */
     public LimberestConfig(Provider provider) {
         try {
             String sysProp = System.getProperty(LIMBEREST_CONFIG_SYS_PROP);
@@ -54,7 +58,7 @@ public class LimberestConfig {
             }
         }
         catch (IOException ex) {
-            logger.warn("limberest config not found, using defaults");
+            logger.debug("limberest config not found, using defaults");
             if (logger.isTraceEnabled())
                 logger.trace(ex.getMessage(), ex);
             settings = new Settings();
@@ -66,5 +70,21 @@ public class LimberestConfig {
         if (instance == null)
             instance = new LimberestConfig(ServiceRegistry.getProvider());
         return instance;
+    }
+
+    @SuppressWarnings("rawtypes")
+    public class JsonFormat {
+        public int prettyIndent = 0;
+        public boolean orderedKeys = true;
+        public boolean falseValuesOutput = false;
+
+        JsonFormat(Settings settings) {
+            Map jsonMap = settings.getMap("json");
+            if (jsonMap != null) {
+                prettyIndent = settings.getInt("prettyIndent", jsonMap, prettyIndent);
+                orderedKeys = settings.getBoolean("orderedKeys", jsonMap, orderedKeys);
+                falseValuesOutput = settings.getBoolean("falseValuesOutput", jsonMap, falseValuesOutput);
+            }
+        }
     }
 }

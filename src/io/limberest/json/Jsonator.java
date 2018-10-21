@@ -55,8 +55,8 @@ public class Jsonator {
                       o = getJsonObject(o);
                       if (o != null) {
                           if (o instanceof Boolean) {
-                              // TODO configurable whether to serialize false
-                              if ((Boolean)o)
+                              if ((Boolean)o || (json instanceof JsonObject
+                                      && JsonObject.getFormat() != null && JsonObject.getFormat().falseValuesOutput))
                                   json.put(pd.getName(), o);
                           }
                           else {
@@ -68,7 +68,6 @@ public class Jsonator {
             }
 
             return json;
-
         }
         catch (IntrospectionException ex) {
             throw new JSONException(ex);
@@ -89,7 +88,7 @@ public class Jsonator {
     }
 
     protected JSONObject getJson(Map<?,?> map) throws JSONException {
-        JSONObject json = new JsonObject();
+        JsonObject json = new JsonObject();
         for (final Entry<?,?> entry : map.entrySet()) {
             Object val = entry.getValue();
             String name = String.valueOf(entry.getKey());

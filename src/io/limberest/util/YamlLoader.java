@@ -28,7 +28,7 @@ public class YamlLoader {
         Yaml yaml = new Yaml();
         top = yaml.load(yamlStr);
     }
-    
+
     /**
      * Empty loader.
      */
@@ -39,7 +39,7 @@ public class YamlLoader {
     public Map getMap(String name) {
         return getMap(name, top, "");
     }
-    
+
     public Map getMap(String name, Object source) {
         Object obj = name.isEmpty() ? source : ((Map)source).get(name);
         if (obj == null)
@@ -74,9 +74,9 @@ public class YamlLoader {
     public List getList(String name) {
         return getList(name, getRequiredMap("", top, ""));
     }
-    
+
     public List getList(String name, Map source) {
-        Object obj = name.isEmpty() ? source : ((Map)source).get(name);
+        Object obj = name.isEmpty() ? source : source.get(name);
         if (obj == null)
             return null;
         if (!(obj instanceof List))
@@ -85,14 +85,14 @@ public class YamlLoader {
     }
 
     public List getList(String name, Map source, String path) {
-        Object obj = name.isEmpty() ? source : ((Map)source).get(name);
+        Object obj = name.isEmpty() ? source : source.get(name);
         if (obj == null)
             return null;
         if (!(obj instanceof List))
             throw new YAMLException("Object: " + path + "/" + name + " is not List");
         return (List) obj;
     }
-    
+
     public List<String> getStringList(String name, Map source) {
         List<String> stringList = null;
         List<?> list = getList(name, source);
@@ -101,15 +101,15 @@ public class YamlLoader {
             for (Object o : list)
                 stringList.add(o.toString());
         }
-        return stringList;        
+        return stringList;
     }
 
     public List getRequiredList(String name) {
         return getRequiredList(name, getRequiredMap("", top, ""), "");
     }
-    
+
     public List getRequiredList(String name, Map source, String path) {
-        Object obj = name.isEmpty() ? source : ((Map)source).get(name);
+        Object obj = name.isEmpty() ? source : source.get(name);
         if (obj == null)
             missingYaml(name, path);
         if (!(obj instanceof List))
@@ -120,7 +120,7 @@ public class YamlLoader {
     public String get(String name) {
         return get(name, getRequiredMap("", top, ""));
     }
-    
+
     public String get(String name, Map source) {
         Object val = source.get(name);
         if (val == null)
@@ -138,13 +138,29 @@ public class YamlLoader {
             missingYaml(name, path);
         return val;
     }
-    
+
     public int getInt(String name, Map source) {
+        return getInt(name, source, 0);
+    }
+
+    public int getInt(String name, Map source, int defaultValue) {
         String str = get(name, source);
         if (str == null)
-            return 0;
+            return defaultValue;
         else
             return Integer.parseInt(str);
+    }
+
+    public boolean getBoolean(String name, Map source) {
+        return getBoolean(name, source, false);
+    }
+
+    public boolean getBoolean(String name, Map source, boolean defaultValue) {
+        String str = get(name, source);
+        if (str == null)
+            return defaultValue;
+        else
+            return Boolean.parseBoolean(str);
     }
 
     public void missingYaml(String name, String path) {

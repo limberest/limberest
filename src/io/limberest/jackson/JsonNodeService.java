@@ -35,7 +35,7 @@ public class JsonNodeService extends RestService<JsonNode> {
 
     @Override
     public String getText(JsonNode jsonNode, int prettyIndent) throws ServiceException {
-        
+
         ObjectMapper mapper = new ObjectMapper();
         try {
             ObjectWriter writer;
@@ -43,7 +43,7 @@ public class JsonNodeService extends RestService<JsonNode> {
                 writer = mapper.writer(new JacksonPrettyPrinter(prettyIndent));
             else
                 writer = mapper.writer();
-            
+
             return writer.writeValueAsString(jsonNode);
         }
         catch (JsonProcessingException ex) {
