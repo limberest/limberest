@@ -25,7 +25,6 @@ sourceSets {
 		java {
 			srcDir 'src'
 		}
-		output.classesDir = 'build/classes'
 	}
 }
 
