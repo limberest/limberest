@@ -1,7 +1,7 @@
 # limberest
 
 ### Documentation
-[Limberest Docs](https://limberest.io/limberest/topics/services)
+[Limberest Guide](https://limberest.io/limberest/topics/services)
 
 
 ### Contribute
