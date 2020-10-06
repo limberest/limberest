@@ -1,133 +1,126 @@
 plugins {
-	id 'java'
-    id 'maven'
-    id 'signing'
-    id 'eclipse'
+  id 'java'
+  id 'maven'
+  id 'signing'
+  id 'eclipse'
 }
 
 group = 'io.limberest'
-version = '1.2.5'
+version = '1.2.6'
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-eclipse {
-    classpath {
-        defaultOutputDir = file("build/classes")
-    }
-}
-
 repositories {
-	mavenCentral()
+  mavenCentral()
 }
 
 sourceSets {
-	main {
-		java {
-			srcDir 'src'
-		}
-	}
+  main {
+    java {
+      srcDir 'src'
+    }
+  }
 }
 
 jar {
-    from('.') {
-       include 'codegen/**/*'
-    }
+  from('.') {
+     include 'codegen/**/*'
+  }
 }
     
 dependencies {
-	compile 'javax.servlet:javax.servlet-api:3.1.0'
-	compile 'javax.ws.rs:javax.ws.rs-api:2.1'
-    compile 'javax.validation:validation-api:2.0.1.Final'
-	compile 'org.json:json:20180130'
-	compile 'org.slf4j:slf4j-api:1.7.25'
-	compile 'org.reflections:reflections:0.9.11'
-    compile 'com.google.guava:guava:20.0'
-	compile 'io.swagger:swagger-annotations:1.5.19'
-	compile 'io.swagger:swagger-core:1.5.19'
-	compile 'io.swagger:swagger-models:1.5.19'
-	compile 'io.swagger:swagger-servlet:1.5.19'
-    compileOnly 'io.swagger:swagger-codegen:2.3.1'
-    compileOnly 'org.springframework:spring-context:5.0.5.RELEASE'
+  compile 'javax.servlet:javax.servlet-api:3.1.0'
+  compile 'javax.ws.rs:javax.ws.rs-api:2.1'
+  compile 'javax.validation:validation-api:2.0.1.Final'
+  compile 'org.json:json:20180130'
+  compile 'org.slf4j:slf4j-api:1.7.25'
+  compile 'org.reflections:reflections:0.9.11'
+  compile 'com.google.guava:guava:20.0'
+  compile 'io.swagger:swagger-annotations:1.5.19'
+  compile 'io.swagger:swagger-core:1.5.19'
+  compile 'io.swagger:swagger-models:1.5.19'
+  compile 'io.swagger:swagger-servlet:1.5.19'
+  compileOnly 'io.swagger:swagger-codegen:2.3.1'
+  compileOnly 'org.springframework:spring-context:5.0.5.RELEASE'
     
-    // added for java 9 (swagger dependency)
-    compile 'javax.xml.bind:jaxb-api:2.2.12'
+  // added for java 9 (swagger dependency)
+  compile 'javax.xml.bind:jaxb-api:2.2.12'
 }
 
 task cleanJavadocs(type: Delete) {
-    delete 'docs/javadoc'
+  delete 'docs/javadoc'
 }
 
 task javadocs(type: Javadoc, dependsOn: cleanJavadocs) {
-    classpath = configurations.compile
-    source = sourceSets.main.allJava
-    title = 'Limberest API'
-    maxMemory = '256m'
-    options.links 'http://docs.oracle.com/javase/8/docs/api/'
-    options.links 'http://docs.swagger.io/swagger-core/current/apidocs/'
-    options.links 'http://stleary.github.io/JSON-java/'
-    options.bottom '<i>Copyright &#169; 2018</i>'
-    destinationDir = file('docs/javadoc')
+  classpath = configurations.compile
+  source = sourceSets.main.allJava
+  title = 'Limberest API'
+  maxMemory = '256m'
+  options.links 'http://docs.oracle.com/javase/8/docs/api/'
+  options.links 'http://docs.swagger.io/swagger-core/current/apidocs/'
+  options.links 'http://stleary.github.io/JSON-java/'
+  options.bottom '<i>Copyright &#169; 2018</i>'
+  destinationDir = file('docs/javadoc')
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
+  classifier = 'sources'
+  from sourceSets.main.allSource
 }
 
 task javadocJar(type: Jar, dependsOn: javadocs) {
-    classifier = 'javadoc'
-    from file('docs/javadoc')
+  classifier = 'javadoc'
+  from file('docs/javadoc')
 }
 
 artifacts {
-    archives javadocJar, sourcesJar
+  archives javadocJar, sourcesJar
 }
 
 signing {
-    sign configurations.archives
+  sign configurations.archives
 }
 
 uploadArchives {
-    repositories {
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-  
-            repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-  
-            snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
-                authentication(userName: ossrhUsername, password: ossrhPassword)
-            }
-  
-            pom.project {
-                name 'Limberest'
-                description 'Lightweight REST for Java'
-                packaging 'jar'
-                url 'https://limberest.io'
-  
-                scm {
-                    connection 'scm:git:https://github.com/limberest/limberest.git'
-                    developerConnection 'scm:git:https://github.com/limberest/limberest.git'
-                    url 'https://github.com/limberest/limberest'
+  repositories {
+    mavenDeployer {
+      beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
 
-                }
-  
-                licenses {
-                    license {
-                        name 'MIT License'
-                        url 'https://opensource.org/licenses/MIT'
-                    }
-                }
-  
-                developers {
-                    developer {
-                        id 'oakesville'
-                        name 'Donald Oakes'
-                        email 'donald@oakesville.io'
-                    }
-                }
-            }
+      repository(url: 'https://oss.sonatype.org/service/local/staging/deploy/maven2/') {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      snapshotRepository(url: 'https://oss.sonatype.org/content/repositories/snapshots/') {
+        authentication(userName: ossrhUsername, password: ossrhPassword)
+      }
+
+      pom.project {
+        name 'Limberest'
+        description 'Lightweight REST for Java'
+        packaging 'jar'
+        url 'https://limberest.io'
+
+        scm {
+          connection 'scm:git:https://github.com/limberest/limberest.git'
+          developerConnection 'scm:git:https://github.com/limberest/limberest.git'
+          url 'https://github.com/limberest/limberest'
         }
+
+        licenses {
+          license {
+            name 'MIT License'
+            url 'https://opensource.org/licenses/MIT'
+          }
+        }
+
+        developers {
+          developer {
+            id 'oakesville'
+            name 'Donald Oakes'
+            email 'donald@oakesville.io'
+          }
+        }
+      }
     }
+  }
 }

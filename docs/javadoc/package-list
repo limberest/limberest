@@ -12,3 +12,4 @@ io.limberest.service.http
 io.limberest.service.registry
 io.limberest.util
 io.limberest.validate
+io.limberest.yaml
